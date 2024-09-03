@@ -1,0 +1,81 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<main class="home">
+  <section class="hero-section text-center">
+    <div class="container container--narrow">
+      <div class="hero-section__box">
+        <h2>Search by Bed</h2>
+      </div>
+    </div>
+  </section>
+</main>
+
+<br></br>
+<div style="display: flex; justify-content: flex-end;">
+  <span class="tag tag--pill tag--sub tag--lg">
+    <small>sort by bed</small>
+  </span>
+  <span class="tag tag--pill tag--sub tag--lg">
+    <small>sort by location</small>
+  </span>
+</div>
+
+<section class="devlist">
+  <div class="container">
+    <div class="grid grid--three">
+
+      <!-- TODO: how to manage the hospital_detail -->
+      <div class="column card">
+        <div class="dev">
+          <a href="{% url 'hospital:hospital_detail' %}" class="card__body">
+            <div class="dev__profile">
+              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png'%}" alt="image">
+              <div class="dev__meta">
+                <h3>doctor name</h3>
+                <h5>doctor specilization</h5>
+              </div>
+            </div>
+            <p class="dev__info">doctor description</p>
+            <h3>no of beds available</h3>
+          </a>
+        </div>
+      </div>
+
+      <div class="column card">
+        <div class="dev">
+          <a href="{% url 'hospital:hospital_detail' %}" class="card__body">
+            <div class="dev__profile">
+              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png'%}" alt="image">
+              <div class="dev__meta">
+                <h3>doctor name</h3>
+                <h5>doctor specilization</h5>
+              </div>
+            </div>
+            <p class="dev__info">doctor description</p>
+            <h3>no of beds available</h3>
+          </a>
+        </div>
+      </div>
+
+      <div class="column card">
+        <div class="dev">
+          <a href="{% url 'hospital:hospital_detail' %}" class="card__body">
+            <div class="dev__profile">
+              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png'%}" alt="image">
+              <div class="dev__meta">
+                <h3>doctor name</h3>
+                <h5>doctor specilization</h5>
+              </div>
+            </div>
+            <p class="dev__info">doctor description</p>
+            <h3>no of beds available</h3>
+          </a>
+        </div>
+      </div>
+
+    </div>
+</section>
+<div style="text-align: center;">
+  <h3>pagination</h3>
+</div>
+{% endblock content %}
