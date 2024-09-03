@@ -19,62 +19,7 @@
     <small>sort by location</small>
   </span>
 </div>
-
-<section class="devlist">
-  <div class="container">
-    <div class="grid grid--three">
-
-      <!-- TODO: how to manage the hospital_detail -->
-      <div class="column card">
-        <div class="dev">
-          <a href="{% url 'user:hospital_detail' %}" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png'%}" alt="image">
-              <div class="dev__meta">
-                <h3>doctor name</h3>
-                <h5>doctor specilization</h5>
-              </div>
-            </div>
-            <p class="dev__info">doctor description</p>
-            <h3>no of beds available</h3>
-          </a>
-        </div>
-      </div>
-
-      <div class="column card">
-        <div class="dev">
-          <a href="{% url 'user:hospital_detail' %}" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png'%}" alt="image">
-              <div class="dev__meta">
-                <h3>doctor name</h3>
-                <h5>doctor specilization</h5>
-              </div>
-            </div>
-            <p class="dev__info">doctor description</p>
-            <h3>no of beds available</h3>
-          </a>
-        </div>
-      </div>
-
-      <div class="column card">
-        <div class="dev">
-          <a href="{% url 'user:hospital_detail' %}" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png'%}" alt="image">
-              <div class="dev__meta">
-                <h3>doctor name</h3>
-                <h5>doctor specilization</h5>
-              </div>
-            </div>
-            <p class="dev__info">doctor description</p>
-            <h3>no of beds available</h3>
-          </a>
-        </div>
-      </div>
-
-    </div>
-</section>
+{% include 'user/hospital_record.html' %}
 <div style="text-align: center;">
   <h3>pagination</h3>
 </div>

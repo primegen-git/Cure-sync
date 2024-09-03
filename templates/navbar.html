@@ -1,5 +1,6 @@
 {% load static %}
 <!-- Header Section -->
+{% if request.resolver_match.namespace != "home" %}
 <header class="header">
   <div class="container container--narrow">
     <a href="{% url 'user:home_page' %}" class="header__logo">
@@ -17,6 +18,14 @@
           <a href="#">navbar1</a>
         </li>
 
+
+
+        {% if request.resolver_match.url_name == "search_specialist" %}
+        <li class="header__menuItem">
+          <a class="btn btn--sub" href="{% url 'user:chatbot' %}">ChatBot</a>
+        </li>
+        {% endif %}
+
         <!-- {% if request.resolver_match.url_name == "daily-tasks-list" %} -->
         <!-- <li class="header__menuItem"> -->
         <!--   <a href="{% url 'taskmanager:create-daily-task' %}" class="btn btn--sub">Add</a> -->
@@ -32,3 +41,4 @@
     </nav>
   </div>
 </header>
+{% endif %}

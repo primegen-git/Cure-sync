@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<h2>this is the home page</h2>
+
+<section class="devlist">
+  <div class="container">
+    <div class="grid grid--three">
+
+      <div class="column card">
+        <div class="dev">
+          <a href="{% url 'user:home_page' %}" class="card__body">
+            <div class="dev__profile">
+              <img class="avatar avatar--md" src="" alt="image" />
+              <div class="dev__meta">
+                <h3>User</h3>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="column card">
+        <div class="dev">
+          <a href="#" class="card__body">
+            <div class="dev__profile">
+              <img class="avatar avatar--md" src="" alt="image" />
+              <div class="dev__meta">
+                <h3>OPD</h3>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="column card">
+        <div class="dev">
+          <a href="#" class="card__body">
+            <div class="dev__profile">
+              <img class="avatar avatar--md" src="" alt="image" />
+              <div class="dev__meta">
+                <h3>hospital</h3>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+</section>
+
+{% endblock content %}

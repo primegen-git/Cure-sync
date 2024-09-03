@@ -20,9 +20,11 @@ from django.urls import path, include
 
 from hospital import urls as hospital_urls
 from user import urls as user_urls
+from home import urls as home_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include(home_urls, namespace="home")),
     path("hospital/", include(hospital_urls, namespace="hospital")),
     path("user/", include(user_urls, namespace="user")),
 ]
