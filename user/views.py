@@ -16,3 +16,8 @@ def bed_list(request):
 def hospital_list(request):
     context = {}
     return render(request, "user/hospital_list.html", context)
+
+
+def hospital_detail(request):
+    context = {}
+    return render(request, "user/hospital_detail.html", context)
