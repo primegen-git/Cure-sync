@@ -8,9 +8,12 @@
   <main class="main-content">
     <header>
       <h1>Search by Bed</h1>
-      <div class="search-bar">
-        <input type="text" placeholder="Search for bed number or type" />
-      </div>
+      <form id="search_form" method="post" action="">
+        {% csrf_token %}
+        <div class="search-bar">
+          <input type="text" name="search_query" id="search_text" placeholder="Search for bed number or type" />
+        </div>
+      </form>
     </header>
     <div class="sort-options">
       <button class="sort-btn">Sort by Bed</button>
@@ -40,3 +43,6 @@
   </main>
 </div>
 {% endblock content %}
+{% block js %}
+<scripts src="{% static 'scripts/form_submit.js' %}"></scripts>
+{% endblock js %}

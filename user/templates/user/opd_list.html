@@ -8,9 +8,10 @@
   <main class="main-content">
     <header>
       <h1>Search by OPD</h1>
-      <form id="search_form" method="POST" action="">
+      <form id="search_form" method="post" action="">
+        {% csrf_token %}
         <div class="search-bar">
-          <input type="text" name="search_text" placeholder="Search for bed number or type" />
+          <input type="text" name="search_query" id="search_text" placeholder="Search for bed number or type" />
         </div>
       </form>
     </header>

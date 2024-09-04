@@ -24,6 +24,8 @@ def hospital_detail(request):
 
 
 def search_specialist(request):
+    if request.method == "POST":
+        print(request.POST)
     context = {}
     return render(request, "user/search_specialist.html", context)
 
