@@ -13,9 +13,9 @@ def bed_list(request):
     return render(request, "user/bed_list.html", context)
 
 
-def hospital_list(request):
+def opd_list(request):
     context = {}
-    return render(request, "user/hospital_list.html", context)
+    return render(request, "user/opd_list.html", context)
 
 
 def hospital_detail(request):

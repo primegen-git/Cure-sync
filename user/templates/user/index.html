@@ -1,61 +1,64 @@
-{% extends 'base.html' %} {% load static %}{% block content %}
-
-<main class="home">
-  <section class="hero-section text-center">
-    <div class="container container--narrow">
-      <div class="hero-section__box">
-        <h2>User</h2>
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'styles/user.css' %}" />
+{% endblock css %}
+{% block content %}
+<div class="dashboard-container">
+  <main class="main-content">
+    <header>
+      <h1>User Dashboard</h1>
+    </header>
+    <div class="search-options">
+      <a href="{% url 'user:bed_list' %}" class="search-card">
+        <div class="icon-container">
+          <i class="fas fa-bed"></i>
+        </div>
+        <span>Search by bed</span>
+      </a>
+      <a href="{% url 'user:search_specialist'  %}" class="search-card">
+        <div class="icon-container">
+          <i class="fas fa-stethoscope"></i>
+        </div>
+        <span>Search by Specialties</span>
+      </a>
+      <a href="{% url 'user:opd_list' %}" class="search-card">
+        <div class="icon-container">
+          <i class="fas fa-hospital-user"></i>
+        </div>
+        <span>Search by OPD</span>
+      </a>
+    </div>
+    <div class="quick-stats">
+      <div class="stat-card">
+        <h3>Available Beds</h3>
+        <div class="stat-value">250</div>
+        <div class="stat-progress">
+          <div class="progress-bar" style="width: 50%"></div>
+        </div>
+        <div class="stat-info">Out of 500 total beds</div>
+      </div>
+      <div class="stat-card">
+        <h3>Active Doctors</h3>
+        <div class="stat-value">75</div>
+        <div class="stat-progress">
+          <div class="progress-bar" style="width: 75%"></div>
+        </div>
+        <div class="stat-info">Across all specialties</div>
+      </div>
+      <div class="stat-card">
+        <h3>Today's Appointments</h3>
+        <div class="stat-value">120</div>
+        <div class="stat-progress">
+          <div class="progress-bar" style="width: 60%"></div>
+        </div>
+        <div class="stat-info">15 urgent cases</div>
       </div>
     </div>
-  </section>
-</main>
-<section class="devlist">
-  <div class="container">
-    <div class="grid grid--three">
-
-      <div class="column card">
-        <div class="dev">
-          <a href="{% url 'user:bed_list'  %}" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png' %}" alt="image" />
-              <div class="dev__meta">
-                <h3>search by bed</h3>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <div class="column card">
-        <div class="dev">
-          <a href="{% url 'user:search_specialist' %}" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png' %}" alt="image" />
-              <div class="dev__meta">
-                <h3>Search by Specialties</h3>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <div class="column card">
-        <div class="dev">
-          <a href="{% url 'user:hospital_list' %}" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="{% static 'images/profile/user-default.png' %}" alt="image" />
-              <div class="dev__meta">
-                <h3>Search by OPD</h3>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-
-
-
-
-    </div>
-</section>
+  </main>
+</div>
 {% endblock content %}
+
+{% block js %}
+
+{% endblock js %}

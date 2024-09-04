@@ -1,0 +1,158 @@
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 300px;
+}
+
+.add-employee {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 30%;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.stat-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-icons {
+  display: flex;
+}
+
+.profile-icons img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: -5px;
+}
+
+.percentage {
+  font-weight: bold;
+}
+
+.content-area {
+  display: flex;
+  gap: 20px;
+}
+
+.employees-table,
+.employees-view {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.see-all {
+  float: right;
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.employee-details {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.employee-details img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.status {
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.status.active {
+  background-color: #e6f7e6;
+  color: #28a745;
+}
+
+.activities-chart {
+  background-color: #f7f7f7;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .DASHBOARD-CONTAINER {
+    flex-direction: COLUMN;
+  }
+  .SIDEBAR {
+    width: 100%;
+    order: 2;
+  }
+  .MAIN-CONTENT {
+    order: 1;
+  }
+  .STATS-CONTAINER,
+  .CONTENT-AREA {
+    flex-direction: COLUMN;
+  }
+  .STAT-CARD,
+  .EMPLOYEES-TABLE,
+  .EMPLOYEES-VIEW {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "hospital.apps.HospitalConfig",
     "user.apps.UserConfig",
     "home.apps.HomeConfig",
+    "opd.apps.OpdConfig",
 ]
 
 MIDDLEWARE = [

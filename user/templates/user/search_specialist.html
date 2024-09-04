@@ -1,21 +1,43 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-
-<section class="hero-section text-center">
-  <div class="container container--narrow">
-    <div class="hero-section__box">
-      <h2>SEARCH SPECIALTIES</h2>
-    </div>
-    <div class="hero-section__search">
-      <form id="searchForm" class="form" action="/" method="get">
-        <div class="form__field">
-          <label for="formInput#search">Search Specialties</label>
-          <input class="input input--text" id="formInput#search" type="text" name="search_query" value=""
-            placeholder="Search Specialties" />
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'styles/bed_opd_specialist.css' %}" />
+<style>
+  input::placeholder {
+    font-size: 20px;
+  }
+</style>
+{% endblock css %}
+{% block content %}
+<div class="dashboard-container">
+  <main class="main-content">
+    <header style="display:flex; justify-content: safe;">
+      <h1>Search by Specialist</h1>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for bed number or type" style="width: 600px;" />
+      </div>
+      <button class="sort-btn">ChatBot</button>
+    </header>
+    <div class="bed-list">
+      <div class="bed-card">
+        <div class="doctor-info">
+          <img src="doctor-avatar.png" alt="Doctor Avatar" class="doctor-avatar" />
+          <div class="doctor-details">
+            <h3>Dr. John Doe</h3>
+            <p>Cardiology</p>
+            <p>Experienced in heart surgeries</p>
+          </div>
         </div>
-        <input class="btn btn--sub btn--lg" type="submit" value="Search" />
-      </form>
+        <div class="bed-availability">
+          <p>No. of beds available: <span>5</span></p>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
-{% include 'user/hospital_record.html' %}
+    <div class="pagination">
+      <button><i class="fas fa-chevron-left"></i></button>
+      <span>Page 1 of 5</span>
+      <button><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </main>
+</div>
 {% endblock content %}

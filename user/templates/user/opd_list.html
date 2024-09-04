@@ -7,16 +7,13 @@
 <div class="dashboard-container">
   <main class="main-content">
     <header>
-      <h1>Search by Bed</h1>
-      <div class="search-bar">
-        <input type="text" placeholder="Search for bed number or type" />
-      </div>
+      <h1>Search by OPD</h1>
+      <form id="search_form" method="POST" action="">
+        <div class="search-bar">
+          <input type="text" name="search_text" placeholder="Search for bed number or type" />
+        </div>
+      </form>
     </header>
-    <div class="sort-options">
-      <button class="sort-btn">Sort by Bed</button>
-      <button class="sort-btn">Sort by Location</button>
-    </div>
-
     <div class="bed-list">
       <div class="bed-card">
         <div class="doctor-info">
@@ -40,3 +37,13 @@
   </main>
 </div>
 {% endblock content %}
+{% block js %}
+<script>
+  document.getElementById('search_text').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent the default action (form submission)
+      document.getElementById('search_form').submit(); // Submit the form
+    }
+  });
+</script>
+{% endblock js %}

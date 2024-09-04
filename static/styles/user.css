@@ -1,0 +1,131 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 300px;
+}
+
+.search-options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.search-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  width: 30%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.search-card:hover {
+  transform: translateY(-5px);
+}
+
+.icon-container {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.icon-container i {
+  font-size: 24px;
+}
+
+.search-card span {
+  font-size: 16px;
+  color: #333;
+}
+
+.quick-stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 30%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.stat-progress {
+  height: 5px;
+  background-color: #e9ecef;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 3px;
+  background-color: #1890ff;
+}
+
+.stat-info {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    order: 2;
+  }
+  .main-content {
+    order: 1;
+  }
+  .search-options,
+  .quick-stats {
+    flex-direction: column;
+  }
+  .search-card,
+  .stat-card {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
