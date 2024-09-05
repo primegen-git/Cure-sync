@@ -1,0 +1,83 @@
+{% extends 'base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/doctor_profile.css' %}" />
+{% endblock css %} {% block content %}
+
+<main class="main-content">
+  <div class="profile-header">
+    <img src="doctor-avatar.jpg" alt="Doctor Name" class="profile-image" />
+    <div>
+      <h1 class="profile-name">Dr. John Doe</h1>
+      <p class="profile-specialty">Cardiologist</p>
+      <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+    </div>
+  </div>
+
+  <section class="profile-section">
+    <h2 class="section-title">Personal Information</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Email:</span> john.doe@example.com
+      </div>
+      <div class="info-item">
+        <span class="info-label">Phone:</span> (123) 456-7890
+      </div>
+      <div class="info-item">
+        <span class="info-label">Address:</span> 123 Medical Center, City,
+        Country
+      </div>
+      <div class="info-item">
+        <span class="info-label">Years of Experience:</span> 15
+      </div>
+    </div>
+  </section>
+
+  <section class="profile-section">
+    <h2 class="section-title">Education & Qualifications</h2>
+    <ul>
+      <li>MD in Cardiology, University of Medical Sciences, 2005</li>
+      <li>Residency in Internal Medicine, City Hospital, 2002-2005</li>
+      <li>Board Certified in Cardiovascular Disease</li>
+    </ul>
+  </section>
+
+  <section class="profile-section">
+    <h2 class="section-title">Availability</h2>
+    <table class="availability-table">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Morning</th>
+          <th>Afternoon</th>
+          <th>Evening</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Monday</td>
+          <td>9:00 AM - 12:00 PM</td>
+          <td>2:00 PM - 5:00 PM</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Tuesday</td>
+          <td>9:00 AM - 12:00 PM</td>
+          <td>-</td>
+          <td>6:00 PM - 9:00 PM</td>
+        </tr>
+        <!-- Add more rows for other days -->
+      </tbody>
+    </table>
+  </section>
+
+  <section class="profile-section">
+    <h2 class="section-title">About</h2>
+    <p>
+      Dr. John Doe is a highly experienced cardiologist with a passion for
+      patient care and the latest advancements in cardiovascular medicine. With
+      15 years of experience, he specializes in non-invasive cardiology and
+      preventive care.
+    </p>
+  </section>
+</main>
+
+{% endblock content %}

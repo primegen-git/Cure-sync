@@ -14,3 +14,8 @@ def employee_list(request):
 def product_list(request):
     context = {}
     return render(request, "opd/product.html", context)
+
+
+def doctor_profile(request):
+    context = {}
+    return render(request, "opd/doctor_profile.html", context)
