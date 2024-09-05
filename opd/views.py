@@ -1,9 +1,16 @@
 from django.shortcuts import render
 
-# Create your views here.
-#
 
-
-def dashboard(request):
+def home_page(request):
     context = {}
-    return render(request, "opd/dashboard.html", context)
+    return render(request, "opd/patient.html", context)
+
+
+def employee_list(request):
+    context = {}
+    return render(request, "opd/employee.html", context)
+
+
+def product_list(request):
+    context = {}
+    return render(request, "opd/product.html", context)

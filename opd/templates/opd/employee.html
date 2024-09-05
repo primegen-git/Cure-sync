@@ -1,0 +1,91 @@
+{% extends 'opd/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/employee.css' %}" />
+{% endblock css %} {% block content %}
+<main class="main-content">
+  <header>
+    <h1>Employees</h1>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for anything" />
+    </div>
+    <button class="add-employee">+ Add Employees</button>
+  </header>
+  <div class="stats-container">
+    <div class="stat-card">
+      <h3>Total employee</h3>
+      <div class="stat-value">1,500k</div>
+      <div class="stat-info">
+        <div class="profile-icons">
+          <!-- Add profile icons here -->
+        </div>
+        <span class="percentage">15%</span>
+      </div>
+      <div class="stat-subinfo">+230 vs preview. 45 days</div>
+    </div>
+    <div class="stat-card">
+      <h3>Active employee</h3>
+      <div class="stat-value">1,000k</div>
+      <div class="stat-info">
+        <div class="profile-icons">
+          <!-- Add profile icons here -->
+        </div>
+        <span class="percentage">10%</span>
+      </div>
+      <div class="stat-subinfo">+250 vs preview. 55 days</div>
+    </div>
+    <div class="stat-card">
+      <h3>Inactive employee</h3>
+      <div class="stat-value">5,00k</div>
+      <div class="stat-info">
+        <div class="profile-icons">
+          <!-- Add profile icons here -->
+        </div>
+        <span class="percentage">5%</span>
+      </div>
+      <div class="stat-subinfo">+300 vs preview. 60 days</div>
+    </div>
+  </div>
+  <div class="content-area">
+    <div class="employees-table">
+      <h2>Employees <a href="#" class="see-all">See All</a></h2>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Employees Name</th>
+            <th>Deport.</th>
+            <th>Mobile</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>#527727</td>
+            <td>
+              <img src="https://via.placeholder.com/30" alt="Cameron" />
+              Cameron
+            </td>
+            <td>Cargill</td>
+            <td>(808) 555-0111</td>
+            <td>
+              <button class="action-btn">📝</button>
+              <button class="action-btn">🗑️</button>
+            </td>
+          </tr>
+          <!-- Add more rows as in the image -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+{% endblock content %} {% block js %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const employeeElement = document.getElementById("employee");
+    employeeElement.classList.add("active");
+  });
+</script>
+{% endblock js %}

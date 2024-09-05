@@ -1,0 +1,95 @@
+{% extends 'opd/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/product.css' %}" />
+{% endblock css %} {% block content %}
+<main class="main-content">
+  <header>
+    <h1>Products & Stock</h1>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for products" />
+      <button class="search-btn"><i class="fas fa-search"></i></button>
+    </div>
+    <button class="add-product-btn">+ Add Product</button>
+  </header>
+  <div class="stock-stats">
+    <div class="stat-card">
+      <h3>Total Products</h3>
+      <div class="stat-value">5,000</div>
+      <div class="stat-info">+50 vs previous month</div>
+    </div>
+    <div class="stat-card">
+      <h3>Low Stock Items</h3>
+      <div class="stat-value">120</div>
+      <div class="stat-info">Needs reordering</div>
+    </div>
+    <div class="stat-card">
+      <h3>Out of Stock</h3>
+      <div class="stat-value">25</div>
+      <div class="stat-info">Critical items</div>
+    </div>
+  </div>
+  <div class="product-list">
+    <h2>Product Inventory <a href="#" class="see-all">See All</a></h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>SKU</th>
+          <th>Category</th>
+          <th>In Stock</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <img src="product-icon.png" alt="Product" class="product-icon" />
+            <span>Surgical Masks</span>
+          </td>
+          <td>SKU001</td>
+          <td>PPE</td>
+          <td>5000</td>
+          <td>$0.50</td>
+          <td><span class="status in-stock">In Stock</span></td>
+          <td>
+            <button class="action-btn">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img src="product-icon.png" alt="Product" class="product-icon" />
+            <span>Paracetamol</span>
+          </td>
+          <td>SKU002</td>
+          <td>Medication</td>
+          <td>100</td>
+          <td>$5.00</td>
+          <td><span class="status low-stock">Low Stock</span></td>
+          <td>
+            <button class="action-btn">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <!-- Add more product rows as needed -->
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock content %} {% block js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const productElement = document.getElementById("product");
+    productElement.classList.add("active");
+  });
+</script>
+{% endblock js %}

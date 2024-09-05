@@ -1,0 +1,76 @@
+{% extends 'opd/index.html' %} {% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'styles/patient.css' %}" />
+{% endblock css %}
+{% block content %}
+<main class="main-content">
+  <header>
+    <h1>Patients</h1>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for patients" />
+    </div>
+    <button class="add-patient-btn">+ Add Patient</button>
+  </header>
+  <div class="patient-stats">
+    <div class="stat-card">
+      <h3>Total Patients</h3>
+      <div class="stat-value">10,500</div>
+      <div class="stat-info">+230 vs previous month</div>
+    </div>
+    <div class="stat-card">
+      <h3>Active Patients</h3>
+      <div class="stat-value">8,200</div>
+      <div class="stat-info">+180 vs previous month</div>
+    </div>
+    <div class="stat-card">
+      <h3>New Patients (This Month)</h3>
+      <div class="stat-value">1,200</div>
+      <div class="stat-info">+50 vs previous month</div>
+    </div>
+  </div>
+  <div class="patient-list">
+    <table>
+      <thead>
+        <tr>
+          <th>Patient Name</th>
+          <th>ID</th>
+          <th>Age</th>
+          <th>Last Visit</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <img src="patient-avatar.jpg" alt="Patient" class="patient-avatar" />
+            <span>John Doe</span>
+          </td>
+          <td>#PT001</td>
+          <td>45</td>
+          <td>2024-03-15</td>
+          <td><span class="status active">Active</span></td>
+          <td>
+            <button class="action-btn">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <!-- Add more patient rows as needed -->
+      </tbody>
+    </table>
+  </div>
+  <br />
+  <h2>pagination here</h2>
+</main>
+{% endblock content %} {% block js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const patientElement = document.getElementById("patient");
+    patientElement.classList.add("active");
+  });
+</script>
+{% endblock js %}

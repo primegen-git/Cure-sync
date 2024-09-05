@@ -4,5 +4,7 @@ from . import views
 app_name = "opd"
 
 urlpatterns = [
-    path("dashboard/", views.dashboard, name="dashboard"),
+    path("", views.home_page, name="home_page"),
+    path("employees/", views.employee_list, name="employee_list"),
+    path("products/", views.product_list, name="product_list"),
 ]

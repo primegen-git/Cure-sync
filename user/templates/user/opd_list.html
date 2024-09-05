@@ -39,12 +39,5 @@
 </div>
 {% endblock content %}
 {% block js %}
-<script>
-  document.getElementById('search_text').addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // Prevent the default action (form submission)
-      document.getElementById('search_form').submit(); // Submit the form
-    }
-  });
-</script>
+<scripts src="{% static 'scripts/form_submit.js' %}"></scripts>
 {% endblock js %}
