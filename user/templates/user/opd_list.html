@@ -16,19 +16,22 @@
       </form>
     </header>
     <div class="bed-list">
-      <div class="bed-card">
+      {% for doctor in doctors %}
+      <a href="{% url 'user:appointment' pk=doctor.id %}" class="bed-card"
+        style="text-decoration: none; color: inherit;">
         <div class="doctor-info">
           <img src="doctor-avatar.png" alt="Doctor Avatar" class="doctor-avatar" />
           <div class="doctor-details">
-            <h3>Dr. John Doe</h3>
-            <p>Cardiology</p>
+            <h3>{{doctor.name}}</h3>
+            <p>{{doctor.speciality}}</p>
             <p>Experienced in heart surgeries</p>
           </div>
         </div>
         <div class="bed-availability">
           <p>No. of beds available: <span>5</span></p>
         </div>
-      </div>
+      </a>
+      {% endfor %}
     </div>
     <div class="pagination">
       <button><i class="fas fa-chevron-left"></i></button>

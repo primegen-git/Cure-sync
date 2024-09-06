@@ -10,4 +10,6 @@ urlpatterns = [
     path("hospital/", views.hospital_detail, name="hospital_detail"),
     path("search_specialist/", views.search_specialist, name="search_specialist"),
     path("chatbot/", views.chatbot, name="chatbot"),
+    path("appoinment/<str:pk>", views.appointment, name="appointment"),
+    path("doctor/<str:pk>", views.doctor_profile, name="doctor_profile"),
 ]

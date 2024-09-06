@@ -4,11 +4,10 @@
 
 <main class="main-content">
   <div class="profile-header">
-    <img src="doctor-avatar.jpg" alt="Doctor Name" class="profile-image" />
+    <img src="doctor-avatar.jpg" alt="Doctor Image" class="profile-image" />
     <div>
-      <h1 class="profile-name">Dr. John Doe</h1>
-      <p class="profile-specialty">Cardiologist</p>
-      <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+      <h1 class="profile-name">{{doctor.name}}</h1>
+      <p class="profile-specialty">{{doctor.speciality}}</p>
     </div>
   </div>
 
@@ -16,17 +15,16 @@
     <h2 class="section-title">Personal Information</h2>
     <div class="info-grid">
       <div class="info-item">
-        <span class="info-label">Email:</span> john.doe@example.com
+        <span class="info-label">Email:</span>{{doctor.email}}
       </div>
       <div class="info-item">
-        <span class="info-label">Phone:</span> (123) 456-7890
+        <span class="info-label">Phone:</span>{{doctor.phone_number}}
       </div>
       <div class="info-item">
-        <span class="info-label">Address:</span> 123 Medical Center, City,
-        Country
+        <span class="info-label">Address:</span>{{doctor.street_address}}, {{doctor.city}}
       </div>
       <div class="info-item">
-        <span class="info-label">Years of Experience:</span> 15
+        <span class="info-label">Years of Experience:</span>{{doctor.experience}}
       </div>
     </div>
   </section>
@@ -71,12 +69,7 @@
 
   <section class="profile-section">
     <h2 class="section-title">About</h2>
-    <p>
-      Dr. John Doe is a highly experienced cardiologist with a passion for
-      patient care and the latest advancements in cardiovascular medicine. With
-      15 years of experience, he specializes in non-invasive cardiology and
-      preventive care.
-    </p>
+    <p>{{doctor.about}}</p>
   </section>
 </main>
 

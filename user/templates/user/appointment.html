@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/appointment.css' %}" />
+{% endblock css %} {% block content %}
+
+<div class="container">
+  <div class="profile-card">
+    <img src="doctor-image.jpg" alt="Doctor image" class="doctor-image" />
+    <div class="doctor-info">
+      <div class="header">
+        <h2 class="doctor-name">{{doctor.name}}</h2>
+        <button id="profile" data-url="{% url 'user:doctor_profile' pk=doctor.id %}"
+          class="profile-btn">Profile</button>
+      </div>
+      <p class="doctor-specialty">{{doctor.speciality}}</p>
+      <p class="doctor-description">{{doctor.about}}</p>
+      <div class="availability">
+        <h3>Availability</h3>
+        <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+        <p>Saturday: 9:00 AM - 1:00 PM</p>
+      </div>
+      <button class="appointment-btn">Book Appointment</button>
+    </div>
+  </div>
+  <div class="live-appointments">
+    <ul class="appointment-list">
+      <li class="appointment-item">
+        <span class="appointment-time">No of available bed: </span>
+      </li>
+      <li class="appointment-item">
+        <span class="appointment-time">No of appoinment</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+{% endblock content %} {% block js %}
+<script src="{% static 'scripts/user_appointment.js' %}"></script>
+{% endblock js %}

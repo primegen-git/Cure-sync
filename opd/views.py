@@ -65,3 +65,15 @@ def doctor_profile(request):
         return HttpResponseForbidden("you don't have access to this account")
     context = {"doctor": doctor}
     return render(request, "opd/doctor_profile.html", context)
+
+
+@login_required(login_url="opd:login")
+def appointment(request):
+    context = {}
+    return render(request, "opd/appointment.html", context)
+
+
+@login_required(login_url="opd:login")
+def appointment_request(request):
+    context = {}
+    return render(request, "opd/online_appointment_request.html", context)

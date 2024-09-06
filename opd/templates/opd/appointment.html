@@ -1,0 +1,67 @@
+{% extends 'opd/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/opd_appointment.css' %}" />
+{% endblock css %} {% block content %}
+<main class="main-content">
+  <div class="notification">
+    <strong>New Online Booking!</strong> You have 3 new appointment
+    requests.
+  </div>
+  <div class="header">
+    <h1>Appointments</h1>
+    <input type="text" class="search-bar" placeholder="Search appointments" />
+    <button id="online_request" data-url="{% url 'opd:appointment_request' %}" class="add-btn">online request</button>
+  </div>
+  <div class="stats-container">
+    <div class="stat-card">
+      <h3>Total Appointments</h3>
+      <div class="stat-value">5,200</div>
+      <div class="stat-label">+120 vs previous month</div>
+    </div>
+    <div class="stat-card">
+      <h3>Scheduled Appointments</h3>
+      <div class="stat-value">4,800</div>
+      <div class="stat-label">+100 vs previous month</div>
+    </div>
+    <div class="stat-card">
+      <h3>New Appointments (This Month)</h3>
+      <div class="stat-value">800</div>
+      <div class="stat-label">+30 vs previous month</div>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Appointment ID</th>
+        <th>Patient Name</th>
+        <th>Doctor</th>
+        <th>Date & Time</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#APT001</td>
+        <td>John Doe</td>
+        <td>Dr. Smith</td>
+        <td>2024-03-20 10:00 AM</td>
+        <td><span class="status status-scheduled">Scheduled</span></td>
+        <td>
+          <button class="action-btn">📝</button>&nbsp
+          <button class="action-btn">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="pagination">pagination here</div>
+</main>
+{% endblock content %}
+{% block js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const appointmentElement = document.getElementById("appointment");
+    appointmentElement.classList.add("active");
+  });
+</script>
+<script src="{% static 'scripts/online_appointment_request.js' %} "></script>
+{% endblock js %}

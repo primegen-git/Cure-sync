@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/online_appointment_request.css' %}" />
+{% endblock css %} {% block content %}
+
+<div class="header">
+  <h1>OPD Appointment Management</h1>
+</div>
+<div class="container">
+  <div class="appointment-section">
+    <div class="section-header">
+      <h2>Pending Appointments</h2>
+    </div>
+    <ul class="appointment-list">
+      <li class="appointment-item">
+        <div class="appointment-info">
+          <h3>John Doe</h3>
+          <p>Time: 10:00 AM | Date: 2024-03-20</p>
+          <span class="badge badge-online">Online Booking</span>
+        </div>
+        <div class="appointment-actions">
+          <button class="btn">Confirm</button>
+          <button class="btn">Cancel</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+{% endblock content %}
