@@ -1,55 +1,52 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'styles/home.css' %}" />
+{% endblock css %}
 
-<h2>this is the home page</h2>
-
-<section class="devlist">
-  <div class="container">
-    <div class="grid grid--three">
-
-      <div class="column card">
-        <div class="dev">
-          <a href="{% url 'user:home_page' %}" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="" alt="image" />
-              <div class="dev__meta">
-                <h3>User</h3>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <div class="column card">
-        <div class="dev">
-          <a href="{% url 'opd:login' %}" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="" alt="image" />
-              <div class="dev__meta">
-                <h3>OPD</h3>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <div class="column card">
-        <div class="dev">
-          <a href="#" class="card__body">
-            <div class="dev__profile">
-              <img class="avatar avatar--md" src="" alt="image" />
-              <div class="dev__meta">
-                <h3>hospital</h3>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
+{% block content %}
 
 
-
-
-
+<div class="container">
+  <div class="sidebar">
+    <div>
+      <div class="logo">CureSync</div>
+      <p class="description">
+        Revolutionizing healthcare through seamless integration of patients,
+        outpatient departments, and hospitals. Experience the future of
+        medical care management with CureSync.
+      </p>
     </div>
-</section>
-
+    <div>
+      <p>&copy; 2024 CureSync. All rights reserved.</p>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="hexagon-container">
+      <div class="hexagon" onclick="location.href='{% url 'user:home_page' %}'">
+        <div class="hexagon-content">
+          <div class="hexagon-icon">👤</div>
+          <div class="hexagon-text">User</div>
+        </div>
+      </div>
+      <div class="hexagon" onclick="location.href='{% url 'opd:login' %}'">
+        <div class="hexagon-content">
+          <div class="hexagon-icon">🏥</div>
+          <div class="hexagon-text">OPD</div>
+        </div>
+      </div>
+      <div class="hexagon" onclick="location.href='#'">
+        <div class="hexagon-content">
+          <div class="hexagon-icon">🚑</div>
+          <div class="hexagon-text">Hospital</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="particles-js" class="particles"></div>
 {% endblock content %}
+
+
+{% block js %}
+<script src="{% static 'scripts/home.js' %}"></script>
+{% endblock js %}

@@ -1,10 +1,9 @@
-from functools import wraps
 from django.contrib import messages
-from django.http import HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from opd.models import Doctor, Employee, Product
+from opd.models import Doctor, Inventory
 
 
 def login_page(request):
@@ -36,24 +35,14 @@ def home_page(request):
 
 
 @login_required(login_url="opd:login")
-def employee_list(request):
-    try:
-        doctor = request.user.doctor
-        employees = Employee.objects.filter(owner=doctor)
-    except AttributeError:
-        return HttpResponseForbidden("You don't have access to view this page")
-    context = {"employees": employees}
-    return render(request, "opd/employee.html", context)
-
-
-@login_required(login_url="opd:login")
 def product_list(request):
-    try:
-        doctor = request.user.doctor
-        products = Product.objects.filter(owner=doctor)
-    except AttributeError:
-        return HttpResponseForbidden("you don't have a doctor account")
-    context = {"products": products}
+    # try:
+    #     doctor = request.user.doctor
+    #     products = .objects.filter(owner=doctor)
+    # except AttributeError:
+    #     return HttpResponseForbidden("you don't have a doctor account")
+    # context = {"products": products}
+    context = {}
     return render(request, "opd/product.html", context)
 
 
