@@ -49,3 +49,17 @@ class Product(models.Model):
         self.name = self.name.capitalize()
         self.category = self.category.capitalize()
         super().save(*args, **kwargs)
+
+
+class Employee(models.Model):
+    owner = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    name = models.CharField("Name", max_length=255)
+    phone_number = models.CharField("Phone Number", max_length=10)
+    display_id = models.CharField("ID", max_length=255)
+
+    id = models.UUIDField(
+        default=uuid.uuid4, unique=True, primary_key=True, editable=False
+    )
+
+    def __str__(self):
+        return str(self.name.capitalize())

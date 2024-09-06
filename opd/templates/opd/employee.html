@@ -1,6 +1,7 @@
 {% extends 'opd/index.html' %} {% load static %} {% block css %}
 <link rel="stylesheet" href="{% static 'styles/employee.css' %}" />
 {% endblock css %} {% block content %}
+
 <main class="main-content">
   <header>
     <h1>Employees</h1>
@@ -50,7 +51,6 @@
       <table>
         <thead>
           <tr>
-            <th></th>
             <th>ID</th>
             <th>Employees Name</th>
             <th>Deport.</th>
@@ -59,26 +59,30 @@
           </tr>
         </thead>
         <tbody>
+          {% for employee in employees %}
           <tr>
-            <td><input type="checkbox" /></td>
-            <td>#527727</td>
+            <td>{{employee.display_id}}</td>
             <td>
               <img src="https://via.placeholder.com/30" alt="Cameron" />
-              Cameron
+              {{employee.name}}
             </td>
             <td>Cargill</td>
-            <td>(808) 555-0111</td>
+            <td>{{employee.phone_number}}</td>
             <td>
               <button class="action-btn">📝</button>
               <button class="action-btn">🗑️</button>
             </td>
           </tr>
-          <!-- Add more rows as in the image -->
+          {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
 </main>
+
+
+
+
 
 {% endblock content %} {% block js %}
 
