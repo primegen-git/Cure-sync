@@ -33,3 +33,19 @@ class Doctor(models.Model):
         self.speciality = self.speciality.capitalize()
 
         super().save(*args, **kwargs)
+
+
+class Product(models.Model):
+    owner = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    name = models.CharField("Name", max_length=255)
+    category = models.CharField("Category", max_length=255)
+    stock = models.IntegerField("Stock", default=0)
+    price = models.IntegerField("Price", default=0)
+
+    def __str__(self):
+        return str(self.name.capitalize())
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.capitalize()
+        self.category = self.category.capitalize()
+        super().save(*args, **kwargs)
