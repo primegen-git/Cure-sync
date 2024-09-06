@@ -1,4 +1,32 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from opd.models import Doctor
+
+
+def login_page(request):
+    if request.method == "POST":
+        username = request.POST["username"].lower()
+        password = request.POST["password"]
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            try:
+                user.doctor
+            except AttributeError:
+                return HttpResponseForbidden("you don't have a doctor account")
+            login(request, user)
+            messages.success(request, "successfull login")
+            return redirect("opd:home_page")
+        else:
+            messages.error(request, "login failed")
+            return redirect("opd:login")
+
+    context = {}
+    return render(request, "opd/doctor_login.html", context)
 
 
 def home_page(request):
@@ -16,6 +44,11 @@ def product_list(request):
     return render(request, "opd/product.html", context)
 
 
+@login_required(login_url="opd:login")
 def doctor_profile(request):
-    context = {}
+    try:
+        doctor = request.user.doctor
+    except AttributeError:
+        return HttpResponseForbidden("you don't have access to this account")
+    context = {"doctor": doctor}
     return render(request, "opd/doctor_profile.html", context)

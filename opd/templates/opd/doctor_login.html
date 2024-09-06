@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href={% static 'styles/doctor_login.css' %} {% endblock css %} {% block content %} <div
+  class="container">
+<div class="login-card">
+  <div class="brand">
+    <img src="curesync-logo.svg" alt="CureSync Logo" class="logo" />
+    <h1>CureSync</h1>
+  </div>
+  <h2>Welcome Back</h2>
+  <form class="login-form" action="" , method="POST">
+    {% csrf_token %}
+    <div class="input-group">
+      <input type="text" name="username" required />
+      <label for="username">Username</label>
+      <i class="fas fa-user"></i>
+    </div>
+    <div class="input-group">
+      <input type="password" name="password" required />
+      <label for="password">Password</label>
+      <i class="fas fa-lock"></i>
+    </div>
+    <div class="options">
+      <a href="#" class="forgot-password">Forgot Password?</a>
+    </div>
+    <button type="submit" class="login-btn">Log In</button>
+  </form>
+  <div class="divider">
+    <span>or</span>
+  </div>
+  <div class="social-login">
+    <button class="google-btn">
+      <i class="fab fa-google"></i> Sign in with Google
+    </button>
+  </div>
+  <p class="signup-link">
+    Don't have an account? <a href="#">Sign Up</a>
+  </p>
+</div>
+<div class="info-panel">
+  <h2>Streamline Your Healthcare Experience</h2>
+  <p>
+    Access patient records, manage appointments, and collaborate with your
+    team seamlessly.
+  </p>
+  <ul>
+    <li>Secure and HIPAA compliant</li>
+    <li>Real-time updates and notifications</li>
+    <li>Integrated telemedicine features</li>
+  </ul>
+</div>
+</div>
+{% endblock content %}

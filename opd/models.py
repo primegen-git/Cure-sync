@@ -13,12 +13,12 @@ class Doctor(models.Model):
         upload_to="profile/",
         default="profile/default-profile.png",
     )
-    speciality = models.CharField("Speciality", max_length=200)
-    phone_number = models.CharField("Phone Number", max_length=10)
-    street_address = models.CharField("Street Address", max_length=255)
-    city = models.CharField("City", max_length=255)
-    experience = models.IntegerField("Year of Experience")
-    about = models.TextField()
+    speciality = models.CharField("Speciality", max_length=200, blank=True)
+    phone_number = models.CharField("Phone Number", max_length=10, blank=True)
+    street_address = models.CharField("Street Address", max_length=255, blank=True)
+    city = models.CharField("City", max_length=255, blank=True)
+    experience = models.IntegerField("Year of Experience", default=0)
+    about = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
