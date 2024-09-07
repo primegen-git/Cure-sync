@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from opd.models import Doctor, Inventory
+from opd.utils import is_doctor
 
 
 def login_page(request):
@@ -13,28 +14,28 @@ def login_page(request):
 
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            try:
-                user.doctor  # type: ignore
-            except AttributeError:
-                return HttpResponseForbidden("You don't have access to view this page")
-            login(request, user)
-            messages.success(request, "successfull login")
-            return redirect("opd:home_page")
-        else:
-            messages.error(request, "login failed")
-            return redirect("opd:login")
+        # if user is not None:
+        #     try:
+        #         user.doctor  # type: ignore
+        #     except AttributeError:
+        #         return HttpResponseForbidden("You don't have access to view this page")
+        login(request, user)
+        messages.success(request, "successfull login")
+        return redirect("opd:home_page")
+        # else:
+        #     messages.error(request, "login failed")
+        #     return redirect("opd:login")
 
     context = {}
     return render(request, "opd/doctor_login.html", context)
 
 
+@user_passes_test(is_doctor, login_url="home:home_page")
 def home_page(request):
     context = {}
     return render(request, "opd/patient.html", context)
 
 
-@login_required(login_url="opd:login")
 def product_list(request):
     # try:
     #     doctor = request.user.doctor

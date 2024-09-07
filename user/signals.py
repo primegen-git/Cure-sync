@@ -1,32 +1,13 @@
 from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-from django.core.mail import send_mail
-
-from django.contrib.auth.models import User
-from django.conf import settings
+from django.contrib.auth.models import Group
 from .models import Profile
 
 
-def createProfile(sender, instance, created, **kwargs):
+def add_user_to_doctor_group(sender, instance, created, **kwargs):
     if created:
-        user = instance
-        Profile.objects.create(  # type: ignore
-            user=user,
-            name=user.first_name,
-            username=user.username,
-            email=user.email,
-        )
-
-        # subject = "welcome to DevSearch"
-        # message = f"hi {profile.name}, we are glad you are here"
-        #
-        # send_mail(
-        #     subject,
-        #     message,
-        #     settings.EMAIL_HOST_USER,
-        #     [profile.email],
-        #     fail_silently=False,
-        # )
+        user = instance.user
+        Profile_group = Group.objects.get(name="Profile")
+        user.groups.add(Profile_group)
 
 
 def updateUser(sender, instance, created, **kwargs):
@@ -41,10 +22,9 @@ def updateUser(sender, instance, created, **kwargs):
 
 def deleteUser(sender, instance, **kwargs):
     user = instance.user
-
     user.delete()
 
 
-post_save.connect(receiver=createProfile, sender=User)
+post_save.connect(receiver=add_user_to_doctor_group, sender=Profile)
 post_save.connect(receiver=updateUser, sender=Profile)
 post_delete.connect(receiver=deleteUser, sender=Profile)

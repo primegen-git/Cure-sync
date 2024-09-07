@@ -1,18 +1,13 @@
 from django.db.models.signals import post_save, post_delete
-
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from .models import Doctor
 
 
-def createDoctorProfile(sender, instance, created, **kwargs):
+def add_user_to_doctor_group(sender, instance, created, **kwargs):
     if created:
-        user = instance
-        Doctor.objects.create(  # type: ignore
-            user=user,
-            name=user.first_name,
-            username=user.username,
-            email=user.email,
-        )
+        user = instance.user
+        doctor_group = Group.objects.get(name="Doctor")
+        user.groups.add(doctor_group)
 
 
 def updateUser(sender, instance, created, **kwargs):
@@ -27,10 +22,9 @@ def updateUser(sender, instance, created, **kwargs):
 
 def deleteUser(sender, instance, **kwargs):
     user = instance.user
-
     user.delete()
 
 
-post_save.connect(receiver=createDoctorProfile, sender=User)
+post_save.connect(receiver=add_user_to_doctor_group, sender=Doctor)
 post_save.connect(receiver=updateUser, sender=Doctor)
 post_delete.connect(receiver=deleteUser, sender=Doctor)
