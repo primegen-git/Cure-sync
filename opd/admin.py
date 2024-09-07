@@ -1,5 +1,6 @@
 from django.contrib import admin
 from opd.models import (
+    Appointment,
     Doctor,
     Inventory_Item,
     Machinery,
@@ -7,6 +8,7 @@ from opd.models import (
     Inventory,
     Opd,
     Medicine,
+    Patient,
 )
 # Register your models here.
 
@@ -17,3 +19,5 @@ admin.site.register(Medicine)
 admin.site.register(Machinery)
 admin.site.register(Inventory_Item)
 admin.site.register(Offline_Patient)
+admin.site.register(Appointment)
+admin.site.register(Patient)

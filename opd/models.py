@@ -1,5 +1,5 @@
 # TODO: delete the unnecessary null = true from the field attribute
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User
 import uuid
 from user.models import Profile
@@ -181,18 +181,21 @@ class Appointment(models.Model):
     class Meta:
         unique_together = [["opd", "appointment_id"]]
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
-        # check if the appointment is new or not...
-        is_new = self.id is None
+        is_new = self._state.adding
         super().save(*args, **kwargs)
 
         if is_new:
             self.opd.no_of_appointment = models.F("no_of_appointment") + 1
             self.opd.save()
+            self.opd.refresh_from_db()
 
+    @transaction.atomic
     def delete(self, *args, **kwargs):  # type: ignore
         self.opd.no_of_appointment = models.F("no_of_appointment") - 1
         self.opd.save()
+        self.opd.refresh_from_db()
         super().delete(*args, **kwargs)
 
 
@@ -220,8 +223,15 @@ class Patient(models.Model):
     patient_type = models.CharField(
         "Patient Type", choices=type, max_length=30, null=True
     )
-    patient_id = models.CharField("Appointment ID", max_length=10, null=True)
+    patient_id = models.CharField("Patient ID", max_length=10, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
+    description = models.TextField("Description", null=True)
+    total_bill = models.DecimalField(
+        "Total Bill", max_digits=10, decimal_places=2, null=True
+    )
+    billing_report = models.TextField("Bill Report", null=True)
+    next_appointment = models.DateTimeField("Next Appointment Date", null=True)
+    bed_reservation = models.PositiveIntegerField("Bed Reservation Hour", default=0)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
     )
@@ -232,15 +242,16 @@ class Patient(models.Model):
     def __str__(self):
         return str(self.patient_id)
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
-        # check if the appointment is new or not...
-        is_new = self.id is None
+        is_new = self._state.adding
         super().save(*args, **kwargs)
 
         if is_new:
             self.opd.no_of_beds = models.F("no_of_beds") + 1
             self.opd.save()
 
+    @transaction.atomic
     def delete(self, *args, **kwargs):  # type: ignore
         self.opd.no_of_beds = models.F("no_of_beds") - 1
         self.opd.save()

@@ -9,11 +9,14 @@ class Profile(models.Model):
     username = models.CharField("Username", max_length=200, null=True, blank=True)
     name = models.CharField("Full Name", max_length=200, null=True, blank=True)
     email = models.EmailField("Email", max_length=190, null=True, blank=True)
+    age = models.PositiveIntegerField("Age", null=True)
     profile_image = models.ImageField(
         "Image",
         upload_to="profile/",
         default="profile/default-profile.png",
     )
+    phone_number = models.PositiveIntegerField("Phone Number", null=True)
+    address = models.TextField("Address", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
