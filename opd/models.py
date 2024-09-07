@@ -6,9 +6,7 @@ from user.models import Profile
 
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="doctor")
-    username = models.CharField("Username", max_length=200)
     name = models.CharField("Full Name", max_length=200)
-    email = models.EmailField("Email", max_length=190)
     profile_image = models.ImageField(
         "Image",
         upload_to="profile/",
@@ -29,26 +27,26 @@ class Doctor(models.Model):
         return str(self.name)
 
     def save(self, *args, **kwargs):
-        self.username = self.username.lower()
         self.name = self.name.upper()
         self.speciality = self.speciality.capitalize()
 
         super().save(*args, **kwargs)
 
+    # user the User class that have to username and the email field built in. this @property method help to access the user as it is part of the doctor table
+    @property
+    def username(self):
+        return str(self.user.username)
 
-class Offline_Patient(models.Model):
-    name = models.CharField("Full Name", max_length=200, null=True, blank=True)
-    age = models.IntegerField("Age")
-    display_id = models.CharField("ID", max_length=30)
-    phone_number = models.CharField("Phone Number", max_length=10)
-    address = models.TextField("Address", default="default")
-    medical_history = models.TextField()
-    email = models.EmailField("Email", max_length=190, null=True, blank=True)
-    profile_image = models.ImageField(
-        "Image",
-        upload_to="profile/",
-        default="profile/default-profile.png",
-    )
+    @property
+    def email(self):
+        return str(self.user.email)
+
+
+class Opd(models.Model):
+    owner = models.OneToOneField(Doctor, on_delete=models.CASCADE, related_name="opd")
+    name = models.CharField("Name", max_length=255, null=True, blank=True)
+    no_of_beds = models.IntegerField("No of Beds", default=0)
+    no_of_appointment = models.IntegerField("No of Appointment", default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
@@ -58,11 +56,24 @@ class Offline_Patient(models.Model):
         return str(self.name)
 
 
+class Inventory(models.Model):
+    opd = models.OneToOneField(
+        "Opd",
+        on_delete=models.CASCADE,
+        related_name="inventorys",
+        null=True,
+        blank=True,  # NOTE: initally after updating we are going to remove it
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f" Inventory of {str(self.opd.name)}"
+
+
 class Medicine(models.Model):
     type = (("oral", "oral"), ("vascular", "vascular"), ("applicant", "applicant"))
     name = models.CharField("Name", max_length=255)
     category = models.CharField("Category", choices=type, max_length=30)
-    price = models.IntegerField("Price", default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
@@ -76,30 +87,54 @@ class Medicine(models.Model):
         super().save(*args, **kwargs)
 
 
-class Inventory(models.Model):
+class Machinery(models.Model):
+    name = models.CharField("Name", max_length=255)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Inventory_Item(models.Model):
+    inventory = models.ForeignKey(
+        Inventory, on_delete=models.CASCADE, related_name="inventory_items"
+    )
     medicine = models.ForeignKey(
-        Medicine, on_delete=models.CASCADE, related_name="inventory"
+        Medicine,
+        on_delete=models.CASCADE,
+        related_name="inventory_items",
+        null=True,
+        blank=True,
+    )
+    machinery = models.ForeignKey(
+        Machinery,
+        on_delete=models.CASCADE,
+        related_name="inventory_items",
+        null=True,
+        blank=True,
     )
     quantity = models.IntegerField("Quantity", default=0)
-    machinary = models.CharField("Machinary", max_length=300, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(
-        default=uuid.uuid4, unique=True, primary_key=True, editable=False
-    )
+    price = models.DecimalField("Price", max_digits=10, default=0, decimal_places=2)
+
+    class Meta:
+        verbose_name_plural = "Inventory Items"
+
+    def __str__(self):
+        return f"{self.medicine or self.machinery} in {self.inventory}"
 
 
-class Opd(models.Model):
-    owner = models.OneToOneField(Doctor, on_delete=models.CASCADE, related_name="opd")
-    name = models.CharField("Name", max_length=255)
-    no_of_beds = models.IntegerField("No of Beds", default=0)
-    no_of_appointment = models.IntegerField("No of Appointment", default=0)
-    online_patient = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="online_patient"
+class Offline_Patient(models.Model):
+    name = models.CharField("Full Name", max_length=200, null=True, blank=True)
+    age = models.IntegerField("Age")
+    email = models.EmailField("Email", max_length=190, null=True, blank=True)
+    profile_image = models.ImageField(
+        "Image",
+        upload_to="profile/",
+        default="profile/default-profile.png",
     )
-    offline_patients = models.ManyToManyField(Offline_Patient, related_name="opds")
-    inventory = models.OneToOneField(
-        Inventory, on_delete=models.CASCADE, related_name="opd"
-    )
+    display_id = models.CharField("ID", max_length=30)
+    phone_number = models.CharField("Phone Number", max_length=10)
+    address = models.TextField("Address", default="default")
+    medical_history = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
@@ -107,3 +142,4 @@ class Opd(models.Model):
 
     def __str__(self):
         return str(self.name)
+
