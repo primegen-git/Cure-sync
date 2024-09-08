@@ -24,7 +24,12 @@ class Profile(models.Model):
         return str(self.name)
 
     def save(self, *args, **kwargs):
-        self.username = self.username.lower()
-        self.name = self.name.upper()
-
         super().save(*args, **kwargs)
+
+    @property
+    def username(self):
+        return self.user.username
+
+    @property
+    def email(self):
+        return self.user.email

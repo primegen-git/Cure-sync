@@ -56,6 +56,10 @@ class Opd(models.Model):
     def __str__(self):
         return str(self.name)
 
+    @property
+    def patient_count(self):
+        self.patients.count()  # type: ignore
+
 
 class Inventory(models.Model):
     opd = models.OneToOneField(
