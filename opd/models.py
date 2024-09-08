@@ -69,7 +69,7 @@ class Inventory(models.Model):
     opd = models.OneToOneField(
         "Opd",
         on_delete=models.CASCADE,
-        related_name="inventorys",
+        related_name="inventory",
         null=True,
         blank=True,  # NOTE: initally after updating we are going to remove it
     )

@@ -1,10 +1,18 @@
 from django.shortcuts import render
 from opd.models import Doctor
-# Create your views here.
+from opd.utils import (
+    get_total_appointment_count,
+    get_total_bed_count,
+    get_total_doctor_count,
+)
 
 
 def home_page(request):
-    context = {}
+    context = {
+        "total_beds_count": get_total_bed_count,
+        "total_doctor_count": get_total_doctor_count,
+        "total_appointment_count": get_total_appointment_count,
+    }
     return render(request, "user/index.html", context)
 
 
@@ -38,7 +46,13 @@ def chatbot(request):
 
 def appointment(request, pk):
     doctor = Doctor.objects.get(id=pk)
-    context = {"doctor": doctor}
+    total_bed_count = doctor.opd.no_of_beds  # type: ignore
+    total_appointment_count = doctor.opd.no_of_appointment  # type: ignore
+    context = {
+        "doctor": doctor,
+        "total_appointment_count": total_appointment_count,
+        "total_bed_count": total_bed_count,
+    }
     return render(request, "user/appointment.html", context)
 
 

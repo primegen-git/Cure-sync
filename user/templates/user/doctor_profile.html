@@ -7,7 +7,8 @@
     <img src="doctor-avatar.jpg" alt="Doctor Image" class="profile-image" />
     <div>
       <h1 class="profile-name">{{doctor.name}}</h1>
-      <p class="profile-specialty">{{doctor.speciality}}</p>
+      <br />
+      <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
     </div>
   </div>
 
@@ -15,56 +16,28 @@
     <h2 class="section-title">Personal Information</h2>
     <div class="info-grid">
       <div class="info-item">
-        <span class="info-label">Email:</span>{{doctor.email}}
+        <span class="info-label">Email:</span> {{doctor.email}}
       </div>
       <div class="info-item">
-        <span class="info-label">Phone:</span>{{doctor.phone_number}}
+        <span class="info-label">Phone:</span> {{doctor.phone_number}}
       </div>
       <div class="info-item">
-        <span class="info-label">Address:</span>{{doctor.street_address}}, {{doctor.city}}
+        <span class="info-label">specialization:</span> {{doctor.speciality}}
       </div>
       <div class="info-item">
-        <span class="info-label">Years of Experience:</span>{{doctor.experience}}
+        <span class="info-label">Years of Experience:</span> {{doctor.experience}}
       </div>
     </div>
   </section>
 
   <section class="profile-section">
     <h2 class="section-title">Education & Qualifications</h2>
-    <ul>
-      <li>MD in Cardiology, University of Medical Sciences, 2005</li>
-      <li>Residency in Internal Medicine, City Hospital, 2002-2005</li>
-      <li>Board Certified in Cardiovascular Disease</li>
-    </ul>
+    {{doctor.education}}
   </section>
 
   <section class="profile-section">
-    <h2 class="section-title">Availability</h2>
-    <table class="availability-table">
-      <thead>
-        <tr>
-          <th>Day</th>
-          <th>Morning</th>
-          <th>Afternoon</th>
-          <th>Evening</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Monday</td>
-          <td>9:00 AM - 12:00 PM</td>
-          <td>2:00 PM - 5:00 PM</td>
-          <td>-</td>
-        </tr>
-        <tr>
-          <td>Tuesday</td>
-          <td>9:00 AM - 12:00 PM</td>
-          <td>-</td>
-          <td>6:00 PM - 9:00 PM</td>
-        </tr>
-        <!-- Add more rows for other days -->
-      </tbody>
-    </table>
+    <h2 class="section-title">Address</h2>
+    {{doctor.address}}
   </section>
 
   <section class="profile-section">
@@ -72,5 +45,6 @@
     <p>{{doctor.about}}</p>
   </section>
 </main>
+
 
 {% endblock content %}

@@ -14,9 +14,8 @@
       <p class="doctor-specialty">{{doctor.speciality}}</p>
       <p class="doctor-description">{{doctor.about}}</p>
       <div class="availability">
-        <h3>Availability</h3>
-        <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
-        <p>Saturday: 9:00 AM - 1:00 PM</p>
+        <h3>Address</h3>
+        {{doctor.address}}
       </div>
       <button class="appointment-btn">Book Appointment</button>
     </div>
@@ -24,10 +23,10 @@
   <div class="live-appointments">
     <ul class="appointment-list">
       <li class="appointment-item">
-        <span class="appointment-time">No of available bed: </span>
+        <span class="appointment-time">No of available bed: {{total_bed_count}}</span>
       </li>
       <li class="appointment-item">
-        <span class="appointment-time">No of appoinment</span>
+        <span class="appointment-time">No of appoinment: {{total_appointment_count}}</span>
       </li>
     </ul>
   </div>

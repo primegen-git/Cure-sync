@@ -32,27 +32,15 @@
     <div class="quick-stats">
       <div class="stat-card">
         <h3>Available Beds</h3>
-        <div class="stat-value">250</div>
-        <div class="stat-progress">
-          <div class="progress-bar" style="width: 50%"></div>
-        </div>
-        <div class="stat-info">Out of 500 total beds</div>
+        <div class="stat-value">{{total_beds_count}}</div>
       </div>
       <div class="stat-card">
         <h3>Active Doctors</h3>
-        <div class="stat-value">75</div>
-        <div class="stat-progress">
-          <div class="progress-bar" style="width: 75%"></div>
-        </div>
-        <div class="stat-info">Across all specialties</div>
+        <div class="stat-value">{{total_doctor_count}}</div>
       </div>
       <div class="stat-card">
         <h3>Today's Appointments</h3>
-        <div class="stat-value">120</div>
-        <div class="stat-progress">
-          <div class="progress-bar" style="width: 60%"></div>
-        </div>
-        <div class="stat-info">15 urgent cases</div>
+        <div class="stat-value">{{total_appointment_count}}</div>
       </div>
     </div>
   </main>

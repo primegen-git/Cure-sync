@@ -28,11 +28,11 @@
           <div class="doctor-details">
             <h3>{{doctor.name}}</h3>
             <p>{{doctor.speciality}}</p>
-            <p>Experienced in heart surgeries</p>
+            <p>Experience: <span>{{doctor.experience}}</span></p>
           </div>
         </div>
         <div class="bed-availability">
-          <p>No. of beds available: <span>5</span></p>
+          <p>No. of beds available: <span>{{doctor.opd.no_of_beds}}</span></p>
         </div>
       </a>
       {% endfor %}

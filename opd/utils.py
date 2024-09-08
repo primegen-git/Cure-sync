@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group, User
-from opd.models import Opd
+from opd.models import Appointment, Opd, Doctor
 
 
 def add_user_to_doctor_group(user):
@@ -28,9 +28,17 @@ def get_product_count(products):
     return [sum(product.quantity for product in products)]
 
 
-def get_total_bed_counts():
+def get_total_bed_count():
     opds = Opd.objects.all()
     total_beds = 0
     for opd in opds:
         total_beds += opd.no_of_beds
     return total_beds
+
+
+def get_total_doctor_count():
+    return Doctor.objects.count()
+
+
+def get_total_appointment_count():
+    return Appointment.objects.count()

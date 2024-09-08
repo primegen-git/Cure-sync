@@ -1,6 +1,11 @@
 from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.models import Group
-from .models import Doctor
+from .models import Doctor, Inventory
+
+
+def create_inventory(sender, instance, created, **kwargs):
+    if created:
+        Inventory.objects.create(opd=instance.opd)
 
 
 def add_user_to_doctor_group(sender, instance, created, **kwargs):
@@ -28,3 +33,4 @@ def deleteUser(sender, instance, **kwargs):
 post_save.connect(receiver=add_user_to_doctor_group, sender=Doctor)
 post_save.connect(receiver=updateUser, sender=Doctor)
 post_delete.connect(receiver=deleteUser, sender=Doctor)
+post_delete.connect(receiver=create_inventory, sender=Doctor)
