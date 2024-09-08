@@ -3,8 +3,8 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, user_passes_test
-from opd.models import Doctor, Inventory
-from opd.utils import is_doctor
+from opd.models import Doctor
+from opd.utils import get_product_count, is_doctor, get_processed_data
 
 
 def login_page(request):
@@ -32,38 +32,43 @@ def login_page(request):
 
 @user_passes_test(is_doctor, login_url="home:home_page")
 def home_page(request):
-    context = {}
+    opd = request.user.doctor.opd
+    patients = opd.patients.all().order_by("-date")
+    context = {"opd": opd, "patients": patients}
     return render(request, "opd/patient.html", context)
 
 
+@user_passes_test(is_doctor, login_url="home:home_page")
 def product_list(request):
-    # try:
-    #     doctor = request.user.doctor
-    #     products = .objects.filter(owner=doctor)
-    # except AttributeError:
-    #     return HttpResponseForbidden("you don't have a doctor account")
-    # context = {"products": products}
-    context = {}
+    products = request.user.doctor.opd.inventorys.inventory_items.all()
+    count = get_product_count(products)[0]
+    context = {"products": products, "count": count}
     return render(request, "opd/product.html", context)
 
 
-@login_required(login_url="opd:login")
+@user_passes_test(is_doctor, login_url="home:home_page")
 def doctor_profile(request):
-    try:
-        doctor = request.user.doctor
-    except AttributeError:
-        return HttpResponseForbidden("you don't have access to this account")
+    doctor = request.user.doctor
     context = {"doctor": doctor}
     return render(request, "opd/doctor_profile.html", context)
 
 
-@login_required(login_url="opd:login")
+@user_passes_test(is_doctor, login_url="home:home_page")
 def appointment(request):
-    context = {}
+    appointments = request.user.doctor.opd.appointments.all()
+    total_appointment = request.user.doctor.opd.no_of_appointment
+    context = {"appointments": appointments, "total_appointment": total_appointment}
     return render(request, "opd/appointment.html", context)
 
 
-@login_required(login_url="opd:login")
+@user_passes_test(is_doctor, login_url="home:home_page")
 def appointment_request(request):
     context = {}
     return render(request, "opd/online_appointment_request.html", context)
+
+
+@user_passes_test(is_doctor, login_url="home:home_page")
+def patient_report(request, id):
+    patient = request.user.doctor.opd.patients.get(id=id)  # type: ignore
+    context = {"patient": patient}
+    return render(request, "opd/patient_report.html", context)

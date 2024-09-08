@@ -13,8 +13,7 @@
   <div class="stock-stats">
     <div class="stat-card">
       <h3>Total Products</h3>
-      <div class="stat-value">5,000</div>
-      <div class="stat-info">+50 vs previous month</div>
+      <div class="stat-value">{{count}}</div>
     </div>
     <div class="stat-card">
       <h3>Low Stock Items</h3>
@@ -34,7 +33,7 @@
           <th>Product Name</th>
           <th>SKU</th>
           <th>Category</th>
-          <th>In Stock</th>
+          <th>Quantity</th>
           <th>Price</th>
           <th>Status</th>
           <th>Action</th>
@@ -44,12 +43,11 @@
         {% for product in products %}
         <tr>
           <td>
-            <img src="product-icon.png" alt="Product" class="product-icon" />
-            <span>{{product.name}}</span>
+            <span>{{product.medicine.name}}</span>
           </td>
           <td>SKU001</td>
-          <td>{{product.category}}</td>
-          <td>{{product.stock}}</td>
+          <td>{{product.medicine.category}}</td>
+          <td>{{product.quantity}}</td>
           <td>Rs {{product.price}}</td>
           <td><span class="status in-stock">In Stock</span></td>
           <td>

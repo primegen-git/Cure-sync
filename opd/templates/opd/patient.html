@@ -9,57 +9,46 @@
     <div class="search-bar">
       <input type="text" placeholder="Search for patients" />
     </div>
-    <button class="add-patient-btn">+ Add Patient</button>
   </header>
+  {% if opd.patient_count != 0 %}
   <div class="patient-stats">
     <div class="stat-card">
       <h3>Total Patients</h3>
-      <div class="stat-value">10,500</div>
-      <div class="stat-info">+230 vs previous month</div>
-    </div>
-    <div class="stat-card">
-      <h3>Active Patients</h3>
-      <div class="stat-value">8,200</div>
-      <div class="stat-info">+180 vs previous month</div>
-    </div>
-    <div class="stat-card">
-      <h3>New Patients (This Month)</h3>
-      <div class="stat-value">1,200</div>
-      <div class="stat-info">+50 vs previous month</div>
+      <div class="stat-value">{{opd.patient_count}}</div>
     </div>
   </div>
+  {% endif %}
   <div class="patient-list">
     <table>
       <thead>
         <tr>
-          <th>Patient Name</th>
           <th>ID</th>
+          <th>Patient Name</th>
           <th>Age</th>
-          <th>Last Visit</th>
-          <th>Status</th>
+          <th>Gender</th>
+          <th>Date_of_visit</th>
+          <th>Mode</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
+        {% for patient in patients %}
         <tr>
+          <td><a style="text-decoration: none;" href={% url 'opd:patient_report' id=patient.id %}>
+              {{patient.patient_id}}</a></td>
           <td>
-            <img src="patient-avatar.jpg" alt="Patient" class="patient-avatar" />
-            <span>John Doe</span>
+            <span>{{patient.name}}</span>
           </td>
-          <td>#PT001</td>
-          <td>45</td>
-          <td>2024-03-15</td>
-          <td><span class="status active">Active</span></td>
+          <td>{{patient.age}}</td>
+          <td>{{patient.gender}}</td>
+          <td>{{patient.date}}</td>
+          <td>{{patient.patient_type}}</td>
           <td>
-            <button class="action-btn">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="action-btn">
-              <i class="fas fa-trash"></i>
-            </button>
+            <button class="action-btn">📝</button>&nbsp
+            <button class="action-btn">🗑️</button>
           </td>
         </tr>
-        <!-- Add more patient rows as needed -->
+        {% endfor %}
       </tbody>
     </table>
   </div>

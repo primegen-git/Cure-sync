@@ -5,9 +5,14 @@ import uuid
 
 
 class Profile(models.Model):
+    gender_type = (
+        ("male", "male"),
+        ("female", "female"),
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     name = models.CharField("Full Name", max_length=200, null=True, blank=True)
     age = models.PositiveIntegerField("Age", null=True)
+    gender = models.CharField("Gender", max_length=10, choices=gender_type, null=True)
     profile_image = models.ImageField(
         "Image",
         upload_to="profile/",

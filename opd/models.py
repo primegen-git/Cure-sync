@@ -1,4 +1,6 @@
+# TODO: change the "date_of_appointment" -> date
 # TODO: delete the unnecessary null = true from the field attribute
+# TODO: create a single table  replacing the medicine table with four catogery (existing + machinary)
 from django.db import models, transaction
 from django.contrib.auth.models import User
 import uuid
@@ -36,11 +38,11 @@ class Doctor(models.Model):
     # user the User class that have to username and the email field built in. this @property method help to access the user as it is part of the doctor table
     @property
     def username(self):
-        return str(self.user.username)
+        return self.user.username
 
     @property
     def email(self):
-        return str(self.user.email)
+        return self.user.email
 
 
 class Opd(models.Model):
@@ -58,7 +60,9 @@ class Opd(models.Model):
 
     @property
     def patient_count(self):
-        self.patients.count()  # type: ignore
+        if self.patients.count() is not None:  # type: ignore
+            return self.patients.count()  # type: ignore
+        return 0
 
 
 class Inventory(models.Model):
@@ -128,8 +132,13 @@ class Inventory_Item(models.Model):
 
 
 class Offline_Patient(models.Model):
+    gender_type = (
+        ("male", "male"),
+        ("female", "female"),
+    )
     name = models.CharField("Full Name", max_length=200, null=True, blank=True)
     age = models.PositiveIntegerField("Age")
+    gender = models.CharField("Gender", max_length=10, choices=gender_type, null=True)
     email = models.EmailField("Email", max_length=190, null=True, blank=True)
     profile_image = models.ImageField(
         "Image",
@@ -202,6 +211,12 @@ class Appointment(models.Model):
         self.opd.refresh_from_db()
         super().delete(*args, **kwargs)
 
+    @property
+    def name(self):
+        if self.online_patient is not None:
+            return self.online_patient.name
+        return self.offline_patient.name
+
 
 class Patient(models.Model):
     type = (
@@ -224,6 +239,7 @@ class Patient(models.Model):
         related_name="online_patients",
     )
 
+    # TODO: chagne the value of type based on the appointment automatically
     patient_type = models.CharField(
         "Patient Type", choices=type, max_length=30, null=True
     )
@@ -260,3 +276,45 @@ class Patient(models.Model):
         self.opd.no_of_beds = models.F("no_of_beds") - 1
         self.opd.save()
         super().delete(*args, **kwargs)
+
+    @property
+    def name(self):
+        if self.online_patient is not None:
+            return self.online_patient.name
+        return self.offline_patient.name
+
+    @property
+    def type(self):
+        if self.online_patient is not None:
+            return "online"
+        return "offline"
+
+    @property
+    def age(self):
+        if self.online_patient is not None:
+            return self.online_patient.age
+        return self.offline_patient.age
+
+    @property
+    def gender(self):
+        if self.online_patient is not None:
+            return self.online_patient.gender
+        return self.offline_patient.gender
+
+    @property
+    def address(self):
+        if self.online_patient is not None:
+            return self.online_patient.address
+        return self.offline_patient.address
+
+    @property
+    def phone_number(self):
+        if self.online_patient is not None:
+            return self.online_patient.phone_number
+        return self.offline_patient.phone_number
+
+    @property
+    def email(self):
+        if self.online_patient is not None:
+            return self.online_patient.email
+        return self.offline_patient.email
