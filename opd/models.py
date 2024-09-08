@@ -160,11 +160,6 @@ class Offline_Patient(models.Model):
 
 
 class Appointment(models.Model):
-    type = (
-        ("online", "online"),
-        ("offline", "offline"),
-    )
-
     online_request_status = (
         ("seen", "seen"),
         ("not_seen", "not_seen"),
@@ -187,12 +182,14 @@ class Appointment(models.Model):
     )
 
     appointment_type = models.CharField(
-        "Appointment Type", choices=type, max_length=30, null=True
+        "Appointment Type", max_length=30, null=True, blank=True
     )
     status = models.CharField(
-        "Status", max_length=20, choices=online_request_status, null=True
+        "Status", choices=online_request_status, max_length=20, null=True, blank=True
     )
-    appointment_id = models.CharField("Appointment ID", max_length=10, null=True)
+    appointment_id = models.CharField(
+        "Appointment ID", max_length=10, null=True, blank=True
+    )
     date_of_appointment = models.DateTimeField(auto_now_add=True, null=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
@@ -202,11 +199,15 @@ class Appointment(models.Model):
         return str(self.appointment_id)
 
     class Meta:
-        unique_together = [["opd", "appointment_id"]]
+        unique_together = [["opd", "online_patient"], ["opd", "offline_patient"]]
 
     @transaction.atomic
     def save(self, *args, **kwargs):
         is_new = self._state.adding
+        if self.online_patient:
+            self.appointment_type = "online"
+        else:
+            self.appointment_type = "offline"
         super().save(*args, **kwargs)
 
         if is_new:

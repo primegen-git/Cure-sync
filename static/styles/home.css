@@ -6,7 +6,7 @@ html {
   padding: 0;
   height: 100%;
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2a7fba;
   color: #fff;
   overflow: hidden;
 }

@@ -8,20 +8,26 @@
 <div class="container">
   <div class="appointment-section">
     <div class="section-header">
-      <h2>Pending Appointments</h2>
+      <h2>Online Appointments Request</h2>
     </div>
     <ul class="appointment-list">
+      {% for appointment in appointments %}
       <li class="appointment-item">
         <div class="appointment-info">
-          <h3>John Doe</h3>
-          <p>Time: 10:00 AM | Date: 2024-03-20</p>
+          <h3>{{ appointment.online_patient.name }}</h3>
+          <p>Time: {{ appointment.date_of_appointment|time:"H:i" }}
+            | Date: {{appointment.date_of_appointment|date:"Y-m-d"}}
+          </p>
           <span class="badge badge-online">Online Booking</span>
         </div>
         <div class="appointment-actions">
-          <button class="btn">Confirm</button>
-          <button class="btn">Cancel</button>
+          <button class="btn"><a href="{% url 'opd:appointment_request' %}?search_query=accepted&id={{appointment.id}}"
+              style="text-decoration: none; color: inherit;">Accept</a></button>
+          <button class="btn"><a href="{% url 'opd:appointment_request' %}?search_query=cancel?id={{appointment.id}}"
+              style="text-decoration: none; color: inherit;">Cancel</a></button>
         </div>
       </li>
+      {% endfor %}
     </ul>
   </div>
 </div>

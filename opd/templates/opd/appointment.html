@@ -2,10 +2,12 @@
 <link rel="stylesheet" href="{% static 'styles/opd_appointment.css' %}" />
 {% endblock css %} {% block content %}
 <main class="main-content">
+  {% if request_count != 0 %}
   <div class="notification">
-    <strong>New Online Booking!</strong> You have 3 new appointment
+    <strong>New Online Booking!</strong> You have {{request_count}} new appointment
     requests.
   </div>
+  {% endif %}
   <div class="header">
     <h1>Appointments</h1>
     <input type="text" class="search-bar" placeholder="Search appointments" />
