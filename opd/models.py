@@ -1,6 +1,7 @@
 # TODO: change the "date_of_appointment" -> date
 # TODO: delete the unnecessary null = true from the field attribute
 # TODO: create a single table  replacing the medicine table with four catogery (existing + machinary)
+# TODO: add a new attribute in the appointment table which check if the online_patient appointment request is approved or not
 from django.db import models, transaction
 from django.contrib.auth.models import User
 import uuid
@@ -56,7 +57,7 @@ class Opd(models.Model):
     )
 
     def __str__(self):
-        return str(self.name)
+        return f"Opd of {self.owner.name}"
 
     @property
     def patient_count(self):
@@ -76,7 +77,7 @@ class Inventory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f" Inventory of {str(self.opd.name)}"
+        return f" Inventory of {str(self.opd.owner.name)}"
 
 
 class Medicine(models.Model):
@@ -163,6 +164,12 @@ class Appointment(models.Model):
         ("online", "online"),
         ("offline", "offline"),
     )
+
+    online_request_status = (
+        ("seen", "seen"),
+        ("not_seen", "not_seen"),
+    )
+
     opd = models.ForeignKey(Opd, on_delete=models.CASCADE, related_name="appointments")
     offline_patient = models.ForeignKey(
         Offline_Patient,
@@ -181,6 +188,9 @@ class Appointment(models.Model):
 
     appointment_type = models.CharField(
         "Appointment Type", choices=type, max_length=30, null=True
+    )
+    status = models.CharField(
+        "Status", max_length=20, choices=online_request_status, null=True
     )
     appointment_id = models.CharField("Appointment ID", max_length=10, null=True)
     date_of_appointment = models.DateTimeField(auto_now_add=True, null=True)

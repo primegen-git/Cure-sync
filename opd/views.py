@@ -40,7 +40,7 @@ def home_page(request):
 
 @user_passes_test(is_doctor, login_url="home:home_page")
 def product_list(request):
-    products = request.user.doctor.opd.inventorys.inventory_items.all()
+    products = request.user.doctor.opd.inventory.inventory_items.all()
     count = get_product_count(products)[0]
     context = {"products": products, "count": count}
     return render(request, "opd/product.html", context)

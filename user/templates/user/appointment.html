@@ -17,7 +17,8 @@
         <h3>Address</h3>
         {{doctor.address}}
       </div>
-      <button class="appointment-btn">Book Appointment</button>
+      <button class="appointment-btn"><a href="{% url 'user:appointment' pk=doctor.id %}?search_query=booking"
+          style="text-decoration: none; color:inherit;">Book Appointment</a></button>
     </div>
   </div>
   <div class="live-appointments">
