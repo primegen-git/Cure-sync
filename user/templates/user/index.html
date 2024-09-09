@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load user_tags %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'styles/user.css' %}" />
 {% endblock css %}
 {% block content %}
 <div class="dashboard-container">
   <main class="main-content">
-    <header>
-      <h1>User Dashboard</h1>
-    </header>
     <div class="search-options">
       <a href="{% url 'user:bed_list' %}" class="search-card" style="text-decoration:none; color:inherit">
         <div class="icon-container">

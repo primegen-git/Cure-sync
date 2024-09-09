@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/user_login.css' %}" />
+{% endblock css %} {% block content %}
+
+<div class="container">
+  <div class="login-container">
+    <div class="login-form">
+      <h1>Welcome to CureSync</h1>
+      <p>Please log in to access your account</p>
+      <form method="POST" action="">
+        {% csrf_token %}
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="login-btn">Log In</button>
+      </form>
+      <div class="links">
+        <a href="#">Forgot Password?</a>
+        <a href="#">Sign Up</a>
+      </div>
+    </div>
+    <div class="login-image"></div>
+  </div>
+</div>
+{% endblock content %}

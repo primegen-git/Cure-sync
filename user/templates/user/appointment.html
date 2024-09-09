@@ -8,31 +8,30 @@
     <div class="doctor-info">
       <div class="header">
         <h2 class="doctor-name">{{doctor.name}}</h2>
-        <button id="profile" data-url="{% url 'user:doctor_profile' pk=doctor.id %}"
-          class="profile-btn">Profile</button>
+        <button id="profile" data-url="{% url 'user:doctor_profile' pk=doctor.id %}" class="profile-btn">Profile</button
+          </div>
+        <p class="doctor-specialty">{{doctor.speciality}}</p>
+        <p class="doctor-description">{{doctor.about}}</p>
+        <div class="availability">
+          <h3>Address</h3>
+          {{doctor.address}}
+        </div>
+        <button class="appointment-btn"><a href="{% url 'user:appointment' pk=doctor.id %}?search_query=booking"
+            style="text-decoration: none; color:inherit;">Book Appointment</a></button>
       </div>
-      <p class="doctor-specialty">{{doctor.speciality}}</p>
-      <p class="doctor-description">{{doctor.about}}</p>
-      <div class="availability">
-        <h3>Address</h3>
-        {{doctor.address}}
-      </div>
-      <button class="appointment-btn"><a href="{% url 'user:appointment' pk=doctor.id %}?search_query=booking"
-          style="text-decoration: none; color:inherit;">Book Appointment</a></button>
+    </div>
+    <div class="live-appointments">
+      <ul class="appointment-list">
+        <li class="appointment-item">
+          <span class="appointment-time">No of available bed: {{total_bed_count}}</span>
+        </li>
+        <li class="appointment-item">
+          <span class="appointment-time">No of appoinment: {{total_appointment_count}}</span>
+        </li>
+      </ul>
     </div>
   </div>
-  <div class="live-appointments">
-    <ul class="appointment-list">
-      <li class="appointment-item">
-        <span class="appointment-time">No of available bed: {{total_bed_count}}</span>
-      </li>
-      <li class="appointment-item">
-        <span class="appointment-time">No of appoinment: {{total_appointment_count}}</span>
-      </li>
-    </ul>
-  </div>
-</div>
 
-{% endblock content %} {% block js %}
-<script src="{% static 'scripts/user_appointment.js' %}"></script>
-{% endblock js %}
+  {% endblock content %} {% block js %}
+  <script src="{% static 'scripts/user_appointment.js' %}"></script>
+  {% endblock js %}

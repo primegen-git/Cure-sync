@@ -1,0 +1,56 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
+    {% block css %} {% endblock css %}
+  </head>
+
+  <body>
+    {% if messages %} {% for message in messages %}
+
+    <div class="alert alert--{{message.tags}}">
+      <p class="alert__message">{{message}}</p>
+    </div>
+    {% endfor %} {% endif %}
+
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <div class="logo">
+          <!-- <span>CureSync</span> -->
+        </div>
+        <nav>
+          <ul>
+            <li id="dashboard">
+              <a href="{% url 'user:home_page' %}"
+                ><span class="icon">👥</span> Dashboard</a
+              >
+            </li>
+            <li id="medical_history">
+              <a href="{% url 'user:medical_history' %}"
+                ><span class="icon">📅</span> Medical_History</a
+              >
+            </li>
+            <li id="product">
+              <a href="{% url 'opd:product_list' %}"
+                ><span class="icon">📦</span> Products & stock</a
+              >
+            </li>
+            <li id="doctor">
+              <a href="{% url 'opd:doctor_profile' %}"
+                ><span class="icon">👨‍⚕️</span> Doctor</a
+              >
+            </li>
+            <li id="earning">
+              <a href="#"><span class="icon">💰</span> Earnings</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      {% block content %} {% endblock content %}
+    </div>
+  </body>
+  {% block js %} {% endblock js %}
+</html>

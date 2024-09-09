@@ -1,0 +1,43 @@
+{% extends 'user/logged/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/profile.css' %}" />
+{% endblock css %} {% block content %}
+<main class="main-content">
+  <div class="profile-header">
+    <img src="user-avatar.jpg" alt="User Avatar" class="profile-image" />
+    <div class="profile-info">
+      <h1>John Doe</h1>
+    </div>
+  </div>
+  <div class="profile-details">
+    <h2>Personal Information</h2>
+    <div class="detail-row">
+      <div class="detail-label">Full Name:</div>
+      <div class="detail-value">John Doe</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Date of Birth:</div>
+      <div class="detail-value">January 15, 1985</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Gender:</div>
+      <div class="detail-value">Male</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Blood Type:</div>
+      <div class="detail-value">O+</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Contact:</div>
+      <div class="detail-value">(555) 123-4567</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Email:</div>
+      <div class="detail-value">john.doe@example.com</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Address:</div>
+      <div class="detail-value">123 Main St, Anytown, USA 12345</div>
+    </div>
+  </div>
+</main>
+{% endblock content %}

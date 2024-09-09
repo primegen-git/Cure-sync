@@ -1,0 +1,64 @@
+{% extends 'user/logged/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/profile.css' %}" />
+{% endblock css %} {% block content %}
+
+<div class="container">
+  <main class="main-content">
+    <div class="header">
+      <h1>User Dashboard</h1>
+      <input type="text" class="search-bar" placeholder="Search for anything" />
+    </div>
+    <div class="stats-container">
+      <div class="card stat-card">
+        <h3>Available Beds</h3>
+        <div class="stat-value">5</div>
+      </div>
+      <div class="card stat-card">
+        <h3>Active Doctors</h3>
+        <div class="stat-value">2</div>
+      </div>
+      <div class="card stat-card">
+        <h3>Today's Appointments</h3>
+        <div class="stat-value">3</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Quick Actions</h2>
+      <button>Search by Bed</button>
+      <button>Search by Specialties</button>
+      <button>Search by OPD</button>
+    </div>
+    <div class="card">
+      <h2>Upcoming Appointments</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Doctor</th>
+            <th>Department</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2024-03-20</td>
+            <td>10:00 AM</td>
+            <td>Dr. Smith</td>
+            <td>Cardiology</td>
+          </tr>
+          <!-- Add more rows as needed -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+{% endblock content %} {% block js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const dashboardElement = document.getElementById("dashboard");
+    dashboardElement.classList.add("active");
+  });
+</script>
+
+{% endblock js %}
