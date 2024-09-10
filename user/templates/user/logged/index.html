@@ -1,3 +1,4 @@
+<!-- NOTE: change the symbol of the dashboard element -->
 <!doctype html>
 {% load static %}
 <html lang="en">
@@ -19,32 +20,29 @@
     <div class="dashboard-container">
       <aside class="sidebar">
         <div class="logo">
-          <!-- <span>CureSync</span> -->
+          <h2 style="color: #2a7fba">CureSync</h2>
         </div>
         <nav>
           <ul>
             <li id="dashboard">
               <a href="{% url 'user:home_page' %}"
-                ><span class="icon">👥</span> Dashboard</a
+                ><span class="icon">👥</span> Patients</a
               >
             </li>
-            <li id="medical_history">
+            <li id="medical">
               <a href="{% url 'user:medical_history' %}"
-                ><span class="icon">📅</span> Medical_History</a
+                ><span class="icon">📦</span> Medical_history</a
               >
             </li>
-            <li id="product">
-              <a href="{% url 'opd:product_list' %}"
-                ><span class="icon">📦</span> Products & stock</a
+            <li id="message">
+              <a href="{% url 'user:message' %}"
+                ><span class="icon">📦</span> Message</a
               >
             </li>
-            <li id="doctor">
-              <a href="{% url 'opd:doctor_profile' %}"
-                ><span class="icon">👨‍⚕️</span> Doctor</a
+            <li id="logout">
+              <a href="{% url 'user:logout' %}"
+                ><span class="icon">👨‍⚕️</span> Logout</a
               >
-            </li>
-            <li id="earning">
-              <a href="#"><span class="icon">💰</span> Earnings</a>
             </li>
           </ul>
         </nav>

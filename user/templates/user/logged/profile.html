@@ -24,12 +24,25 @@
     </div>
     <div class="card">
       <h2>Quick Actions</h2>
-      <button>Search by Bed</button>
-      <button>Search by Specialties</button>
-      <button>Search by OPD</button>
+      <div class="btn-container">
+        <button onclick="window.location.href='{% url 'user:user_profile' %}'">
+          Profile
+        </button>
+        <button onclick="window.location.href='{% url 'user:bed_list' %}'">
+          Search by Bed
+        </button>
+        <button
+          onclick="window.location.href='{% url 'user:search_specialist' %}'"
+        >
+          Search by Specialties
+        </button>
+        <button onclick="window.location.href='{% url 'user:opd_list' %}'">
+          Search by OPD
+        </button>
+      </div>
     </div>
     <div class="card">
-      <h2>Upcoming Appointments</h2>
+      <h2>Live Appointment View</h2>
       <table>
         <thead>
           <tr>

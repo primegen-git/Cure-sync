@@ -1,0 +1,20 @@
+{% extends 'user/logged/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/message.css' %}" />
+{% endblock css %} {% block content %}
+<div class="container">
+  <div class="appointment-section">
+    <div class="section-header">
+      <h2>Message</h2>
+    </div>
+    <ul class="appointment-list"></ul>
+  </div>
+</div>
+{% endblock content %} {% block js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const messageElement = document.getElementById("message");
+    messageElement.classList.add("active");
+  });
+</script>
+
+{% endblock js %}

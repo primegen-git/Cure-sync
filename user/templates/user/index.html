@@ -6,6 +6,15 @@
 {% endblock css %}
 {% block content %}
 <div class="dashboard-container">
+  <header>
+
+    <h1>User Dashboard</h1>
+    <nav class="navbar">
+      <div class="navbar-menu">
+        <a href="{% url 'user:login' %}">Login</a>
+      </div>
+    </nav>
+  </header>
   <main class="main-content">
     <div class="search-options">
       <a href="{% url 'user:bed_list' %}" class="search-card" style="text-decoration:none; color:inherit">

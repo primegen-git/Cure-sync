@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group, User
+from django.contrib.auth import authenticate
 from opd.models import Appointment, Opd, Doctor
 
 
@@ -42,3 +43,14 @@ def get_total_doctor_count():
 
 def get_total_appointment_count():
     return Appointment.objects.count()
+
+
+def custom_authenticate(request):
+    username = request.POST.get("username")
+    password = request.POST.get("password")
+    user = authenticate(request, username=username, password=password)
+
+    if user is not None and user.groups.filter(name="Doctor").exists():
+        return user
+
+    return None

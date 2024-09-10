@@ -15,4 +15,7 @@ urlpatterns = [
     path("login/", views.user_login, name="login"),
     path("logout/", views.user_logout, name="logout"),
     path("profile/", views.profile, name="profile"),
+    path("medical_history/", views.medical_history, name="medical_history"),
+    path("message/", views.message, name="message"),
+    path("user_profile/", views.user_profile, name="user_profile"),
 ]

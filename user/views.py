@@ -50,14 +50,24 @@ def profile(request):
 
 
 def bed_list(request):
+    is_user = check_user(request)
+    if is_user:
+        base_template = "user/logged/index.html"
+    else:
+        base_template = "base.html"
     doctors = Doctor.objects.all()
-    context = {"doctors": doctors}
+    context = {"doctors": doctors, "base_template": base_template}
     return render(request, "user/bed_list.html", context)
 
 
 def opd_list(request):
+    is_user = check_user(request)
+    if is_user:
+        base_template = "user/logged/index.html"
+    else:
+        base_template = "base.html"
     doctors = Doctor.objects.all()
-    context = {"doctors": doctors}
+    context = {"doctors": doctors, "base_template": base_template}
     return render(request, "user/opd_list.html", context)
 
 
@@ -67,8 +77,13 @@ def hospital_detail(request):
 
 
 def search_specialist(request):
+    is_user = check_user(request)
+    if is_user:
+        base_template = "user/logged/index.html"
+    else:
+        base_template = "base.html"
     doctors = Doctor.objects.all()
-    context = {"doctors": doctors}
+    context = {"doctors": doctors, "base_template": base_template}
     return render(request, "user/search_specialist.html", context)
 
 
@@ -96,3 +111,16 @@ def doctor_profile(request, pk):
 
 
 # NOTE: All the method after this are related to the logged in user
+def medical_history(request):
+    context = {}
+    return render(request, "user/logged/medical_history.html", context)
+
+
+def message(request):
+    context = {}
+    return render(request, "user/logged/message.html", context)
+
+
+def user_profile(request):
+    context = {}
+    return render(request, "user/logged/user_profile.html", context)

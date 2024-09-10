@@ -44,6 +44,10 @@ body {
   justify-content: space-between;
   margin-bottom: 20px;
 }
+.btn-container {
+  display: flex;
+  gap: 2rem;
+}
 .stat-card {
   flex: 1;
   margin-right: 10px;
@@ -64,4 +68,33 @@ td {
 }
 th {
   background-color: #f8f9fa;
+}
+
+.card h2 {
+  color: #333333;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.card button {
+  padding: 10px 15px;
+  background-color: #f0f2f5;
+  color: #333333;
+  border: 1px solid #d1d9e6;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.card button:hover {
+  background-color: #e4e6e9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card button:last-child {
+  margin-bottom: 0;
 }

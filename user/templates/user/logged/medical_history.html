@@ -1,0 +1,56 @@
+{% extends 'user/logged/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/medical_history.css' %}" />
+{% endblock css %} {% block content %}
+
+<div class="p-container">
+  <div class="container">
+    <main class="main-content">
+      <div class="header">
+        <h1>Medical Reports</h1>
+        <input type="text" class="search-bar" placeholder="Search reports" />
+      </div>
+      <div class="card">
+        <h2>Recent Reports</h2>
+        <ul class="report-list">
+          <li class="report-item">
+            <div class="report-title">Annual Check-up Report</div>
+            <div class="report-date">Date: March 15, 2024</div>
+            <div class="report-doctor">Doctor: Dr. Emily Johnson</div>
+            <button class="btn">View Report</button>
+          </li>
+          <li class="report-item">
+            <div class="report-title">Blood Test Results</div>
+            <div class="report-date">Date: February 28, 2024</div>
+            <div class="report-doctor">Doctor: Dr. Michael Chen</div>
+            <button class="btn">View Report</button>
+          </li>
+          <li class="report-item">
+            <div class="report-title">Cardiology Consultation</div>
+            <div class="report-date">Date: January 10, 2024</div>
+            <div class="report-doctor">Doctor: Dr. Sarah Williams</div>
+            <button class="btn">View Report</button>
+          </li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Report Categories</h2>
+
+        <button class="btn">Lab Results</button>
+        <button class="btn">Imaging Reports</button>
+        <button class="btn">Specialist Consultations</button>
+        <button class="btn">Surgical Reports</button>
+      </div>
+    </main>
+  </div>
+</div>
+<div></div>
+</div>
+
+{% endblock content %} {% block js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const medicalElement = document.getElementById("medical");
+    medicalElement.classList.add("active");
+  });
+</script>
+{% endblock js %}

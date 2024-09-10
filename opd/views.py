@@ -2,34 +2,36 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.http.response import HttpResponseBadRequest
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from opd.models import Doctor, Appointment
-from opd.utils import get_product_count, is_doctor, get_processed_data
+from opd.utils import (
+    get_product_count,
+    is_doctor,
+    get_processed_data,
+    custom_authenticate,
+)
 from django.db.models import Q
 
 
-def login_page(request):
+def login_doctor(request):
     if request.method == "POST":
-        username = request.POST["username"].lower()
-        password = request.POST["password"]
-
-        user = authenticate(request, username=username, password=password)
-
-        # if user is not None:
-        #     try:
-        #         user.doctor  # type: ignore
-        #     except AttributeError:
-        #         return HttpResponseForbidden("You don't have access to view this page")
+        user = custom_authenticate(request)
+        if user is None:
+            messages.error(request, "something wrong in either username or password")
+            return redirect("opd:login")
         login(request, user)
         messages.success(request, "successfull login")
         return redirect("opd:home_page")
-        # else:
-        #     messages.error(request, "login failed")
-        #     return redirect("opd:login")
 
     context = {}
     return render(request, "opd/doctor_login.html", context)
+
+
+def logout_doctor(request):
+    logout(request)
+    messages.success(request, "you have been logout successfully")
+    return redirect("opd:login")
 
 
 @user_passes_test(is_doctor, login_url="home:home_page")

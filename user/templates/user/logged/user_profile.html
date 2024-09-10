@@ -1,0 +1,48 @@
+{% extends 'user/logged/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/user_profile.css' %}" />
+{% endblock css %} {% block content %}
+<div class="container">
+  <main class="main-content">
+    <div class="profile-card">
+      <div class="profile-header">
+        <img src="user-avatar.jpg" alt="User Avatar" class="profile-image" />
+        <div class="profile-name">John Doe</div>
+      </div>
+      <div class="profile-info">
+        <div class="info-item">
+          <div class="info-label">Patient ID:</div>
+          <div class="info-value">#PT001</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Date of Birth:</div>
+          <div class="info-value">January 15, 1985</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Gender:</div>
+          <div class="info-value">Male</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Blood Type:</div>
+          <div class="info-value">O+</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Email:</div>
+          <div class="info-value">john.doe@example.com</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Phone:</div>
+          <div class="info-value">(555) 123-4567</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Address:</div>
+          <div class="info-value">123 Main St, Anytown, USA 12345</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Emergency Contact:</div>
+          <div class="info-value">Jane Doe (555) 987-6543</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock content %}
