@@ -1,34 +1,37 @@
-{% extends 'base.html' %} {% load static %} {% block css %}
+{% extends 'opd/index.html' %} {% load static %} {% block css %}
 <link rel="stylesheet" href="{% static 'styles/online_appointment_request.css' %}" />
 {% endblock css %} {% block content %}
 
-<div class="header">
-  <h1>OPD Appointment Management</h1>
-</div>
-<div class="container">
-  <div class="appointment-section">
-    <div class="section-header">
-      <h2>Online Appointments Request</h2>
+<div class="main-appointment">
+  <div class="header">
+    <h1>OPD Appointment Management</h1>
+  </div>
+  <div class="container">
+    <div class="appointment-section">
+      <div class="section-header">
+        <h2>Online Appointments Request</h2>
+      </div>
+      <ul class="appointment-list">
+        {% for appointment in appointments %}
+        <li class="appointment-item">
+          <div class="appointment-info">
+            <h3>{{ appointment.online_patient.name }}</h3>
+            <p>Time: {{ appointment.date_of_appointment|time:"H:i" }}
+              | Date: {{appointment.date_of_appointment|date:"Y-m-d"}}
+            </p>
+            <span class="badge badge-online">Online Booking</span>
+          </div>
+          <div class="appointment-actions">
+            <button class="btn"><a
+                href="{% url 'opd:appointment_request' %}?search_query=accepted&id={{appointment.id}}"
+                style="text-decoration: none; color: inherit;">Accept</a></button>
+            <button class="btn"><a href="{% url 'opd:appointment_request' %}?search_query=cancel?id={{appointment.id}}"
+                style="text-decoration: none; color: inherit;">Cancel</a></button>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
-    <ul class="appointment-list">
-      {% for appointment in appointments %}
-      <li class="appointment-item">
-        <div class="appointment-info">
-          <h3>{{ appointment.online_patient.name }}</h3>
-          <p>Time: {{ appointment.date_of_appointment|time:"H:i" }}
-            | Date: {{appointment.date_of_appointment|date:"Y-m-d"}}
-          </p>
-          <span class="badge badge-online">Online Booking</span>
-        </div>
-        <div class="appointment-actions">
-          <button class="btn"><a href="{% url 'opd:appointment_request' %}?search_query=accepted&id={{appointment.id}}"
-              style="text-decoration: none; color: inherit;">Accept</a></button>
-          <button class="btn"><a href="{% url 'opd:appointment_request' %}?search_query=cancel?id={{appointment.id}}"
-              style="text-decoration: none; color: inherit;">Cancel</a></button>
-        </div>
-      </li>
-      {% endfor %}
-    </ul>
   </div>
 </div>
 

@@ -20,7 +20,7 @@
   <div class="dashboard-container">
     <aside class="sidebar">
       <div class="logo">
-        <!-- <span>CureSync</span> -->
+        <h2 style="color: #2a7fba">CureSync</h2>
       </div>
       <nav>
         <ul>
@@ -37,7 +37,7 @@
             <a href="{% url 'opd:doctor_profile' %}"><span class="icon">👨‍⚕️</span> Doctor</a>
           </li>
           <li id="earning">
-            <a href="#"><span class="icon">💰</span> Earnings</a>
+            <a href="{% url 'opd:earning' %}"><span class="icon">💰</span> Earnings</a>
           </li>
           <li id="logout">
             <a href="{% url 'opd:logout' %}"><span class="icon">💰</span> logout</a>

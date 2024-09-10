@@ -107,3 +107,9 @@ def patient_report(request, id):
     patient = request.user.doctor.opd.patients.get(id=id)  # type: ignore
     context = {"patient": patient}
     return render(request, "opd/patient_report.html", context)
+
+
+@user_passes_test(is_doctor, login_url="home:home_page")
+def earning(request):
+    context = {}
+    return render(request, "opd/earning.html", context)

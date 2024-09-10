@@ -1,0 +1,1224 @@
+{% extends 'opd/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/earning.css' %}" />
+{% endblock css %} {% block content %}
+<div class="container">
+  <main class="main-content">
+    <div class="header">
+      <h1>OPD Financial Dashboard</h1>
+      <select>
+        <option>Last 30 Days</option>
+        <option>Last Quarter</option>
+        <option>Last Year</option>
+      </select>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">$1,250,000</div>
+        <div>Total Revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">15,000</div>
+        <div>Patient Visits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">$83.33</div>
+        <div>Avg. Revenue per Visit</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">18%</div>
+        <div>Growth Rate</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Revenue Trend</h2>
+      <div class="chart-container">
+        <canvas
+          id="revenueChart"
+          style="
+            display: block;
+            box-sizing: border-box;
+            height: 300px;
+            width: 1555px;
+          "
+          width="2332"
+          height="450"
+        ></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Revenue by Department</h2>
+      <div class="chart-container">
+        <div id="departmentChart" style="min-height: 302.7px">
+          <div
+            id="apexchartsychf22vcj"
+            class="apexcharts-canvas apexchartsychf22vcj apexcharts-theme-"
+            style="width: 1555px; height: 302.7px"
+          >
+            <svg
+              id="SvgjsSvg1396"
+              width="1555"
+              height="302.7"
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlns:svgjs="http://svgjs.dev"
+              class="apexcharts-svg"
+              xmlns:data="ApexChartsNS"
+              transform="translate(0, 0)"
+            >
+              <foreignObject x="0" y="0" width="1555" height="302.7"
+                ><div
+                  class="apexcharts-legend apexcharts-align-center apx-legend-position-right"
+                  xmlns="http://www.w3.org/1999/xhtml"
+                  style="position: absolute; left: auto; top: 24px; right: 5px"
+                >
+                  <div
+                    class="apexcharts-legend-series"
+                    style="margin: 4px 5px"
+                    rel="1"
+                    seriesname="GeneralxMedicine"
+                    data:collapsed="false"
+                  >
+                    <span
+                      class="apexcharts-legend-marker"
+                      style="height: 16px; width: 16px; left: 0px; top: 0px"
+                      rel="1"
+                      data:collapsed="false"
+                      ><svg
+                        id="SvgjsSvg1399"
+                        width="100%"
+                        height="100%"
+                        xmlns="http://www.w3.org/2000/svg"
+                        version="1.1"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xmlns:svgjs="http://svgjs.dev"
+                        ><defs id="SvgjsDefs1400"
+                          ><clipPath id="gridRectMaskychf22vcj"
+                            ><rect
+                              id="SvgjsRect1414"
+                              width="1373"
+                              height="306"
+                              x="-3"
+                              y="-3"
+                              rx="0"
+                              ry="0"
+                              opacity="1"
+                              stroke-width="0"
+                              stroke="none"
+                              stroke-dasharray="0"
+                              fill="#fff"
+                            ></rect></clipPath
+                          ><clipPath id="forecastMaskychf22vcj"></clipPath
+                          ><clipPath id="nonForecastMaskychf22vcj"></clipPath
+                          ><clipPath id="gridRectMarkerMaskychf22vcj"
+                            ><rect
+                              id="SvgjsRect1415"
+                              width="1371"
+                              height="304"
+                              x="-2"
+                              y="-2"
+                              rx="0"
+                              ry="0"
+                              opacity="1"
+                              stroke-width="0"
+                              stroke="none"
+                              stroke-dasharray="0"
+                              fill="#fff"
+                            ></rect></clipPath></defs
+                        ><path
+                          id="SvgjsPath1401"
+                          d="M 0, 0 
+           m -7, 0 
+           a 7,7 0 1,0 14,0 
+           a 7,7 0 1,0 -14,0"
+                          fill="#008ffb"
+                          fill-opacity="1"
+                          stroke="#ffffff"
+                          stroke-opacity="0.9"
+                          stroke-linecap="butt"
+                          stroke-width="1"
+                          stroke-dasharray="0"
+                          cx="0"
+                          cy="0"
+                          shape="circle"
+                          class="apexcharts-legend-marker apexcharts-marker apexcharts-marker-circle"
+                          style="transform: translate(50%, 50%)"
+                        ></path></svg></span
+                    ><span
+                      class="apexcharts-legend-text"
+                      style="
+                        color: rgb(55, 61, 63);
+                        font-size: 12px;
+                        font-weight: 400;
+                        font-family: Helvetica, Arial, sans-serif;
+                      "
+                      rel="1"
+                      i="0"
+                      data:default-text="General%20Medicine"
+                      data:collapsed="false"
+                      >General Medicine</span
+                    >
+                  </div>
+                  <div
+                    class="apexcharts-legend-series"
+                    style="margin: 4px 5px"
+                    rel="2"
+                    seriesname="Pediatrics"
+                    data:collapsed="false"
+                  >
+                    <span
+                      class="apexcharts-legend-marker"
+                      style="height: 16px; width: 16px; left: 0px; top: 0px"
+                      rel="2"
+                      data:collapsed="false"
+                      ><svg
+                        id="SvgjsSvg1402"
+                        width="100%"
+                        height="100%"
+                        xmlns="http://www.w3.org/2000/svg"
+                        version="1.1"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xmlns:svgjs="http://svgjs.dev"
+                        ><defs id="SvgjsDefs1403"></defs
+                        ><path
+                          id="SvgjsPath1404"
+                          d="M 0, 0 
+           m -7, 0 
+           a 7,7 0 1,0 14,0 
+           a 7,7 0 1,0 -14,0"
+                          fill="#00e396"
+                          fill-opacity="1"
+                          stroke="#ffffff"
+                          stroke-opacity="0.9"
+                          stroke-linecap="butt"
+                          stroke-width="1"
+                          stroke-dasharray="0"
+                          cx="0"
+                          cy="0"
+                          shape="circle"
+                          class="apexcharts-legend-marker apexcharts-marker apexcharts-marker-circle"
+                          style="transform: translate(50%, 50%)"
+                        ></path></svg></span
+                    ><span
+                      class="apexcharts-legend-text"
+                      style="
+                        color: rgb(55, 61, 63);
+                        font-size: 12px;
+                        font-weight: 400;
+                        font-family: Helvetica, Arial, sans-serif;
+                      "
+                      rel="2"
+                      i="1"
+                      data:default-text="Pediatrics"
+                      data:collapsed="false"
+                      >Pediatrics</span
+                    >
+                  </div>
+                  <div
+                    class="apexcharts-legend-series"
+                    style="margin: 4px 5px"
+                    rel="3"
+                    seriesname="Orthopedics"
+                    data:collapsed="false"
+                  >
+                    <span
+                      class="apexcharts-legend-marker"
+                      style="height: 16px; width: 16px; left: 0px; top: 0px"
+                      rel="3"
+                      data:collapsed="false"
+                      ><svg
+                        id="SvgjsSvg1405"
+                        width="100%"
+                        height="100%"
+                        xmlns="http://www.w3.org/2000/svg"
+                        version="1.1"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xmlns:svgjs="http://svgjs.dev"
+                        ><defs id="SvgjsDefs1406"></defs
+                        ><path
+                          id="SvgjsPath1407"
+                          d="M 0, 0 
+           m -7, 0 
+           a 7,7 0 1,0 14,0 
+           a 7,7 0 1,0 -14,0"
+                          fill="#feb019"
+                          fill-opacity="1"
+                          stroke="#ffffff"
+                          stroke-opacity="0.9"
+                          stroke-linecap="butt"
+                          stroke-width="1"
+                          stroke-dasharray="0"
+                          cx="0"
+                          cy="0"
+                          shape="circle"
+                          class="apexcharts-legend-marker apexcharts-marker apexcharts-marker-circle"
+                          style="transform: translate(50%, 50%)"
+                        ></path></svg></span
+                    ><span
+                      class="apexcharts-legend-text"
+                      style="
+                        color: rgb(55, 61, 63);
+                        font-size: 12px;
+                        font-weight: 400;
+                        font-family: Helvetica, Arial, sans-serif;
+                      "
+                      rel="3"
+                      i="2"
+                      data:default-text="Orthopedics"
+                      data:collapsed="false"
+                      >Orthopedics</span
+                    >
+                  </div>
+                  <div
+                    class="apexcharts-legend-series"
+                    style="margin: 4px 5px"
+                    rel="4"
+                    seriesname="Dermatology"
+                    data:collapsed="false"
+                  >
+                    <span
+                      class="apexcharts-legend-marker"
+                      style="height: 16px; width: 16px; left: 0px; top: 0px"
+                      rel="4"
+                      data:collapsed="false"
+                      ><svg
+                        id="SvgjsSvg1408"
+                        width="100%"
+                        height="100%"
+                        xmlns="http://www.w3.org/2000/svg"
+                        version="1.1"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xmlns:svgjs="http://svgjs.dev"
+                        ><defs id="SvgjsDefs1409"></defs
+                        ><path
+                          id="SvgjsPath1410"
+                          d="M 0, 0 
+           m -7, 0 
+           a 7,7 0 1,0 14,0 
+           a 7,7 0 1,0 -14,0"
+                          fill="#ff4560"
+                          fill-opacity="1"
+                          stroke="#ffffff"
+                          stroke-opacity="0.9"
+                          stroke-linecap="butt"
+                          stroke-width="1"
+                          stroke-dasharray="0"
+                          cx="0"
+                          cy="0"
+                          shape="circle"
+                          class="apexcharts-legend-marker apexcharts-marker apexcharts-marker-circle"
+                          style="transform: translate(50%, 50%)"
+                        ></path></svg></span
+                    ><span
+                      class="apexcharts-legend-text"
+                      style="
+                        color: rgb(55, 61, 63);
+                        font-size: 12px;
+                        font-weight: 400;
+                        font-family: Helvetica, Arial, sans-serif;
+                      "
+                      rel="4"
+                      i="3"
+                      data:default-text="Dermatology"
+                      data:collapsed="false"
+                      >Dermatology</span
+                    >
+                  </div>
+                  <div
+                    class="apexcharts-legend-series"
+                    style="margin: 4px 5px"
+                    rel="5"
+                    seriesname="ENT"
+                    data:collapsed="false"
+                  >
+                    <span
+                      class="apexcharts-legend-marker"
+                      style="height: 16px; width: 16px; left: 0px; top: 0px"
+                      rel="5"
+                      data:collapsed="false"
+                      ><svg
+                        id="SvgjsSvg1411"
+                        width="100%"
+                        height="100%"
+                        xmlns="http://www.w3.org/2000/svg"
+                        version="1.1"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xmlns:svgjs="http://svgjs.dev"
+                        ><defs id="SvgjsDefs1412"></defs
+                        ><path
+                          id="SvgjsPath1413"
+                          d="M 0, 0 
+           m -7, 0 
+           a 7,7 0 1,0 14,0 
+           a 7,7 0 1,0 -14,0"
+                          fill="#775dd0"
+                          fill-opacity="1"
+                          stroke="#ffffff"
+                          stroke-opacity="0.9"
+                          stroke-linecap="butt"
+                          stroke-width="1"
+                          stroke-dasharray="0"
+                          cx="0"
+                          cy="0"
+                          shape="circle"
+                          class="apexcharts-legend-marker apexcharts-marker apexcharts-marker-circle"
+                          style="transform: translate(50%, 50%)"
+                        ></path></svg></span
+                    ><span
+                      class="apexcharts-legend-text"
+                      style="
+                        color: rgb(55, 61, 63);
+                        font-size: 12px;
+                        font-weight: 400;
+                        font-family: Helvetica, Arial, sans-serif;
+                      "
+                      rel="5"
+                      i="4"
+                      data:default-text="ENT"
+                      data:collapsed="false"
+                      >ENT</span
+                    >
+                  </div>
+                </div>
+                <style type="text/css">
+                  .apexcharts-legend {
+                    display: flex;
+                    overflow: auto;
+                    padding: 0 10px;
+                  }
+                  .apexcharts-legend.apx-legend-position-bottom,
+                  .apexcharts-legend.apx-legend-position-top {
+                    flex-wrap: wrap;
+                  }
+                  .apexcharts-legend.apx-legend-position-right,
+                  .apexcharts-legend.apx-legend-position-left {
+                    flex-direction: column;
+                    bottom: 0;
+                  }
+                  .apexcharts-legend.apx-legend-position-bottom.apexcharts-align-left,
+                  .apexcharts-legend.apx-legend-position-top.apexcharts-align-left,
+                  .apexcharts-legend.apx-legend-position-right,
+                  .apexcharts-legend.apx-legend-position-left {
+                    justify-content: flex-start;
+                  }
+                  .apexcharts-legend.apx-legend-position-bottom.apexcharts-align-center,
+                  .apexcharts-legend.apx-legend-position-top.apexcharts-align-center {
+                    justify-content: center;
+                  }
+                  .apexcharts-legend.apx-legend-position-bottom.apexcharts-align-right,
+                  .apexcharts-legend.apx-legend-position-top.apexcharts-align-right {
+                    justify-content: flex-end;
+                  }
+                  .apexcharts-legend-series {
+                    cursor: pointer;
+                    line-height: normal;
+                    display: flex;
+                    align-items: center;
+                  }
+                  .apexcharts-legend-text {
+                    position: relative;
+                    font-size: 14px;
+                  }
+                  .apexcharts-legend-text *,
+                  .apexcharts-legend-marker * {
+                    pointer-events: none;
+                  }
+                  .apexcharts-legend-marker {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    margin-right: 1px;
+                  }
+
+                  .apexcharts-legend-series.apexcharts-no-click {
+                    cursor: auto;
+                  }
+                  .apexcharts-legend .apexcharts-hidden-zero-series,
+                  .apexcharts-legend .apexcharts-hidden-null-series {
+                    display: none !important;
+                  }
+                  .apexcharts-inactive-legend {
+                    opacity: 0.45;
+                  }
+                </style></foreignObject
+              >
+              <g
+                id="SvgjsG1398"
+                class="apexcharts-inner apexcharts-graphical"
+                transform="translate(22, 0)"
+              >
+                <defs id="SvgjsDefs1397">
+                  <filter
+                    id="SvgjsFilter1426"
+                    filterUnits="userSpaceOnUse"
+                    width="200%"
+                    height="200%"
+                    x="-50%"
+                    y="-50%"
+                  >
+                    <feFlood
+                      id="SvgjsFeFlood1427"
+                      flood-color="#000000"
+                      flood-opacity="0.45"
+                      result="SvgjsFeFlood1427Out"
+                      in="SourceGraphic"
+                    ></feFlood>
+                    <feComposite
+                      id="SvgjsFeComposite1428"
+                      in="SvgjsFeFlood1427Out"
+                      in2="SourceAlpha"
+                      operator="in"
+                      result="SvgjsFeComposite1428Out"
+                    ></feComposite>
+                    <feOffset
+                      id="SvgjsFeOffset1429"
+                      dx="1"
+                      dy="1"
+                      result="SvgjsFeOffset1429Out"
+                      in="SvgjsFeComposite1428Out"
+                    ></feOffset>
+                    <feGaussianBlur
+                      id="SvgjsFeGaussianBlur1430"
+                      stdDeviation="1 "
+                      result="SvgjsFeGaussianBlur1430Out"
+                      in="SvgjsFeOffset1429Out"
+                    ></feGaussianBlur>
+                    <feBlend
+                      id="SvgjsFeBlend1431"
+                      in="SourceGraphic"
+                      in2="SvgjsFeGaussianBlur1430Out"
+                      mode="normal"
+                      result="SvgjsFeBlend1431Out"
+                    ></feBlend>
+                  </filter>
+                  <filter
+                    id="SvgjsFilter1436"
+                    filterUnits="userSpaceOnUse"
+                    width="200%"
+                    height="200%"
+                    x="-50%"
+                    y="-50%"
+                  >
+                    <feFlood
+                      id="SvgjsFeFlood1437"
+                      flood-color="#000000"
+                      flood-opacity="0.45"
+                      result="SvgjsFeFlood1437Out"
+                      in="SourceGraphic"
+                    ></feFlood>
+                    <feComposite
+                      id="SvgjsFeComposite1438"
+                      in="SvgjsFeFlood1437Out"
+                      in2="SourceAlpha"
+                      operator="in"
+                      result="SvgjsFeComposite1438Out"
+                    ></feComposite>
+                    <feOffset
+                      id="SvgjsFeOffset1439"
+                      dx="1"
+                      dy="1"
+                      result="SvgjsFeOffset1439Out"
+                      in="SvgjsFeComposite1438Out"
+                    ></feOffset>
+                    <feGaussianBlur
+                      id="SvgjsFeGaussianBlur1440"
+                      stdDeviation="1 "
+                      result="SvgjsFeGaussianBlur1440Out"
+                      in="SvgjsFeOffset1439Out"
+                    ></feGaussianBlur>
+                    <feBlend
+                      id="SvgjsFeBlend1441"
+                      in="SourceGraphic"
+                      in2="SvgjsFeGaussianBlur1440Out"
+                      mode="normal"
+                      result="SvgjsFeBlend1441Out"
+                    ></feBlend>
+                  </filter>
+                  <filter
+                    id="SvgjsFilter1446"
+                    filterUnits="userSpaceOnUse"
+                    width="200%"
+                    height="200%"
+                    x="-50%"
+                    y="-50%"
+                  >
+                    <feFlood
+                      id="SvgjsFeFlood1447"
+                      flood-color="#000000"
+                      flood-opacity="0.45"
+                      result="SvgjsFeFlood1447Out"
+                      in="SourceGraphic"
+                    ></feFlood>
+                    <feComposite
+                      id="SvgjsFeComposite1448"
+                      in="SvgjsFeFlood1447Out"
+                      in2="SourceAlpha"
+                      operator="in"
+                      result="SvgjsFeComposite1448Out"
+                    ></feComposite>
+                    <feOffset
+                      id="SvgjsFeOffset1449"
+                      dx="1"
+                      dy="1"
+                      result="SvgjsFeOffset1449Out"
+                      in="SvgjsFeComposite1448Out"
+                    ></feOffset>
+                    <feGaussianBlur
+                      id="SvgjsFeGaussianBlur1450"
+                      stdDeviation="1 "
+                      result="SvgjsFeGaussianBlur1450Out"
+                      in="SvgjsFeOffset1449Out"
+                    ></feGaussianBlur>
+                    <feBlend
+                      id="SvgjsFeBlend1451"
+                      in="SourceGraphic"
+                      in2="SvgjsFeGaussianBlur1450Out"
+                      mode="normal"
+                      result="SvgjsFeBlend1451Out"
+                    ></feBlend>
+                  </filter>
+                  <filter
+                    id="SvgjsFilter1456"
+                    filterUnits="userSpaceOnUse"
+                    width="200%"
+                    height="200%"
+                    x="-50%"
+                    y="-50%"
+                  >
+                    <feFlood
+                      id="SvgjsFeFlood1457"
+                      flood-color="#000000"
+                      flood-opacity="0.45"
+                      result="SvgjsFeFlood1457Out"
+                      in="SourceGraphic"
+                    ></feFlood>
+                    <feComposite
+                      id="SvgjsFeComposite1458"
+                      in="SvgjsFeFlood1457Out"
+                      in2="SourceAlpha"
+                      operator="in"
+                      result="SvgjsFeComposite1458Out"
+                    ></feComposite>
+                    <feOffset
+                      id="SvgjsFeOffset1459"
+                      dx="1"
+                      dy="1"
+                      result="SvgjsFeOffset1459Out"
+                      in="SvgjsFeComposite1458Out"
+                    ></feOffset>
+                    <feGaussianBlur
+                      id="SvgjsFeGaussianBlur1460"
+                      stdDeviation="1 "
+                      result="SvgjsFeGaussianBlur1460Out"
+                      in="SvgjsFeOffset1459Out"
+                    ></feGaussianBlur>
+                    <feBlend
+                      id="SvgjsFeBlend1461"
+                      in="SourceGraphic"
+                      in2="SvgjsFeGaussianBlur1460Out"
+                      mode="normal"
+                      result="SvgjsFeBlend1461Out"
+                    ></feBlend>
+                  </filter>
+                  <filter
+                    id="SvgjsFilter1466"
+                    filterUnits="userSpaceOnUse"
+                    width="200%"
+                    height="200%"
+                    x="-50%"
+                    y="-50%"
+                  >
+                    <feFlood
+                      id="SvgjsFeFlood1467"
+                      flood-color="#000000"
+                      flood-opacity="0.45"
+                      result="SvgjsFeFlood1467Out"
+                      in="SourceGraphic"
+                    ></feFlood>
+                    <feComposite
+                      id="SvgjsFeComposite1468"
+                      in="SvgjsFeFlood1467Out"
+                      in2="SourceAlpha"
+                      operator="in"
+                      result="SvgjsFeComposite1468Out"
+                    ></feComposite>
+                    <feOffset
+                      id="SvgjsFeOffset1469"
+                      dx="1"
+                      dy="1"
+                      result="SvgjsFeOffset1469Out"
+                      in="SvgjsFeComposite1468Out"
+                    ></feOffset>
+                    <feGaussianBlur
+                      id="SvgjsFeGaussianBlur1470"
+                      stdDeviation="1 "
+                      result="SvgjsFeGaussianBlur1470Out"
+                      in="SvgjsFeOffset1469Out"
+                    ></feGaussianBlur>
+                    <feBlend
+                      id="SvgjsFeBlend1471"
+                      in="SourceGraphic"
+                      in2="SvgjsFeGaussianBlur1470Out"
+                      mode="normal"
+                      result="SvgjsFeBlend1471Out"
+                    ></feBlend>
+                  </filter>
+                </defs>
+                <g id="SvgjsG1418" class="apexcharts-pie">
+                  <g id="SvgjsG1419" transform="translate(0, 0) scale(1)">
+                    <circle
+                      id="SvgjsCircle1420"
+                      r="91.22195121951219"
+                      cx="683.5"
+                      cy="150"
+                      fill="transparent"
+                    ></circle>
+                    <g id="SvgjsG1421" class="apexcharts-slices">
+                      <g
+                        id="SvgjsG1422"
+                        class="apexcharts-series apexcharts-pie-series"
+                        seriesName="GeneralxMedicine"
+                        rel="1"
+                        data:realIndex="0"
+                      >
+                        <path
+                          id="SvgjsPath1423"
+                          d="M 683.5 9.658536585365852 A 140.34146341463415 140.34146341463415 0 0 1 823.7478343785941 155.12555416277485 L 774.6610923460862 153.33161020580366 A 91.22195121951219 91.22195121951219 0 0 0 683.5 58.77804878048781 L 683.5 9.658536585365852 z "
+                          fill="rgba(0,143,251,1)"
+                          fill-opacity="1"
+                          stroke-opacity="1"
+                          stroke-linecap="butt"
+                          stroke-width="2"
+                          stroke-dasharray="0"
+                          class="apexcharts-pie-area apexcharts-donut-slice-0"
+                          index="0"
+                          j="0"
+                          data:angle="92.09302325581395"
+                          data:startAngle="0"
+                          data:strokeWidth="2"
+                          data:value="44"
+                          data:pathOrig="M 683.5 9.658536585365852 A 140.34146341463415 140.34146341463415 0 0 1 823.7478343785941 155.12555416277485 L 774.6610923460862 153.33161020580366 A 91.22195121951219 91.22195121951219 0 0 0 683.5 58.77804878048781 L 683.5 9.658536585365852 z "
+                          stroke="#ffffff"
+                        ></path>
+                      </g>
+                      <g
+                        id="SvgjsG1432"
+                        class="apexcharts-series apexcharts-pie-series"
+                        seriesName="Pediatrics"
+                        rel="2"
+                        data:realIndex="1"
+                      >
+                        <path
+                          id="SvgjsPath1433"
+                          d="M 823.7478343785941 155.12555416277485 A 140.34146341463415 140.34146341463415 0 0 1 619.3299432123198 274.8115786504882 L 641.7894630880079 231.1275261228173 A 91.22195121951219 91.22195121951219 0 0 0 774.6610923460862 153.33161020580366 L 823.7478343785941 155.12555416277485 z "
+                          fill="rgba(0,227,150,1)"
+                          fill-opacity="1"
+                          stroke-opacity="1"
+                          stroke-linecap="butt"
+                          stroke-width="2"
+                          stroke-dasharray="0"
+                          class="apexcharts-pie-area apexcharts-donut-slice-1"
+                          index="0"
+                          j="1"
+                          data:angle="115.11627906976746"
+                          data:startAngle="92.09302325581395"
+                          data:strokeWidth="2"
+                          data:value="55"
+                          data:pathOrig="M 823.7478343785941 155.12555416277485 A 140.34146341463415 140.34146341463415 0 0 1 619.3299432123198 274.8115786504882 L 641.7894630880079 231.1275261228173 A 91.22195121951219 91.22195121951219 0 0 0 774.6610923460862 153.33161020580366 L 823.7478343785941 155.12555416277485 z "
+                          stroke="#ffffff"
+                        ></path>
+                      </g>
+                      <g
+                        id="SvgjsG1442"
+                        class="apexcharts-series apexcharts-pie-series"
+                        seriesName="Orthopedics"
+                        rel="3"
+                        data:realIndex="2"
+                      >
+                        <path
+                          id="SvgjsPath1443"
+                          d="M 619.3299432123198 274.8115786504882 A 140.34146341463415 140.34146341463415 0 0 1 554.3372697498306 95.11179117804005 L 599.5442253373899 114.32266426572603 A 91.22195121951219 91.22195121951219 0 0 0 641.7894630880079 231.1275261228173 L 619.3299432123198 274.8115786504882 z "
+                          fill="rgba(254,176,25,1)"
+                          fill-opacity="1"
+                          stroke-opacity="1"
+                          stroke-linecap="butt"
+                          stroke-width="2"
+                          stroke-dasharray="0"
+                          class="apexcharts-pie-area apexcharts-donut-slice-2"
+                          index="0"
+                          j="2"
+                          data:angle="85.81395348837208"
+                          data:startAngle="207.2093023255814"
+                          data:strokeWidth="2"
+                          data:value="41"
+                          data:pathOrig="M 619.3299432123198 274.8115786504882 A 140.34146341463415 140.34146341463415 0 0 1 554.3372697498306 95.11179117804005 L 599.5442253373899 114.32266426572603 A 91.22195121951219 91.22195121951219 0 0 0 641.7894630880079 231.1275261228173 L 619.3299432123198 274.8115786504882 z "
+                          stroke="#ffffff"
+                        ></path>
+                      </g>
+                      <g
+                        id="SvgjsG1452"
+                        class="apexcharts-series apexcharts-pie-series"
+                        seriesName="Dermatology"
+                        rel="4"
+                        data:realIndex="3"
+                      >
+                        <path
+                          id="SvgjsPath1453"
+                          d="M 554.3372697498306 95.11179117804005 A 140.34146341463415 140.34146341463415 0 0 1 610.390470264206 30.205496723880742 L 635.9788056717339 72.13357287052249 A 91.22195121951219 91.22195121951219 0 0 0 599.5442253373899 114.32266426572603 L 554.3372697498306 95.11179117804005 z "
+                          fill="rgba(255,69,96,1)"
+                          fill-opacity="1"
+                          stroke-opacity="1"
+                          stroke-linecap="butt"
+                          stroke-width="2"
+                          stroke-dasharray="0"
+                          class="apexcharts-pie-area apexcharts-donut-slice-3"
+                          index="0"
+                          j="3"
+                          data:angle="35.58139534883719"
+                          data:startAngle="293.0232558139535"
+                          data:strokeWidth="2"
+                          data:value="17"
+                          data:pathOrig="M 554.3372697498306 95.11179117804005 A 140.34146341463415 140.34146341463415 0 0 1 610.390470264206 30.205496723880742 L 635.9788056717339 72.13357287052249 A 91.22195121951219 91.22195121951219 0 0 0 599.5442253373899 114.32266426572603 L 554.3372697498306 95.11179117804005 z "
+                          stroke="#ffffff"
+                        ></path>
+                      </g>
+                      <g
+                        id="SvgjsG1462"
+                        class="apexcharts-series apexcharts-pie-series"
+                        seriesName="ENT"
+                        rel="5"
+                        data:realIndex="4"
+                      >
+                        <path
+                          id="SvgjsPath1463"
+                          d="M 610.390470264206 30.205496723880742 A 140.34146341463415 140.34146341463415 0 0 1 683.4755057939878 9.65853872288855 L 683.4840787660921 58.778050169877574 A 91.22195121951219 91.22195121951219 0 0 0 635.9788056717339 72.13357287052249 L 610.390470264206 30.205496723880742 z "
+                          fill="rgba(119,93,208,1)"
+                          fill-opacity="1"
+                          stroke-opacity="1"
+                          stroke-linecap="butt"
+                          stroke-width="2"
+                          stroke-dasharray="0"
+                          class="apexcharts-pie-area apexcharts-donut-slice-4"
+                          index="0"
+                          j="4"
+                          data:angle="31.395348837209326"
+                          data:startAngle="328.6046511627907"
+                          data:strokeWidth="2"
+                          data:value="15"
+                          data:pathOrig="M 610.390470264206 30.205496723880742 A 140.34146341463415 140.34146341463415 0 0 1 683.4755057939878 9.65853872288855 L 683.4840787660921 58.778050169877574 A 91.22195121951219 91.22195121951219 0 0 0 635.9788056717339 72.13357287052249 L 610.390470264206 30.205496723880742 z "
+                          stroke="#ffffff"
+                        ></path>
+                      </g>
+                      <g id="SvgjsG1424" class="apexcharts-datalabels">
+                        <text
+                          id="SvgjsText1425"
+                          font-family="Helvetica, Arial, sans-serif"
+                          x="766.8516532951926"
+                          y="69.63890467263147"
+                          text-anchor="middle"
+                          dominant-baseline="auto"
+                          font-size="12px"
+                          font-weight="600"
+                          fill="#ffffff"
+                          class="apexcharts-text apexcharts-pie-label"
+                          style="font-family: Helvetica, Arial, sans-serif"
+                          filter="url(#SvgjsFilter1426)"
+                        >
+                          25.6%
+                        </text>
+                      </g>
+                      <g id="SvgjsG1434" class="apexcharts-datalabels">
+                        <text
+                          id="SvgjsText1435"
+                          font-family="Helvetica, Arial, sans-serif"
+                          x="742.0002559706223"
+                          y="249.91558337230515"
+                          text-anchor="middle"
+                          dominant-baseline="auto"
+                          font-size="12px"
+                          font-weight="600"
+                          fill="#ffffff"
+                          class="apexcharts-text apexcharts-pie-label"
+                          style="font-family: Helvetica, Arial, sans-serif"
+                          filter="url(#SvgjsFilter1436)"
+                        >
+                          32.0%
+                        </text>
+                      </g>
+                      <g id="SvgjsG1444" class="apexcharts-datalabels">
+                        <text
+                          id="SvgjsText1445"
+                          font-family="Helvetica, Arial, sans-serif"
+                          x="574.6206424552875"
+                          y="189.37879187972925"
+                          text-anchor="middle"
+                          dominant-baseline="auto"
+                          font-size="12px"
+                          font-weight="600"
+                          fill="#ffffff"
+                          class="apexcharts-text apexcharts-pie-label"
+                          style="font-family: Helvetica, Arial, sans-serif"
+                          filter="url(#SvgjsFilter1446)"
+                        >
+                          23.8%
+                        </text>
+                      </g>
+                      <g id="SvgjsG1454" class="apexcharts-datalabels">
+                        <text
+                          id="SvgjsText1455"
+                          font-family="Helvetica, Arial, sans-serif"
+                          x="595.872247007277"
+                          y="74.32450426523313"
+                          text-anchor="middle"
+                          dominant-baseline="auto"
+                          font-size="12px"
+                          font-weight="600"
+                          fill="#ffffff"
+                          class="apexcharts-text apexcharts-pie-label"
+                          style="font-family: Helvetica, Arial, sans-serif"
+                          filter="url(#SvgjsFilter1456)"
+                        >
+                          9.9%
+                        </text>
+                      </g>
+                      <g id="SvgjsG1464" class="apexcharts-datalabels">
+                        <text
+                          id="SvgjsText1465"
+                          font-family="Helvetica, Arial, sans-serif"
+                          x="652.1739425307317"
+                          y="38.536634391884206"
+                          text-anchor="middle"
+                          dominant-baseline="auto"
+                          font-size="12px"
+                          font-weight="600"
+                          fill="#ffffff"
+                          class="apexcharts-text apexcharts-pie-label"
+                          style="font-family: Helvetica, Arial, sans-serif"
+                          filter="url(#SvgjsFilter1466)"
+                        >
+                          8.7%
+                        </text>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+                <line
+                  id="SvgjsLine1472"
+                  x1="0"
+                  y1="0"
+                  x2="1367"
+                  y2="0"
+                  stroke="#b6b6b6"
+                  stroke-dasharray="0"
+                  stroke-width="1"
+                  stroke-linecap="butt"
+                  class="apexcharts-ycrosshairs"
+                ></line>
+                <line
+                  id="SvgjsLine1473"
+                  x1="0"
+                  y1="0"
+                  x2="1367"
+                  y2="0"
+                  stroke-dasharray="0"
+                  stroke-width="0"
+                  stroke-linecap="butt"
+                  class="apexcharts-ycrosshairs-hidden"
+                ></line>
+              </g>
+              <g
+                id="SvgjsG1416"
+                class="apexcharts-datalabels-group"
+                transform="translate(0, 0) scale(1)"
+              ></g>
+              <g
+                id="SvgjsG1417"
+                class="apexcharts-datalabels-group"
+                transform="translate(0, 0) scale(1)"
+              ></g>
+            </svg>
+            <div class="apexcharts-tooltip apexcharts-theme-dark">
+              <div
+                class="apexcharts-tooltip-series-group apexcharts-tooltip-series-group-0"
+                style="order: 1"
+              >
+                <span
+                  class="apexcharts-tooltip-marker"
+                  style="background-color: rgb(0, 143, 251)"
+                ></span>
+                <div
+                  class="apexcharts-tooltip-text"
+                  style="
+                    font-family: Helvetica, Arial, sans-serif;
+                    font-size: 12px;
+                  "
+                >
+                  <div class="apexcharts-tooltip-y-group">
+                    <span class="apexcharts-tooltip-text-y-label"></span
+                    ><span class="apexcharts-tooltip-text-y-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-goals-group">
+                    <span class="apexcharts-tooltip-text-goals-label"></span
+                    ><span class="apexcharts-tooltip-text-goals-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-z-group">
+                    <span class="apexcharts-tooltip-text-z-label"></span
+                    ><span class="apexcharts-tooltip-text-z-value"></span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="apexcharts-tooltip-series-group apexcharts-tooltip-series-group-1"
+                style="order: 2"
+              >
+                <span
+                  class="apexcharts-tooltip-marker"
+                  style="background-color: rgb(0, 227, 150)"
+                ></span>
+                <div
+                  class="apexcharts-tooltip-text"
+                  style="
+                    font-family: Helvetica, Arial, sans-serif;
+                    font-size: 12px;
+                  "
+                >
+                  <div class="apexcharts-tooltip-y-group">
+                    <span class="apexcharts-tooltip-text-y-label"></span
+                    ><span class="apexcharts-tooltip-text-y-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-goals-group">
+                    <span class="apexcharts-tooltip-text-goals-label"></span
+                    ><span class="apexcharts-tooltip-text-goals-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-z-group">
+                    <span class="apexcharts-tooltip-text-z-label"></span
+                    ><span class="apexcharts-tooltip-text-z-value"></span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="apexcharts-tooltip-series-group apexcharts-tooltip-series-group-2"
+                style="order: 3"
+              >
+                <span
+                  class="apexcharts-tooltip-marker"
+                  style="background-color: rgb(254, 176, 25)"
+                ></span>
+                <div
+                  class="apexcharts-tooltip-text"
+                  style="
+                    font-family: Helvetica, Arial, sans-serif;
+                    font-size: 12px;
+                  "
+                >
+                  <div class="apexcharts-tooltip-y-group">
+                    <span class="apexcharts-tooltip-text-y-label"></span
+                    ><span class="apexcharts-tooltip-text-y-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-goals-group">
+                    <span class="apexcharts-tooltip-text-goals-label"></span
+                    ><span class="apexcharts-tooltip-text-goals-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-z-group">
+                    <span class="apexcharts-tooltip-text-z-label"></span
+                    ><span class="apexcharts-tooltip-text-z-value"></span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="apexcharts-tooltip-series-group apexcharts-tooltip-series-group-3"
+                style="order: 4"
+              >
+                <span
+                  class="apexcharts-tooltip-marker"
+                  style="background-color: rgb(255, 69, 96)"
+                ></span>
+                <div
+                  class="apexcharts-tooltip-text"
+                  style="
+                    font-family: Helvetica, Arial, sans-serif;
+                    font-size: 12px;
+                  "
+                >
+                  <div class="apexcharts-tooltip-y-group">
+                    <span class="apexcharts-tooltip-text-y-label"></span
+                    ><span class="apexcharts-tooltip-text-y-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-goals-group">
+                    <span class="apexcharts-tooltip-text-goals-label"></span
+                    ><span class="apexcharts-tooltip-text-goals-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-z-group">
+                    <span class="apexcharts-tooltip-text-z-label"></span
+                    ><span class="apexcharts-tooltip-text-z-value"></span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="apexcharts-tooltip-series-group apexcharts-tooltip-series-group-4"
+                style="order: 5"
+              >
+                <span
+                  class="apexcharts-tooltip-marker"
+                  style="background-color: rgb(119, 93, 208)"
+                ></span>
+                <div
+                  class="apexcharts-tooltip-text"
+                  style="
+                    font-family: Helvetica, Arial, sans-serif;
+                    font-size: 12px;
+                  "
+                >
+                  <div class="apexcharts-tooltip-y-group">
+                    <span class="apexcharts-tooltip-text-y-label"></span
+                    ><span class="apexcharts-tooltip-text-y-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-goals-group">
+                    <span class="apexcharts-tooltip-text-goals-label"></span
+                    ><span class="apexcharts-tooltip-text-goals-value"></span>
+                  </div>
+                  <div class="apexcharts-tooltip-z-group">
+                    <span class="apexcharts-tooltip-text-z-label"></span
+                    ><span class="apexcharts-tooltip-text-z-value"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Top Performing Services</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Revenue</th>
+              <th>Visits</th>
+              <th>Avg. Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>General Consultation</td>
+              <td>$350,000</td>
+              <td>5,000</td>
+              <td>$70</td>
+            </tr>
+            <tr>
+              <td>Laboratory Tests</td>
+              <td>$275,000</td>
+              <td>3,500</td>
+              <td>$78.57</td>
+            </tr>
+            <tr>
+              <td>X-Ray Services</td>
+              <td>$200,000</td>
+              <td>2,000</td>
+              <td>$100</td>
+            </tr>
+            <tr>
+              <td>Specialist Consultation</td>
+              <td>$180,000</td>
+              <td>1,200</td>
+              <td>$150</td>
+            </tr>
+            <tr>
+              <td>Minor Procedures</td>
+              <td>$150,000</td>
+              <td>750</td>
+              <td>$200</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock content %} {% block js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const earningElement = document.getElementById("earning");
+    earningElement.classList.add("active");
+  });
+</script>
+<script>
+  // Revenue Trend Chart
+  var ctx = document.getElementById("revenueChart").getContext("2d");
+  var revenueChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+      datasets: [
+        {
+          label: "Monthly Revenue",
+          data: [
+            95000, 100000, 105000, 110000, 120000, 115000, 125000, 130000,
+            140000, 135000, 145000, 150000,
+          ],
+          borderColor: "rgb(75, 192, 192)",
+          tension: 0.1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+    },
+  });
+
+  // Revenue by Department Chart
+  var options = {
+    series: [44, 55, 41, 17, 15],
+    chart: {
+      type: "donut",
+      height: 300,
+    },
+    labels: [
+      "General Medicine",
+      "Pediatrics",
+      "Orthopedics",
+      "Dermatology",
+      "ENT",
+    ],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            position: "bottom",
+          },
+        },
+      },
+    ],
+  };
+
+  var departmentChart = new ApexCharts(
+    document.querySelector("#departmentChart"),
+    options,
+  );
+  departmentChart.render();
+</script>
+{% endblock js %}
