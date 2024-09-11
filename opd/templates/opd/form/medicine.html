@@ -1,0 +1,96 @@
+{% extends 'opd/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/form/medicine.css' %}" />
+{% endblock css %} {% block content %}
+
+<div class="container">
+  <h2>Medication Assignment</h2>
+  <form id="medicationForm" method="POST" action="">
+    {% csrf_token %}
+    <input
+      type="text"
+      id="medicationSearch"
+      class="search-bar"
+      placeholder="Search for medication..."
+    />
+    <table class="medication-table">
+      <thead>
+        <tr>
+          <th>Medication Name</th>
+          <th>Quantity</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="medicationList"></tbody>
+    </table>
+    <input type="hidden" id="medicationData" name="medicationData" value="" />
+    <button type="submit" class="submit-btn">Assign Medications</button>
+  </form>
+</div>
+{% endblock content %} {% block js %}
+
+<script>
+  const medicationSearch = document.getElementById("medicationSearch");
+  const medicationList = document.getElementById("medicationList");
+  const medicationForm = document.getElementById("medicationForm");
+  const medicationData = document.getElementById("medicationData");
+
+  medicationSearch.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addMedication(this.value);
+      this.value = "";
+    }
+  });
+
+  function addMedication(name) {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+                <td>${name}</td>
+                <td>
+                    <div class="quantity-control">
+                        <button type="button" class="quantity-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" onchange="updateQuantity(this)">
+                        <button type="button" class="quantity-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </td>
+                <td><button type="button" class="remove-btn" onclick="removeMedication(this)">Remove</button></td>
+            `;
+    medicationList.appendChild(row);
+    updateMedicationData();
+  }
+
+  function changeQuantity(btn, change) {
+    const input = btn.parentNode.querySelector(".quantity-input");
+    input.value = Math.max(1, parseInt(input.value) + change);
+    updateMedicationData();
+  }
+
+  function updateQuantity(input) {
+    input.value = Math.max(1, parseInt(input.value));
+    updateMedicationData();
+  }
+
+  function removeMedication(btn) {
+    btn.closest("tr").remove();
+    updateMedicationData();
+  }
+
+  function updateMedicationData() {
+    const medications = [];
+    document.querySelectorAll("#medicationList tr").forEach((row) => {
+      medications.push({
+        name: row.cells[0].textContent,
+        quantity: row.querySelector(".quantity-input").value,
+      });
+    });
+    medicationData.value = JSON.stringify(medications);
+  }
+
+  medicationForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    updateMedicationData();
+    this.submit();
+  });
+</script>
+
+{% endblock js %}

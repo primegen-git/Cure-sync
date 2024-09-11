@@ -1,16 +1,20 @@
-{% extends 'opd/index.html' %} {% load static %} {% block css %}
+{% extends 'opd/index.html' %}
+{% load static %}
+
+{% block css %}
 <link rel="stylesheet" href="{% static 'styles/opd_appointment.css' %}" />
-{% endblock css %} {% block content %}
+{% endblock css %}
+
+{% block content %}
 <main class="main-content">
   {% if request_count != 0 %}
   <div class="notification">
-    <strong>New Online Booking!</strong> You have {{request_count}} new appointment
-    requests.
+    <strong>New Online Booking!</strong> You have {{request_count}} new appointment requests.
   </div>
   {% endif %}
   <div class="header">
     <h1>Appointments</h1>
-    <input type="text" class="search-bar" placeholder="Search appointments" />
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search appointments" />
     <button id="online_request" data-url="{% url 'opd:appointment_request' %}" class="add-btn">online request</button>
   </div>
   <div class="stats-container">
@@ -27,6 +31,9 @@
         <th>Date & Time</th>
         <th>Mode</th>
         <th>Action</th>
+        <th>
+          <a href="{% url 'opd:offline_appointment_booking' %}" id="plus-symbol" title="Add new patient"></a>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -37,8 +44,12 @@
         <td>{{appointment.date_of_appointment}}</td>
         <td>{{appointment.appointment_type}}</td>
         <td>
-          <button class="action-btn">📝</button>&nbsp
-          <button class="action-btn">🗑️</button>
+          <button onclick="window.location.href='{% url 'opd:medicine'  id=appointment.id %}'"
+            class="action-btn">👥</button>&nbsp;
+          <button
+            onclick="window.location.href='{% url 'opd:confirmation_page' %}?section=appointment&id={{appointment.id}}'"
+            class="
+            action-btn">🗑️</button>
         </td>
       </tr>
       {% endfor %}
@@ -47,11 +58,35 @@
   <div class="pagination">pagination here</div>
 </main>
 {% endblock content %}
+
 {% block js %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const appointmentElement = document.getElementById("appointment");
     appointmentElement.classList.add("active");
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+
+    function performSearch() {
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = "{% url 'opd:appointment' %}" + '?search_query=' + encodeURIComponent(query);
+      }
+    }
+
+    searchInput.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        performSearch();
+      }
+    });
+
+    // You can also add a search button if you want
+    // const searchButton = document.createElement('button');
+    // searchButton.textContent = 'Search';
+    // searchButton.addEventListener('click', performSearch);
+    // searchInput.parentNode.insertBefore(searchButton, searchInput.nextSibling);
   });
 </script>
 <script src="{% static 'scripts/online_appointment_request.js' %} "></script>

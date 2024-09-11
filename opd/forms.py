@@ -1,0 +1,68 @@
+from django.utils import timezone
+from django import forms
+from django.forms import ModelForm
+from opd.models import Appointment
+from django.db import models
+from django import forms
+from .models import Medicine, Offline_Patient, Appointment
+
+
+class OfflinePatientAppointmentForm(forms.Form):
+    name = forms.CharField(max_length=200, label="Full Name")
+    age = forms.IntegerField(min_value=0, label="Age")
+    gender = forms.ChoiceField(choices=Offline_Patient.gender_type, label="Gender")
+    phone_number = forms.CharField(max_length=10, label="Phone Number")
+    address = forms.CharField(widget=forms.Textarea, label="Address")
+
+    # Appointment fields
+    appointment_id = forms.CharField(max_length=30, label="Appointment ID")
+    date_of_appointment = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        label="Date of Appointment",
+    )
+
+    def save(self, opd):
+        # Create Offline_Patient instance
+        patient = Offline_Patient.objects.create(
+            name=self.cleaned_data["name"],
+            age=self.cleaned_data["age"],
+            gender=self.cleaned_data["gender"],
+            phone_number=self.cleaned_data["phone_number"],
+            address=self.cleaned_data["address"],
+        )
+
+        # Create Appointment instance
+        appointment = Appointment.objects.create(
+            opd=opd,
+            offline_patient=patient,
+            appointment_id=self.cleaned_data["appointment_id"],
+            appointment_type="offline",
+            date_of_appointment=self.cleaned_data["date_of_appointment"],
+        )
+        opd.no_of_appointment = models.F("no_of_appointment") + 1
+        opd.save()
+
+    def __init__(self, *args, **kwargs):
+        super(OfflinePatientAppointmentForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({"class": "input"})  # type: ignore
+
+
+
+class OnlinePatientAppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['appointment_id']
+        labels = {
+            "appointment_id": "Appointment ID",
+        }
+
+
+
+class InventoryItemsForm(forms.Form):
+    name = forms.CharField(max_length=30, label="Medicine Name") 
+    quantity = forms.IntegerField(min_value=0, label="Quantity")
+    price = forms.DecimalField(min_value=0, max_digits=10, decimal_places=2, label="Price")
+    type = forms.ChoiceField(choices=Medicine.type, label="Category")
+

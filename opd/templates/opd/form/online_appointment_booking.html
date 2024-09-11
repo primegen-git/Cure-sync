@@ -1,0 +1,29 @@
+
+{% extends 'base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/ eform.css' %}" />
+<link rel="stylesheet" href="{% static 'styles/form.css' %}" />
+{% endblock css %} {% block content %}
+<div class="container">
+  <div class="form-card">
+    <h2>Appointment Form</h2>
+    <form method="POST" action="">
+      {% csrf_token %}
+        <label for="appointment_id">Appointment ID</label>
+        <input type="text" id="appointment_id" name="appointment_id" required /><br></br>
+      <div class="form-group">
+        <label for="appointmentDate">Appointment Date</label>
+        <input
+          type="date"
+          id="appointmentDate"
+          name="date_of_appointment"
+          required
+        />
+      </div>
+      <div class="form-footer">
+        <button type="reset" class="btn btn-secondary">Reset</button>
+        <button type="submit" class="btn">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}

@@ -1,29 +1,24 @@
-{% extends 'opd/index.html' %} {% load static %} {% block css %}
+{% extends 'opd/index.html' %}
+{% load static %}
+
+{% block css %}
 <link rel="stylesheet" href="{% static 'styles/product.css' %}" />
-{% endblock css %} {% block content %}
+{% endblock css %}
+
+{% block content %}
 <main class="main-content">
   <header>
     <h1>Products & Stock</h1>
     <div class="search-bar">
-      <input type="text" placeholder="Search for products" />
-      <button class="search-btn"><i class="fas fa-search"></i></button>
+      <input type="text" id="searchInput" placeholder="Search for products" />
+      <button class="search-btn" id="searchButton"><i class="fas fa-search"></i></button>
     </div>
-    <button class="add-product-btn">+ Add Product</button>
+    <button onclick="window.location.href='{% url 'opd:add_product' %}'" class="add-product-btn">+ Add Product</button>
   </header>
   <div class="stock-stats">
     <div class="stat-card">
       <h3>Total Products</h3>
       <div class="stat-value">{{count}}</div>
-    </div>
-    <div class="stat-card">
-      <h3>Low Stock Items</h3>
-      <div class="stat-value">120</div>
-      <div class="stat-info">Needs reordering</div>
-    </div>
-    <div class="stat-card">
-      <h3>Out of Stock</h3>
-      <div class="stat-value">25</div>
-      <div class="stat-info">Critical items</div>
     </div>
   </div>
   <div class="product-list">
@@ -31,11 +26,9 @@
       <thead>
         <tr>
           <th>Product Name</th>
-          <th>SKU</th>
           <th>Category</th>
           <th>Quantity</th>
           <th>Price</th>
-          <th>Status</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -45,14 +38,13 @@
           <td>
             <span>{{product.medicine.name}}</span>
           </td>
-          <td>SKU001</td>
           <td>{{product.medicine.category}}</td>
           <td>{{product.quantity}}</td>
           <td>Rs {{product.price}}</td>
-          <td><span class="status in-stock">In Stock</span></td>
           <td>
             <button class="action-btn">📝</button>
-            <button class="action-btn">🗑️</button>
+            <button onclick="window.location.href='{% url 'opd:confirmation_page' %}?section=product&id={{product.id}}'"
+              class="action-btn">🗑️</button>
           </td>
         </tr>
         {% endfor %}
@@ -60,11 +52,35 @@
     </table>
   </div>
 </main>
-{% endblock content %} {% block js %}
+{% endblock content %}
+
+{% block js %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const productElement = document.getElementById("product");
     productElement.classList.add("active");
+
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    function performSearch() {
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = "{% url 'opd:product_list' %}" + '?search_query=' + encodeURIComponent(query);
+      }
+    }
+
+    searchInput.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        performSearch();
+      }
+    });
+
+    searchButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      performSearch();
+    });
   });
 </script>
 {% endblock js %}
