@@ -1,37 +1,44 @@
 {% extends 'base.html' %} {% load static %} {% block css %}
 <link rel="stylesheet" href="{% static 'styles/appointment.css' %}" />
 {% endblock css %} {% block content %}
-
 <div class="container">
-  <div class="profile-card">
-    <img src="doctor-image.jpg" alt="Doctor image" class="doctor-image" />
-    <div class="doctor-info">
-      <div class="header">
-        <h2 class="doctor-name">{{doctor.name}}</h2>
-        <button id="profile" data-url="{% url 'user:doctor_profile' pk=doctor.id %}" class="profile-btn">Profile</button
-          </div>
-        <p class="doctor-specialty">{{doctor.speciality}}</p>
-        <p class="doctor-description">{{doctor.about}}</p>
-        <div class="availability">
-          <h3>Address</h3>
-          {{doctor.address}}
-        </div>
-        <button class="appointment-btn"><a href="{% url 'user:appointment' pk=doctor.id %}?search_query=booking"
-            style="text-decoration: none; color:inherit;">Book Appointment</a></button>
-      </div>
+  <button onclick="window.history.back()" class="back-btn" style="margin-bottom: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+    <span style="margin-right: 8px;">←</span> Back
+</button>
+
+  <div class="profile-card d-flex flex-wrap">
+    <div class="doctor-image-wrapper d-flex justify-content-center align-items-center">
+      <img src="doctor-image.jpg" alt="Doctor image" class="doctor-image" />
     </div>
-    <div class="live-appointments">
-      <ul class="appointment-list">
-        <li class="appointment-item">
-          <span class="appointment-time">No of available bed: {{total_bed_count}}</span>
-        </li>
-        <li class="appointment-item">
-          <span class="appointment-time">No of appoinment: {{total_appointment_count}}</span>
-        </li>
-      </ul>
+    <div class="doctor-info d-flex flex-column">
+      <div class="header d-flex justify-content-between align-items-center">
+        <h2 class="doctor-name">{{doctor.name}}</h2>
+        <button id="profile" data-url="{% url 'user:doctor_profile' pk=doctor.id %}" class="profile-btn">Profile</button>
+      </div>
+      <p class="doctor-specialty">{{doctor.speciality}}</p>
+      <p class="doctor-description">{{doctor.about}}</p>
+      <div class="availability d-flex flex-column">
+        <h3>Address</h3>    
+        <p class="doctor-address">{{doctor.address}}</p>
+      </div>
+      <button class="appointment-btn">
+        <a href="{% url 'user:appointment' pk=doctor.id %}?search_query=booking" style="text-decoration: none; color:inherit;">
+          Book Appointment
+        </a>
+      </button>
     </div>
   </div>
-
+  <div class="live-appointments d-flex justify-content-between align-items-center">
+    <ul class="appointment-list d-flex justify-content-around">
+      <li class="appointment-item">
+        <span class="appointment-time">No of available bed: {{total_bed_count}}</span>
+      </li>
+      <li class="appointment-item">
+        <span class="appointment-time">No of appointments: {{total_appointment_count}}</span>
+      </li>
+    </ul>
+  </div>
+</div>
   {% endblock content %} {% block js %}
   <script src="{% static 'scripts/user_appointment.js' %}"></script>
   {% endblock js %}
