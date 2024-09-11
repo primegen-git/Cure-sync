@@ -2,53 +2,41 @@
 <!doctype html>
 {% load static %}
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
-    {% block css %} {% endblock css %}
-  </head>
 
-  <body>
-    {% if messages %} {% for message in messages %}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
+  {% block css %} {% endblock css %}
+</head>
 
-    <div class="alert alert--{{message.tags}}">
-      <p class="alert__message">{{message}}</p>
-    </div>
-    {% endfor %} {% endif %}
+<body>
 
-    <div class="dashboard-container">
-      <aside class="sidebar">
-        <div class="logo">
-          <h2 style="color: #2a7fba">CureSync</h2>
-        </div>
-        <nav>
-          <ul>
-            <li id="dashboard">
-              <a href="{% url 'user:home_page' %}"
-                ><span class="icon">👥</span> Patients</a
-              >
-            </li>
-            <li id="medical">
-              <a href="{% url 'user:medical_history' %}"
-                ><span class="icon">📦</span> Medical_history</a
-              >
-            </li>
-            <li id="message">
-              <a href="{% url 'user:message' %}"
-                ><span class="icon">📦</span> Message</a
-              >
-            </li>
-            <li id="logout">
-              <a href="{% url 'user:logout' %}"
-                ><span class="icon">👨‍⚕️</span> Logout</a
-              >
-            </li>
-          </ul>
-        </nav>
-      </aside>
-      {% block content %} {% endblock content %}
-    </div>
-  </body>
-  {% block js %} {% endblock js %}
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="logo">
+        <h2 style="color: #2a7fba">CureSync</h2>
+      </div>
+      <nav>
+        <ul>
+          <li id="dashboard">
+            <a href="{% url 'user:home_page' %}"><span class="icon">👥</span> Patients</a>
+          </li>
+          <li id="medical">
+            <a href="{% url 'user:medical_history' %}"><span class="icon">📦</span> Medical_history</a>
+          </li>
+          <li id="message">
+            <a href="{% url 'user:message' %}"><span class="icon">📦</span> Message</a>
+          </li>
+          <li id="logout">
+            <a href="{% url 'user:logout' %}"><span class="icon">👨‍⚕️</span> Logout</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    {% block content %} {% endblock content %}
+  </div>
+</body>
+{% block js %} {% endblock js %}
+
 </html>
