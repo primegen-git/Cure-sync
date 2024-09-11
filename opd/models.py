@@ -92,16 +92,16 @@ class Medicine(models.Model):
     def __str__(self):
         return str(self.name)
 
-    def save(self, *args, **kwargs):
-        self.name = self.name.capitalize()
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.name = self.name.capitalize()
+    #     super().save(*args, **kwargs)
 
 
-class Machinery(models.Model):
-    name = models.CharField("Name", max_length=255)
-
-    def __str__(self):
-        return str(self.name)
+# class Machinery(models.Model):
+#     name = models.CharField("Name", max_length=255)
+#
+#     def __str__(self):
+#         return str(self.name)
 
 
 class Inventory_Item(models.Model):
@@ -115,21 +115,25 @@ class Inventory_Item(models.Model):
         null=True,
         blank=True,
     )
-    machinery = models.ForeignKey(
-        Machinery,
-        on_delete=models.CASCADE,
-        related_name="inventory_items",
-        null=True,
-        blank=True,
-    )
+    # machinery = models.ForeignKey(
+    #     Machinery,
+    #     on_delete=models.CASCADE,
+    #     related_name="inventory_items",
+    #     null=True,
+    #     blank=True,
+    # )
     quantity = models.PositiveIntegerField("Quantity", default=0)
     price = models.DecimalField("Price", max_digits=10, default=0, decimal_places=2)
+
+    id = models.UUIDField(
+        default=uuid.uuid4, unique=True, primary_key=True, editable=False
+    )
 
     class Meta:
         verbose_name_plural = "Inventory Items"
 
     def __str__(self):
-        return f"{self.medicine or self.machinery} in {self.inventory}"
+        return f"{self.medicine}  in {self.inventory}"
 
 
 class Offline_Patient(models.Model):
@@ -160,6 +164,8 @@ class Offline_Patient(models.Model):
 
 
 class Appointment(models.Model):
+    # NOTE: always increase the no_of_appointment when working with the appointment
+    # NOTE: always decreae the no_of_appointment when working with the appointment
     online_request_status = (
         ("seen", "seen"),
         ("not_seen", "not_seen"),
@@ -200,27 +206,6 @@ class Appointment(models.Model):
 
     class Meta:
         unique_together = [["opd", "online_patient"], ["opd", "offline_patient"]]
-
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        is_new = self._state.adding
-        if self.online_patient:
-            self.appointment_type = "online"
-        else:
-            self.appointment_type = "offline"
-        super().save(*args, **kwargs)
-
-        if is_new:
-            self.opd.no_of_appointment = models.F("no_of_appointment") + 1
-            self.opd.save()
-            self.opd.refresh_from_db()
-
-    @transaction.atomic
-    def delete(self, *args, **kwargs):  # type: ignore
-        self.opd.no_of_appointment = models.F("no_of_appointment") - 1
-        self.opd.save()
-        self.opd.refresh_from_db()
-        super().delete(*args, **kwargs)
 
     @property
     def name(self):
@@ -273,20 +258,20 @@ class Patient(models.Model):
     def __str__(self):
         return str(self.patient_id)
 
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        is_new = self._state.adding
-        super().save(*args, **kwargs)
-
-        if is_new:
-            self.opd.no_of_beds = models.F("no_of_beds") + 1
-            self.opd.save()
-
-    @transaction.atomic
-    def delete(self, *args, **kwargs):  # type: ignore
-        self.opd.no_of_beds = models.F("no_of_beds") - 1
-        self.opd.save()
-        super().delete(*args, **kwargs)
+    # @transaction.atomic
+    # def save(self, *args, **kwargs):
+    #     is_new = self._state.adding
+    #     super().save(*args, **kwargs)
+    #
+    #     if is_new:
+    #         self.opd.no_of_beds = models.F("no_of_beds") + 1
+    #         self.opd.save()
+    #
+    # @transaction.atomic
+    # def delete(self, *args, **kwargs):  # type: ignore
+    #     self.opd.no_of_beds = models.F("no_of_beds") - 1
+    #     self.opd.save()
+    #     super().delete(*args, **kwargs)
 
     @property
     def name(self):

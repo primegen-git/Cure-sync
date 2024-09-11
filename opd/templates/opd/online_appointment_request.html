@@ -22,8 +22,7 @@
             <span class="badge badge-online">Online Booking</span>
           </div>
           <div class="appointment-actions">
-            <button class="btn"><a
-                href="{% url 'opd:appointment_request' %}?search_query=accepted&id={{appointment.id}}"
+            <button class="btn"><a href="{% url 'opd:online_appointment_booking' id=appointment.id %}"
                 style="text-decoration: none; color: inherit;">Accept</a></button>
             <button class="btn"><a href="{% url 'opd:appointment_request' %}?search_query=cancel?id={{appointment.id}}"
                 style="text-decoration: none; color: inherit;">Cancel</a></button>

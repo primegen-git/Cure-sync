@@ -1,17 +1,30 @@
 from django.contrib import messages
+import json
 from django.http import HttpResponseForbidden
 from django.http.response import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from opd.models import Doctor, Appointment
+from opd.forms import (
+    InventoryItemsForm,
+    OfflinePatientAppointmentForm,
+    OnlinePatientAppointmentForm,
+)
+from opd.models import Doctor, Appointment, Medicine, Inventory_Item, Patient
 from opd.utils import (
     get_product_count,
     is_doctor,
     get_processed_data,
     custom_authenticate,
+    appointment_handler,
+    product_handler,
+    patient_handler,
+    search_appointment,
+    search_patient,
+    search_product,
 )
 from django.db.models import Q
+from django.db import models
 
 
 def login_doctor(request):
@@ -36,17 +49,25 @@ def logout_doctor(request):
 
 @user_passes_test(is_doctor, login_url="home:home_page")
 def home_page(request):
+    search_query = request.GET.get("search_query", "")
     opd = request.user.doctor.opd
-    patients = opd.patients.all().order_by("-date")
+    if search_query:
+        patients = search_patient(request, search_query)
+    else:
+        patients = opd.patients.all().order_by("-date")
     context = {"opd": opd, "patients": patients}
     return render(request, "opd/patient.html", context)
 
 
 @user_passes_test(is_doctor, login_url="home:home_page")
 def product_list(request):
-    products = request.user.doctor.opd.inventory.inventory_items.all()
-    count = get_product_count(products)[0]
-    context = {"products": products, "count": count}
+    search_query = request.GET.get("search_query", "")
+    if search_query:
+        products = search_product(request, search_query)
+    else:
+        products = request.user.doctor.opd.inventory.inventory_items.all()
+    count = get_product_count(products)[0]  # type: ignore
+    context = {"products": products, "count": count}  # type: ignore
     return render(request, "opd/product.html", context)
 
 
@@ -59,10 +80,14 @@ def doctor_profile(request):
 
 @user_passes_test(is_doctor, login_url="home:home_page")
 def appointment(request):
-    appointments = request.user.doctor.opd.appointments.filter(
-        Q(offline_patient__isnull=False)
-        | Q(online_patient__isnull=False, status="seen")
-    )
+    search_query = request.GET.get("search_query", "")
+    if search_query:
+        appointments = search_appointment(request, search_query)
+    else:
+        appointments = request.user.doctor.opd.appointments.filter(
+            Q(offline_patient__isnull=False)
+            | Q(online_patient__isnull=False, status="seen")
+        )
     request_count = request.user.doctor.opd.appointments.filter(
         Q(online_patient__isnull=False, status="not_seen")
     ).count()
@@ -79,10 +104,7 @@ def appointment(request):
 def appointment_request(request):
     search_query = request.GET.get("search_query")
     appointment_id = request.GET.get("id")
-    print(search_query)
-    print(appointment_id)
     if search_query and appointment_id:
-        print("inside the if statement")
         try:
             appointment = request.user.doctor.opd.appointments.get(id=appointment_id)
             if search_query == "accepted":
@@ -113,3 +135,182 @@ def patient_report(request, id):
 def earning(request):
     context = {}
     return render(request, "opd/earning.html", context)
+
+
+@user_passes_test(is_doctor, login_url="home:home_page")
+def confirmation_page(request):
+    confirmation = request.GET.get("confirmation")
+    section = request.GET.get("section")
+    id = request.GET.get("id")
+    if confirmation == "yes":
+        if section and id:
+            if section == "appointment":
+                appointment_handler(id)
+                messages.success(request, "Appointment has been successfully deleted.")
+                return redirect("opd:appointment")
+            if section == "product":
+                product_handler(id)
+                messages.success(request, "Product has been successfully deleted.")
+                return redirect("opd:product_list")
+            if section == "patient":
+                patient_handler(id)
+                messages.success(request, "Patient has been successfully deleted.")
+                return redirect("opd:home_page")
+        else:
+            return redirect("opd:home_page")
+
+    if confirmation == "no":
+        if section == "appointment":
+            return redirect("opd:appointment")
+        if section == "product":
+            return redirect("opd:product_list")
+        if section == "patient":
+            return redirect("opd:home_page")
+
+    context = {"section": section, "id": id}
+    return render(request, "opd/confirmation_page.html", context)
+
+
+@user_passes_test(is_doctor, login_url="home:home_page")
+def offline_appointment_booking(request):
+    if request.method == "POST":
+        opd = request.user.doctor.opd
+        print(request.POST)
+        form = OfflinePatientAppointmentForm(request.POST)
+        if form.is_valid():
+            form.save(opd)
+            return redirect("opd:appointment")
+    form = OfflinePatientAppointmentForm()
+    context = {"form": form}
+    return render(request, "opd/form/offline_appointment.html", context)
+
+
+@user_passes_test(is_doctor, login_url="home:home_page")
+def online_appointment_booking(request, id):
+    if request.method == "POST":
+        opd = request.user.doctor.opd
+        form = OnlinePatientAppointmentForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            appointment = Appointment.objects.get(id=id)
+            appointment.opd = opd
+            appointment.appointment_type = "offline"
+            appointment.status = "seen"
+            appointment.appointment_id = request.POST["appointment_id"]
+            appointment.date_of_appointment = request.POST["date_of_appointment"]
+            opd.no_of_appointment = models.F("no_of_appointment") + 1
+            opd.save()
+            appointment.save()
+            messages.success(request, "Appointment is successfully added")
+            return redirect("opd:appointment")
+        else:
+            messages.error(request, "something wrong in the form")
+            return redirect("opd:online_appointment_booking", id=id)
+    else:
+        form = OnlinePatientAppointmentForm()
+    context = {}
+    return render(request, "opd/form/online_appointment_booking.html", context)
+
+
+@user_passes_test(is_doctor, login_url="home:home_page")
+def medicine(request, id):
+    if request.method == "POST":
+        medication_data_json = request.POST.get("medicationData", "[]")
+        medication_list = json.loads(medication_data_json)
+
+        updated_medication_list = []
+        medicine_description = []
+
+        for medication in medication_list:
+            name = medication["name"].capitalize()
+            requested_quantity = int(medication["quantity"])
+            medicine_description.append(f"{name}: {requested_quantity}")
+
+            try:
+                medicine_obj = Medicine.objects.get(name=name)
+                inventory_item = Inventory_Item.objects.filter(
+                    inventory=request.user.doctor.opd.inventory, medicine=medicine_obj
+                ).first()
+
+                if inventory_item:
+                    available_quantity = inventory_item.quantity
+                    if requested_quantity <= available_quantity:
+                        inventory_item.quantity = (
+                            models.F("quantity") - requested_quantity
+                        )
+                        inventory_item.save()
+                    else:
+                        available_quantity = (
+                            inventory_item.quantity
+                        )  # Keep original if insufficient
+                else:
+                    available_quantity = 0
+
+            except Medicine.DoesNotExist:
+                available_quantity = 0
+
+            updated_medication_list.append(
+                {
+                    "name": name,
+                    "requested_quantity": requested_quantity,
+                    "available_quantity": available_quantity,
+                }
+            )
+
+        context = {"medications": updated_medication_list}
+        appointment = Appointment.objects.get(id=id)
+
+        # Create the medicine description string
+        medicine_details = "Prescribed Medicines:\n" + "\n".join(medicine_description)
+
+        patient = Patient.objects.create(
+            opd=request.user.doctor.opd,
+            patient_type=appointment.appointment_type,
+            patient_id=appointment.appointment_id,
+            description=medicine_details,  # Add medicine details to description
+        )
+        if appointment.appointment_type == "offline":
+            patient.offline_patient = appointment.offline_patient
+        else:
+            patient.online_patient = appointment.online_patient
+        patient.save()
+
+        appointment.opd.no_of_appointment = models.F("no_of_appointment") - 1
+        appointment.opd.no_of_beds = models.F("no_of_beds") + 1
+        appointment.delete()
+        appointment.opd.save()
+
+        return render(request, "opd/form/medicine_report.html", context)
+
+    context = {}
+    return render(request, "opd/form/medicine.html", context)
+
+
+@user_passes_test(is_doctor, login_url="home:home_page")
+def add_product(request):
+    if request.method == "POST":
+        print(request.POST)
+        form = InventoryItemsForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            quantity = form.cleaned_data["quantity"]
+            price = form.cleaned_data["price"]
+            category = form.cleaned_data["type"]
+            medicine = Medicine.objects.create(
+                name=name,
+                category=category,
+            )
+            inventory_item = Inventory_Item.objects.create(
+                inventory=request.user.doctor.opd.inventory,
+                medicine=medicine,
+                quantity=quantity,
+                price=price,
+            )
+            messages.success(request, "Product has been added")
+            return redirect("opd:product_list")
+        else:
+            messages.error(request, "Something is wrong in the form")
+            return redirect("opd:add_product")
+    form = InventoryItemsForm()
+    context = {"form": form}
+    return render(request, "opd/form/product.html", context)

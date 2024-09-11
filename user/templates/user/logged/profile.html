@@ -11,15 +11,11 @@
     <div class="stats-container">
       <div class="card stat-card">
         <h3>Available Beds</h3>
-        <div class="stat-value">5</div>
+        <div class="stat-value">{{total_beds_count}}</div>
       </div>
       <div class="card stat-card">
         <h3>Active Doctors</h3>
-        <div class="stat-value">2</div>
-      </div>
-      <div class="card stat-card">
-        <h3>Today's Appointments</h3>
-        <div class="stat-value">3</div>
+        <div class="stat-value">{{total_doctor_count}}</div>
       </div>
     </div>
     <div class="card">
@@ -31,9 +27,7 @@
         <button onclick="window.location.href='{% url 'user:bed_list' %}'">
           Search by Bed
         </button>
-        <button
-          onclick="window.location.href='{% url 'user:search_specialist' %}'"
-        >
+        <button onclick="window.location.href='{% url 'user:search_specialist' %}'">
           Search by Specialties
         </button>
         <button onclick="window.location.href='{% url 'user:opd_list' %}'">

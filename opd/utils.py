@@ -1,6 +1,18 @@
+from functools import wraps
 from django.contrib.auth.models import Group, User
 from django.contrib.auth import authenticate
-from opd.models import Appointment, Opd, Doctor
+from django.forms import models
+from django.db import models
+from opd.models import (
+    Appointment,
+    Inventory_Item,
+    Medicine,
+    Offline_Patient,
+    Opd,
+    Doctor,
+    Patient,
+)
+from django.db.models import Q
 
 
 def add_user_to_doctor_group(user):
@@ -54,3 +66,52 @@ def custom_authenticate(request):
         return user
 
     return None
+
+
+def appointment_handler(id):
+    appointment = Appointment.objects.get(id=id)
+    appointment.opd.no_of_appointment = models.F("no_of_appointment") - 1
+    appointment.delete()
+
+
+def product_handler(id):
+    product = Inventory_Item.objects.get(id=id)
+    product.delete()
+
+
+def patient_handler(id):
+    patient = Patient.objects.get(id=id)
+    patient.opd.no_of_appointment = models.F("no_of_appointment") - 1
+    patient.delete()
+
+
+def search_product(request, search_query):
+    return request.user.doctor.opd.inventory.inventory_items.filter(
+        Q(medicine__name__icontains=search_query)
+        | Q(medicine__category__icontains=search_query)
+    )
+
+
+def search_appointment(request, search_query):
+    appointments = Appointment.objects.filter(opd=request.user.doctor.opd)
+    appointments = appointments.filter(
+        Q(appointment_id__icontains=search_query)
+        | Q(offline_patient__name__icontains=search_query)
+        | Q(online_patient__name__icontains=search_query)
+    )
+
+    return appointments
+
+
+def search_patient(request, search_query):
+    patients = Patient.objects.filter(opd=request.user.doctor.opd)
+    patients = patients.filter(
+        Q(patient_id__icontains=search_query)
+        | Q(online_patient__name__icontains=search_query)
+        | Q(offline_patient__name__icontains=search_query)
+        | Q(offline_patient__gender__icontains=search_query)
+        | Q(offline_patient__gender__icontains=search_query)
+        | Q(patient_type__icontains=search_query)
+    )
+
+    return patients

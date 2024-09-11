@@ -8,12 +8,10 @@
   <main class="main-content">
     <header>
       <h1>Search by OPD</h1>
-      <form id="search_form" method="post" action="">
-        {% csrf_token %}
-        <div class="search-bar">
-          <input type="text" name="search_query" id="search_text" placeholder="Search for bed number or type" />
-        </div>
-      </form>
+      <div class="search-bar">
+        <input type="text" name="search_query" id="searchInput" placeholder="Search for bed number or type" />
+        <button id="searchButton" class="search-btn"><i class="fas fa-search"></i></button>
+      </div>
     </header>
     <div class="bed-list">
       {% for doctor in doctors %}
@@ -42,5 +40,30 @@
 </div>
 {% endblock content %}
 {% block js %}
-<scripts src="{% static 'scripts/form_submit.js' %}"></scripts>
+<script src="{% static 'scripts/form_submit.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    function performSearch() {
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = "{% url 'user:opd_list' %}" + '?search_query=' + encodeURIComponent(query);
+      }
+    }
+
+    searchInput.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        performSearch();
+      }
+    });
+
+    searchButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      performSearch();
+    });
+  });
+</script>
 {% endblock js %}

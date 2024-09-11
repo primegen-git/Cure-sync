@@ -1,13 +1,16 @@
-{% extends 'opd/index.html' %} {% load static %}
+{% extends 'opd/index.html' %}
+{% load static %}
+
 {% block css %}
 <link rel="stylesheet" href="{% static 'styles/patient.css' %}" />
 {% endblock css %}
+
 {% block content %}
 <main class="main-content">
   <header>
     <h1>Patients</h1>
     <div class="search-bar">
-      <input type="text" placeholder="Search for patients" />
+      <input type="text" id="searchInput" placeholder="Search for patients" />
     </div>
   </header>
   {% if opd.patient_count != 0 %}
@@ -29,15 +32,12 @@
           <th>Date_of_visit</th>
           <th>Mode</th>
           <th>Action</th>
-          <th>
-            <a href="#" id="plus-symbol" title="Add new patient"></a>
-          </th>
         </tr>
       </thead>
       <tbody>
         {% for patient in patients %}
         <tr>
-          <td><a style="text-decoration: none;" href={% url 'opd:patient_report' id=patient.id %}>
+          <td><a style="text-decoration: none;" href="{% url 'opd:patient_report' id=patient.id %}">
               {{patient.patient_id}}</a></td>
           <td>
             <span>{{patient.name}}</span>
@@ -47,8 +47,9 @@
           <td>{{patient.date}}</td>
           <td>{{patient.patient_type}}</td>
           <td>
-            <button class="action-btn">📝</button>&nbsp
-            <button class="action-btn">🗑️</button>
+            <button class="action-btn">📝</button>&nbsp;
+            <button onclick="window.location.href='{% url 'opd:confirmation_page' %}?section=patient&id={{patient.id}}'"
+              class="action-btn">🗑️</button>
           </td>
         </tr>
         {% endfor %}
@@ -58,11 +59,35 @@
   <br />
   <h2>pagination here</h2>
 </main>
-{% endblock content %} {% block js %}
+{% endblock content %}
+
+{% block js %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const patientElement = document.getElementById("patient");
     patientElement.classList.add("active");
+
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    function performSearch() {
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = "{% url 'opd:home_page' %}" + '?search_query=' + encodeURIComponent(query);
+      }
+    }
+
+    searchInput.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        performSearch();
+      }
+    });
+
+    searchButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      performSearch();
+    });
   });
 </script>
 {% endblock js %}

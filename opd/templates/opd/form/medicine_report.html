@@ -1,0 +1,35 @@
+{% extends 'opd/index.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'styles/form/medicine_report.css' %}" />
+{% endblock css %} {% block content %}
+<div class="container">
+  <div class="report-header">
+    <h1>Medicine Report</h1>
+    <input type="text" class="search-bar" placeholder="Search medicines..." />
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Medicine Name</th>
+        <th>Quantity Required</th>
+        <th>Quantity Available</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for med in medications %}
+      <tr>
+        <td>{{med.name}}</td>
+        <td>{{med.requested_quantity}}</td>
+        <td>{{med.available_quantity}}</td>
+        {% if med.requested_quantity <= med.available_quantity %}
+        <td><span class="status status-available">Available</span></td>
+        {% else %}
+        <td><span class="status status-unavailable">Insufficient</span></td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock content %}
