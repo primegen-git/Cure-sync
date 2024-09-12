@@ -14,17 +14,8 @@
         <input type="text" id="age" name="age" required />
       </div>
 
-        <label for="appointment_id">{{form.appointment_id.label}}</label>
-        <input type="text" id="appointment_id" name="appointment_id" required /><br></br>
-      <div class="form-group">
-        <label for="appointmentDate">Appointment Date</label>
-        <input
-          type="date"
-          id="appointmentDate"
-          name="date_of_appointment"
-          required
-        />
-      </div>
+      <label for="appointment_id">{{form.appointment_id.label}}</label>
+      <input type="text" id="appointment_id" name="appointment_id" required /><br></br>
 
       <!-- NOTE: still to implement -->
       <!-- <div class="form-group"> -->
@@ -51,21 +42,12 @@
           <label>
             <input type="radio" name="gender" value="female" /> Female
           </label>
-          <label>
-            <input type="radio" name="gender" value="other" /> Other
-          </label>
         </div>
       </div>
 
       <div class="form-group">
         <label for="phone">Phone Number</label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone_number"
-          pattern="[0-9]{10}"
-          required
-        />
+        <input type="tel" id="phone" name="phone_number" pattern="[0-9]{10}" required />
       </div>
 
       <div class="form-group">

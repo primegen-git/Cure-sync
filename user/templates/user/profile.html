@@ -12,7 +12,7 @@
     <h2>Personal Information</h2>
     <div class="detail-row">
       <div class="detail-label">Full Name:</div>
-      <div class="detail-value">John Doe</div>
+      <div class="detail-value">{{user.name}}</div>
     </div>
     <div class="detail-row">
       <div class="detail-label">Date of Birth:</div>
@@ -20,7 +20,7 @@
     </div>
     <div class="detail-row">
       <div class="detail-label">Gender:</div>
-      <div class="detail-value">Male</div>
+      <div class="detail-value">{{user.gender}}</div>
     </div>
     <div class="detail-row">
       <div class="detail-label">Blood Type:</div>
@@ -28,15 +28,15 @@
     </div>
     <div class="detail-row">
       <div class="detail-label">Contact:</div>
-      <div class="detail-value">(555) 123-4567</div>
+      <div class="detail-value">{{user.phone_number}}</div>
     </div>
     <div class="detail-row">
       <div class="detail-label">Email:</div>
-      <div class="detail-value">john.doe@example.com</div>
+      <div class="detail-value">{{user.email}}</div>
     </div>
     <div class="detail-row">
       <div class="detail-label">Address:</div>
-      <div class="detail-value">123 Main St, Anytown, USA 12345</div>
+      <div class="detail-value">{{user.address}}</div>
     </div>
   </div>
 </main>

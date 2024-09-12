@@ -6,10 +6,14 @@ from opd.utils import (
     get_total_appointment_count,
     get_total_bed_count,
     get_total_doctor_count,
-    
 )
 from django.db import models
-from user.utils import custom_authenticate, check_user, search_by_opd, search_specialist_doctor
+from user.utils import (
+    custom_authenticate,
+    check_user,
+    search_by_opd,
+    search_specialist_doctor,
+)
 # TODO: remove the message after a time
 
 
@@ -73,7 +77,7 @@ def opd_list(request):
         base_template = "user/logged/index.html"
     else:
         base_template = "base.html"
-    search_query = request.GET.get('search_query', "")
+    search_query = request.GET.get("search_query", "")
     if search_query:
         doctors = search_by_opd(request, search_query)
     else:
@@ -95,7 +99,7 @@ def search_specialist(request):
         base_template = "base.html"
     search_query = request.GET.get("search_query", "")
     if search_query:
-        doctors = search_specialist_doctor(request, search_query) 
+        doctors = search_specialist_doctor(request, search_query)
     else:
         doctors = Doctor.objects.all()
     context = {"doctors": doctors, "base_template": base_template}
@@ -104,7 +108,7 @@ def search_specialist(request):
 
 def chatbot(request):
     context = {}
-    return render(request, "chatbot.html", context)
+    return render(request, "user/chatbot.html", context)
 
 
 def appointment(request, pk):
@@ -120,9 +124,10 @@ def appointment(request, pk):
                     appointment_type="offline",
                     status="not_seen",
                 )
-                doctor.opd.no_of_appointment = models.F('no_of_appointment') + 1
                 doctor.opd.save()
-                messages.success(request, "You appoinment request has been send successfully")
+                messages.success(
+                    request, "You appoinment request has been send successfully"
+                )
                 return redirect("user:home_page")
             except Exception as e:
                 messages.error(request, f"Error creating appointment: {str(e)}")
@@ -156,5 +161,6 @@ def message(request):
 
 
 def user_profile(request):
-    context = {}
+    is_user = check_user(request)
+    context = {"user": is_user.profile}  # type: ignore
     return render(request, "user/logged/user_profile.html", context)

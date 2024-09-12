@@ -5,8 +5,8 @@
   <main class="main-content">
     <div class="profile-card">
       <div class="profile-header">
-        <img src="user-avatar.jpg" alt="User Avatar" class="profile-image" />
-        <div class="profile-name">John Doe</div>
+        <img src="{{user.profile_image.url}}" alt="User Avatar" class="profile-image" />
+        <div class="profile-name">{{user.name}}</div>
       </div>
       <div class="profile-info">
         <div class="info-item">
@@ -19,7 +19,7 @@
         </div>
         <div class="info-item">
           <div class="info-label">Gender:</div>
-          <div class="info-value">Male</div>
+          <div class="info-value">{{user.gender}}</div>
         </div>
         <div class="info-item">
           <div class="info-label">Blood Type:</div>
@@ -27,15 +27,15 @@
         </div>
         <div class="info-item">
           <div class="info-label">Email:</div>
-          <div class="info-value">john.doe@example.com</div>
+          <div class="info-value">{{user.email}}</div>
         </div>
         <div class="info-item">
           <div class="info-label">Phone:</div>
-          <div class="info-value">(555) 123-4567</div>
+          <div class="info-value">{{user.phone_number}}</div>
         </div>
         <div class="info-item">
           <div class="info-label">Address:</div>
-          <div class="info-value">123 Main St, Anytown, USA 12345</div>
+          <div class="info-value">{{user.address}}</div>
         </div>
         <div class="info-item">
           <div class="info-label">Emergency Contact:</div>

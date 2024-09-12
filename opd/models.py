@@ -1,7 +1,5 @@
 # TODO: change the "date_of_appointment" -> date
 # TODO: delete the unnecessary null = true from the field attribute
-# TODO: create a single table  replacing the medicine table with four catogery (existing + machinary)
-# TODO: add a new attribute in the appointment table which check if the online_patient appointment request is approved or not
 from django.db import models, transaction
 from django.contrib.auth.models import User
 import uuid
@@ -18,10 +16,10 @@ class Doctor(models.Model):
     )
     speciality = models.CharField("Speciality", max_length=200)
     phone_number = models.CharField("Phone Number", max_length=10)
-    address = models.TextField("Address", default="default")
+    address = models.TextField("Address")
     experience = models.PositiveIntegerField("Year of Experience", default=0)
     about = models.TextField(blank=True)
-    education = models.TextField(default="default_address")
+    education = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
@@ -30,13 +28,6 @@ class Doctor(models.Model):
     def __str__(self):
         return str(self.name)
 
-    def save(self, *args, **kwargs):
-        self.name = self.name.upper()
-        self.speciality = self.speciality.capitalize()
-
-        super().save(*args, **kwargs)
-
-    # user the User class that have to username and the email field built in. this @property method help to access the user as it is part of the doctor table
     @property
     def username(self):
         return self.user.username
@@ -46,9 +37,10 @@ class Doctor(models.Model):
         return self.user.email
 
 
+# NOTE: Opd is created automatically when the doctor is created through the django siganls
 class Opd(models.Model):
     owner = models.OneToOneField(Doctor, on_delete=models.CASCADE, related_name="opd")
-    name = models.CharField("Name", max_length=255, null=True, blank=True)
+    name = models.CharField("Name", max_length=255)
     no_of_beds = models.PositiveIntegerField("No of Beds", default=0)
     no_of_appointment = models.PositiveIntegerField("No of Appointment", default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -66,13 +58,12 @@ class Opd(models.Model):
         return 0
 
 
+# NOTE: inventory is created automatically when the doctor is created through the django siganls
 class Inventory(models.Model):
     opd = models.OneToOneField(
         "Opd",
         on_delete=models.CASCADE,
         related_name="inventory",
-        null=True,
-        blank=True,  # NOTE: initally after updating we are going to remove it
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -92,17 +83,6 @@ class Medicine(models.Model):
     def __str__(self):
         return str(self.name)
 
-    # def save(self, *args, **kwargs):
-    #     self.name = self.name.capitalize()
-    #     super().save(*args, **kwargs)
-
-
-# class Machinery(models.Model):
-#     name = models.CharField("Name", max_length=255)
-#
-#     def __str__(self):
-#         return str(self.name)
-
 
 class Inventory_Item(models.Model):
     inventory = models.ForeignKey(
@@ -115,13 +95,6 @@ class Inventory_Item(models.Model):
         null=True,
         blank=True,
     )
-    # machinery = models.ForeignKey(
-    #     Machinery,
-    #     on_delete=models.CASCADE,
-    #     related_name="inventory_items",
-    #     null=True,
-    #     blank=True,
-    # )
     quantity = models.PositiveIntegerField("Quantity", default=0)
     price = models.DecimalField("Price", max_digits=10, default=0, decimal_places=2)
 
@@ -141,10 +114,10 @@ class Offline_Patient(models.Model):
         ("male", "male"),
         ("female", "female"),
     )
-    name = models.CharField("Full Name", max_length=200, null=True, blank=True)
+    name = models.CharField("Full Name", max_length=200)
     age = models.PositiveIntegerField("Age")
-    gender = models.CharField("Gender", max_length=10, choices=gender_type, null=True)
-    email = models.EmailField("Email", max_length=190, null=True, blank=True)
+    gender = models.CharField("Gender", max_length=10, choices=gender_type)
+    email = models.EmailField("Email", max_length=190)
     profile_image = models.ImageField(
         "Image",
         upload_to="profile/",
@@ -152,8 +125,8 @@ class Offline_Patient(models.Model):
     )
     display_id = models.CharField("ID", max_length=30)
     phone_number = models.CharField("Phone Number", max_length=10)
-    address = models.TextField("Address", default="default")
-    medical_history = models.TextField()
+    address = models.TextField("Address")
+    medical_history = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
@@ -163,9 +136,10 @@ class Offline_Patient(models.Model):
         return str(self.name)
 
 
+# TODO: learn how to combine the offline_patient and the online_patient together.
+# TODO: once the above task is completed remove the status property
+# NOTE: make a signal which increase or decrease if the no_of_appointment related to the particular opd
 class Appointment(models.Model):
-    # NOTE: always increase the no_of_appointment when working with the appointment
-    # NOTE: always decreae the no_of_appointment when working with the appointment
     online_request_status = (
         ("seen", "seen"),
         ("not_seen", "not_seen"),
@@ -174,7 +148,7 @@ class Appointment(models.Model):
     opd = models.ForeignKey(Opd, on_delete=models.CASCADE, related_name="appointments")
     offline_patient = models.ForeignKey(
         Offline_Patient,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,  # offline patient can be deleted only from the appointment section.
         null=True,
         blank=True,
         related_name="offline_appoinments",
@@ -187,16 +161,16 @@ class Appointment(models.Model):
         related_name="online_appointments",
     )
 
-    appointment_type = models.CharField(
-        "Appointment Type", max_length=30, null=True, blank=True
-    )
+    appointment_type = models.CharField("Appointment Type", max_length=30)
     status = models.CharField(
         "Status", choices=online_request_status, max_length=20, null=True, blank=True
     )
     appointment_id = models.CharField(
-        "Appointment ID", max_length=10, null=True, blank=True
+        "Appointment ID",
+        max_length=10,
+        unique=True,
     )
-    date_of_appointment = models.DateTimeField(auto_now_add=True, null=True)
+    date_of_appointment = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
     )
@@ -209,20 +183,16 @@ class Appointment(models.Model):
 
     @property
     def name(self):
-        if self.online_patient is not None:
+        if self.online_patient:
             return self.online_patient.name
         return self.offline_patient.name
 
 
 class Patient(models.Model):
-    type = (
-        ("online", "online"),
-        ("offline", "offline"),
-    )
     opd = models.ForeignKey(Opd, on_delete=models.CASCADE, related_name="patients")
     offline_patient = models.ForeignKey(
         Offline_Patient,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="offline_patients",
@@ -235,15 +205,13 @@ class Patient(models.Model):
         related_name="online_patients",
     )
 
-    # TODO: chagne the value of type based on the appointment automatically
-    patient_type = models.CharField(
-        "Patient Type", choices=type, max_length=30, null=True
-    )
-    patient_id = models.CharField("Patient ID", max_length=10, null=True)
+    # NOTE: handle in the signals file
+    patient_type = models.CharField("Patient Type", max_length=30)
+    patient_id = models.CharField("Patient ID", max_length=10, unique=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
-    description = models.TextField("Description", null=True)
+    description = models.TextField("Description")
     total_bill = models.DecimalField(
-        "Total Bill", max_digits=10, decimal_places=2, null=True
+        "Total Bill", max_digits=10, decimal_places=2, default=0
     )
     billing_report = models.TextField("Bill Report", null=True)
     next_appointment = models.DateTimeField("Next Appointment Date", null=True)
@@ -258,21 +226,7 @@ class Patient(models.Model):
     def __str__(self):
         return str(self.patient_id)
 
-    # @transaction.atomic
-    # def save(self, *args, **kwargs):
-    #     is_new = self._state.adding
-    #     super().save(*args, **kwargs)
-    #
-    #     if is_new:
-    #         self.opd.no_of_beds = models.F("no_of_beds") + 1
-    #         self.opd.save()
-    #
-    # @transaction.atomic
-    # def delete(self, *args, **kwargs):  # type: ignore
-    #     self.opd.no_of_beds = models.F("no_of_beds") - 1
-    #     self.opd.save()
-    #     super().delete(*args, **kwargs)
-
+    # TODO: find a way to handle all these property carefully
     @property
     def name(self):
         if self.online_patient is not None:

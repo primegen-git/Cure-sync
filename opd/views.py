@@ -22,6 +22,7 @@ from opd.utils import (
     search_appointment,
     search_patient,
     search_product,
+    create_patient,
 )
 from django.db.models import Q
 from django.db import models
@@ -91,7 +92,7 @@ def appointment(request):
     request_count = request.user.doctor.opd.appointments.filter(
         Q(online_patient__isnull=False, status="not_seen")
     ).count()
-    total_appointment = len(appointments)
+    total_appointment = request.user.doctor.opd.no_of_appointment
     context = {
         "appointments": appointments,
         "total_appointment": total_appointment,
@@ -100,6 +101,7 @@ def appointment(request):
     return render(request, "opd/appointment.html", context)
 
 
+# TODO: handle it in someother ways we cannot let the online logged_in user to send the random amount of online_request directly add in the appointment table
 @user_passes_test(is_doctor, login_url="home:home_page")
 def appointment_request(request):
     search_query = request.GET.get("search_query")
@@ -175,7 +177,6 @@ def confirmation_page(request):
 def offline_appointment_booking(request):
     if request.method == "POST":
         opd = request.user.doctor.opd
-        print(request.POST)
         form = OfflinePatientAppointmentForm(request.POST)
         if form.is_valid():
             form.save(opd)
@@ -185,20 +186,18 @@ def offline_appointment_booking(request):
     return render(request, "opd/form/offline_appointment.html", context)
 
 
+# TODO: change has to make in this also after handiling the appointment request section
 @user_passes_test(is_doctor, login_url="home:home_page")
 def online_appointment_booking(request, id):
     if request.method == "POST":
         opd = request.user.doctor.opd
         form = OnlinePatientAppointmentForm(request.POST)
-        print(request.POST)
         if form.is_valid():
             appointment = Appointment.objects.get(id=id)
             appointment.opd = opd
             appointment.appointment_type = "offline"
             appointment.status = "seen"
             appointment.appointment_id = request.POST["appointment_id"]
-            appointment.date_of_appointment = request.POST["date_of_appointment"]
-            opd.no_of_appointment = models.F("no_of_appointment") + 1
             opd.save()
             appointment.save()
             messages.success(request, "Appointment is successfully added")
@@ -222,7 +221,7 @@ def medicine(request, id):
         medicine_description = []
 
         for medication in medication_list:
-            name = medication["name"].capitalize()
+            name = medication["name"]
             requested_quantity = int(medication["quantity"])
             medicine_description.append(f"{name}: {requested_quantity}")
 
@@ -263,22 +262,10 @@ def medicine(request, id):
         # Create the medicine description string
         medicine_details = "Prescribed Medicines:\n" + "\n".join(medicine_description)
 
-        patient = Patient.objects.create(
-            opd=request.user.doctor.opd,
-            patient_type=appointment.appointment_type,
-            patient_id=appointment.appointment_id,
-            description=medicine_details,  # Add medicine details to description
-        )
-        if appointment.appointment_type == "offline":
-            patient.offline_patient = appointment.offline_patient
-        else:
-            patient.online_patient = appointment.online_patient
+        patient = create_patient(request, id)
+        patient.description = medicine_details
         patient.save()
-
-        appointment.opd.no_of_appointment = models.F("no_of_appointment") - 1
-        appointment.opd.no_of_beds = models.F("no_of_beds") + 1
         appointment.delete()
-        appointment.opd.save()
 
         return render(request, "opd/form/medicine_report.html", context)
 

@@ -22,8 +22,7 @@ html {
   backdrop-filter: blur(10px);
   padding: 2rem;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .logo {

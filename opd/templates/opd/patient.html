@@ -13,14 +13,12 @@
       <input type="text" id="searchInput" placeholder="Search for patients" />
     </div>
   </header>
-  {% if opd.patient_count != 0 %}
   <div class="patient-stats">
     <div class="stat-card">
       <h3>Total Patients</h3>
       <div class="stat-value">{{opd.patient_count}}</div>
     </div>
   </div>
-  {% endif %}
   <div class="patient-list">
     <table>
       <thead>
@@ -36,6 +34,7 @@
       </thead>
       <tbody>
         {% for patient in patients %}
+        {% if patient is not None %}
         <tr>
           <td><a style="text-decoration: none;" href="{% url 'opd:patient_report' id=patient.id %}">
               {{patient.patient_id}}</a></td>
@@ -52,6 +51,7 @@
               class="action-btn">🗑️</button>
           </td>
         </tr>
+        {% endif %}
         {% endfor %}
       </tbody>
     </table>

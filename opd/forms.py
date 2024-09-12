@@ -1,8 +1,3 @@
-from django.utils import timezone
-from django import forms
-from django.forms import ModelForm
-from opd.models import Appointment
-from django.db import models
 from django import forms
 from .models import Medicine, Offline_Patient, Appointment
 
@@ -16,10 +11,6 @@ class OfflinePatientAppointmentForm(forms.Form):
 
     # Appointment fields
     appointment_id = forms.CharField(max_length=30, label="Appointment ID")
-    date_of_appointment = forms.DateTimeField(
-        widget=forms.DateTimeInput(attrs={"type": "datetime-local"}),
-        label="Date of Appointment",
-    )
 
     def save(self, opd):
         # Create Offline_Patient instance
@@ -32,15 +23,11 @@ class OfflinePatientAppointmentForm(forms.Form):
         )
 
         # Create Appointment instance
-        appointment = Appointment.objects.create(
+        Appointment.objects.create(
             opd=opd,
             offline_patient=patient,
             appointment_id=self.cleaned_data["appointment_id"],
-            appointment_type="offline",
-            date_of_appointment=self.cleaned_data["date_of_appointment"],
         )
-        opd.no_of_appointment = models.F("no_of_appointment") + 1
-        opd.save()
 
     def __init__(self, *args, **kwargs):
         super(OfflinePatientAppointmentForm, self).__init__(*args, **kwargs)
@@ -49,20 +36,19 @@ class OfflinePatientAppointmentForm(forms.Form):
             field.widget.attrs.update({"class": "input"})  # type: ignore
 
 
-
 class OnlinePatientAppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ['appointment_id']
+        fields = ["appointment_id"]
         labels = {
             "appointment_id": "Appointment ID",
         }
 
 
-
 class InventoryItemsForm(forms.Form):
-    name = forms.CharField(max_length=30, label="Medicine Name") 
+    name = forms.CharField(max_length=30, label="Medicine Name")
     quantity = forms.IntegerField(min_value=0, label="Quantity")
-    price = forms.DecimalField(min_value=0, max_digits=10, decimal_places=2, label="Price")
+    price = forms.DecimalField(
+        min_value=0, max_digits=10, decimal_places=2, label="Price"
+    )
     type = forms.ChoiceField(choices=Medicine.type, label="Category")
-

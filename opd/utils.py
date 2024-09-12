@@ -62,7 +62,7 @@ def custom_authenticate(request):
     password = request.POST.get("password")
     user = authenticate(request, username=username, password=password)
 
-    if user is not None and user.groups.filter(name="Doctor").exists():
+    if user is not None and user.groups.filter(name="Doctor").exists():  # type: ignore
         return user
 
     return None
@@ -70,7 +70,8 @@ def custom_authenticate(request):
 
 def appointment_handler(id):
     appointment = Appointment.objects.get(id=id)
-    appointment.opd.no_of_appointment = models.F("no_of_appointment") - 1
+    if appointment.appointment_type == "offline":
+        appointment.offline_patient.delete()  # this is triggred when the appointment is deleted manually
     appointment.delete()
 
 
@@ -81,7 +82,6 @@ def product_handler(id):
 
 def patient_handler(id):
     patient = Patient.objects.get(id=id)
-    patient.opd.no_of_appointment = models.F("no_of_appointment") - 1
     patient.delete()
 
 
@@ -115,3 +115,17 @@ def search_patient(request, search_query):
     )
 
     return patients
+
+
+def create_patient(request, id):
+    appointment = Appointment.objects.get(id=id)
+    patient = Patient.objects.create(
+        opd=request.user.doctor.opd,
+        patient_id=appointment.appointment_id,
+    )
+
+    if appointment.appointment_type == "offline":
+        patient.offline_patient = appointment.offline_patient
+    else:
+        patient.online_patient = appointment.online_patient
+    return patient
