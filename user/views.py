@@ -13,6 +13,7 @@ from user.utils import (
     check_user,
     search_by_opd,
     search_specialist_doctor,
+    getResponse,
 )
 # TODO: remove the message after a time
 
@@ -107,7 +108,14 @@ def search_specialist(request):
 
 
 def chatbot(request):
-    context = {}
+    user_message = request.GET.get("message", "")
+    if user_message:
+        print("inside the if statement")
+        bot_response = getResponse(user_message)  # Assuming you have this function
+    else:
+        bot_response = ""
+
+    context = {"bot_response": bot_response, "user_message": user_message}
     return render(request, "user/chatbot.html", context)
 
 

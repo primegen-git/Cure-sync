@@ -11,17 +11,18 @@
 {% block content %}
 <div class="dashboard-container">
   <main class="main-content">
-    <button onclick="window.history.back()" class="back-btn" style="margin-bottom: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+    <button onclick="window.history.back()" class="back-btn"
+      style="margin-bottom: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
       <span style="margin-right: 8px;">←</span> Back
-  </button>
-  
+    </button>
+
     <header style="display:flex; justify-content: safe;">
       <h1>Search by Specialist</h1>
       <div class="search-bar">
         <input type="text" name="search_query" id="searchInput" placeholder="Search for bed number or type" />
         <button id="searchButton" class="search-btn"><i class="fas fa-search"></i></button>
       </div>
-      <button class="sort-btn">ChatBot</button>
+      <button onclick="window.location.href='{% url 'user:chatbot' %}'" class="sort-btn">ChatBot</button>
     </header>
     <div class="bed-list">
       {% for doctor in doctors %}
