@@ -1,14 +1,15 @@
-user_section:
 
 date: 27-sep-2024
-1. first have to complete the live updation of the appointment-list of the doctor that has approved his request and a message showing that the appointment is accepted.
-2. change the message that show-up to smaller time.
-3. update the user profile functionality.
 
+  USER_SECTION:
 
-DOCTOR_SECTION
+  1. first have to complete the live updation of the appointment-list of the doctor that has approved his request and a message showing that the appointment is accepted.
+  2. change the message that show-up to smaller time.
+  3. update the user profile functionality.
 
-1. sign-up, page for the doctor. 
-2. just after the signup we have to create the opd information.
-3. edit doctor profile functionality.
-4. edit patient, appointment and product functionality.
+  DOCTOR_SECTION
+
+  1. sign-up, page for the doctor. 
+  2. just after the signup we have to create the opd information.
+  3. edit doctor profile functionality.
+  4. edit patient, appointment and product functionality.
