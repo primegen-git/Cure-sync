@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from django.dispatch import receiver
 from .models import Doctor, Inventory, Opd, Appointment, Patient
 from django.core.cache import cache
-from django.db import models
+from django.db import models, transaction
 
 
 def online_appointment_request(sender, instance, created, **kwargs):
@@ -43,47 +43,59 @@ def deleteUser(sender, instance, **kwargs):
 
 def increment_appointment(sender, instance, created, **kwargs):
     if created:
-        opd = instance.opd
-        opd.no_of_appointment = models.F("no_of_appointment") + 1
-        opd.save()
+        with transaction.atomic():
+            opd = instance.opd
+            opd.no_of_appointment = models.F("no_of_appointment") + 1
+            opd.save()
 
-        if instance.online_patient:
-            instance.appointment_type = "online"
-        else:
-            instance.appointment_type = "offline"
-        instance.save()
+            if instance.online_patient:
+                instance.appointment_type = "online"
+            else:
+                instance.appointment_type = "offline"
+            instance.save()
 
 
 def decrement_appointment(sender, instance, **kwargs):
-    opd = instance.opd
-    if not kwargs.get("raw", False):
-        opd.no_of_appointment = models.F("no_of_appointment") - 1
-        opd.save()
+    with transaction.atomic():
+        opd = instance.opd
+        if not kwargs.get("raw", False):
+            opd.no_of_appointment = models.F("no_of_appointment") - 1
+            opd.save()
 
 
 def increment_bed(sender, instance, created, **kwargs):
     if created:
-        opd = instance.opd
-        opd.no_of_beds = models.F("no_of_beds") + 1
-        opd.save()
+        with transaction.atomic():
+            opd = instance.opd
+            opd.no_of_beds = models.F("no_of_beds") + 1
+            opd.save()
 
-        if instance.online_patient:
-            instance.patient_type = "online"
-        else:
-            instance.patient_type = "offline"
-        instance.save()
+            if instance.online_patient:
+                instance.patient_type = "online"
+            else:
+                instance.patient_type = "offline"
+            instance.save()
 
 
 def decrement_bed(sender, instance, **kwargs):
-    opd = instance.opd
-    opd.no_of_beds = models.F("no_of_beds") - 1
-    opd.save()
+    with transaction.atomic():
+        opd = instance.opd
+        opd.no_of_beds = models.F("no_of_beds") - 1
+        opd.save()
 
 
 @receiver(post_delete, sender=Patient)
 def delete_offline_patient(sender, instance, **kwargs):
-    if instance.patient_type == "offline":
-        instance.offline_patient.delete()
+    with transaction.atomic():
+        if instance.patient_type == "offline":
+            instance.offline_patient.delete()
+
+
+@receiver(post_delete, sender=Appointment)
+def delete_offline_appointment(sender, instance, **kwargs):
+    with transaction.atomic():
+        if instance.appointment_type == "offline":
+            instance.offline_patient.delete()
 
 
 # save/create signals

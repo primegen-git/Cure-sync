@@ -179,7 +179,7 @@ def offline_appointment_booking(request):
         opd = request.user.doctor.opd
         form = OfflinePatientAppointmentForm(request.POST)
         if form.is_valid():
-            form.save(opd)
+            form.save(opd=opd)
             return redirect("opd:appointment")
     form = OfflinePatientAppointmentForm()
     context = {"form": form}
@@ -198,6 +198,7 @@ def online_appointment_booking(request, id):
             appointment.appointment_type = "offline"
             appointment.status = "seen"
             appointment.appointment_id = request.POST["appointment_id"]
+            appointment.appointment_date = request.POST["appointment_date"]
             opd.save()
             appointment.save()
             messages.success(request, "Appointment is successfully added")

@@ -3,13 +3,44 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from django.contrib.auth import authenticate
 from opd.models import Doctor, Opd
+from .models import Profile
+
+
+def get_appointment(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    opd = profile.get_opd()
+    if opd:
+        appointments = opd.appointments.filter(status__icontains="seen").order_by(
+            "-appointment_date"
+        )[:5]  # type: ignore
+        if appointments.exists():
+            return appointments
+    return None
+
+
+def appointment_count(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    if hasattr(profile, "online_appointment") and profile.online_appointment:  # type: ignore
+        user_appoinment_date = profile.online_appointment.appointment_date  # type: ignore
+        opd = profile.get_opd()
+        if opd:
+            appointments = opd.appointments.filter(status__icontains="seen").order_by(
+                "-appointment_date"
+            )  # type: ignore
+            if appointments.exists():
+                count = appointments.filter(
+                    appointment_date__lt=user_appoinment_date
+                ).count()
+                return count
+    return None
 
 
 def custom_authenticate(request):
     username = request.POST.get("username")
     password = request.POST.get("password")
     user = authenticate(request, username=username, password=password)
-
     if user is not None:
         if user.groups.filter(name="Profile").exists():  # type: ignore
             return user

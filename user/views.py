@@ -7,14 +7,21 @@ from opd.utils import (
     get_total_bed_count,
     get_total_doctor_count,
 )
-from django.db import models
 from user.utils import (
+    appointment_count,
     custom_authenticate,
     check_user,
+    get_appointment,
     search_by_opd,
     search_specialist_doctor,
     getResponse,
 )
+
+
+from .forms import CustomUserCreationForm
+from django.contrib.auth.models import Group
+
+
 # TODO: remove the message after a time
 
 
@@ -37,6 +44,31 @@ def user_logout(request):
     return redirect("user:home_page")
 
 
+def signup(request):
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+
+            # Add user to the group
+            profile_group = Group.objects.get(name="Profile")
+            user.groups.add(profile_group)
+
+            messages.success(request, "user has been successfully created")
+            return redirect("user:login")
+
+        else:
+            messages.error(request, "Some error occurs in the form submission")
+            return redirect("user:signup")
+    else:
+        form = CustomUserCreationForm()
+
+    context = {"form": form}
+    return render(request, "signup.html", context)
+
+
 def home_page(request):
     # check if the home page is for user or not
     is_user = check_user(request)
@@ -46,6 +78,8 @@ def home_page(request):
             "total_beds_count": get_total_bed_count,
             "total_doctor_count": get_total_doctor_count,
             "total_appointment_count": get_total_appointment_count,
+            "appointments": get_appointment(request),
+            "count": appointment_count(request),
         }
         return render(request, "user/logged/profile.html", context)
     context = {
@@ -129,7 +163,7 @@ def appointment(request, pk):
                 Appointment.objects.create(
                     opd=doctor.opd,  # type: ignore
                     online_patient=request.user.profile,
-                    appointment_type="offline",
+                    appointment_type="online",
                     status="not_seen",
                 )
                 doctor.opd.save()

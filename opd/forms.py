@@ -8,6 +8,7 @@ class OfflinePatientAppointmentForm(forms.Form):
     gender = forms.ChoiceField(choices=Offline_Patient.gender_type, label="Gender")
     phone_number = forms.CharField(max_length=10, label="Phone Number")
     address = forms.CharField(widget=forms.Textarea, label="Address")
+    appointment_date = forms.DateTimeField(label="Appointment Date")
 
     # Appointment fields
     appointment_id = forms.CharField(max_length=30, label="Appointment ID")
@@ -39,9 +40,10 @@ class OfflinePatientAppointmentForm(forms.Form):
 class OnlinePatientAppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ["appointment_id"]
+        fields = ["appointment_id", "appointment_date"]
         labels = {
             "appointment_id": "Appointment ID",
+            "appointment_date": "appointment_date",
         }
 
 

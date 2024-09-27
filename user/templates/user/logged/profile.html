@@ -35,28 +35,33 @@
         </button>
       </div>
     </div>
+    {% if appointments %}
     <div class="card">
       <h2>Live Appointment View</h2>
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Doctor</th>
-            <th>Department</th>
           </tr>
         </thead>
         <tbody>
+          {% for appointment in appointments %}
           <tr>
-            <td>2024-03-20</td>
-            <td>10:00 AM</td>
-            <td>Dr. Smith</td>
-            <td>Cardiology</td>
+            <td>{{ appointment.appointment_id }}</td>
+            <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
+            <td>{{ appointment.appointment_date|date:"h:i A" }}</td>
           </tr>
-          <!-- Add more rows as needed -->
+          {% endfor %}
         </tbody>
       </table>
     </div>
+    <div class="card stat-card">
+      <h3>Total Wating Count</h3>
+      <div class="stat-value">{{count}}</div>
+    </div>
+    {% endif %}
   </main>
 </div>
 

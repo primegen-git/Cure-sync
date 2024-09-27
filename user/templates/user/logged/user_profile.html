@@ -6,16 +6,19 @@
     <div class="profile-card">
       <div class="profile-header">
         <img src="{{user.profile_image.url}}" alt="User Avatar" class="profile-image" />
-        <div class="profile-name">{{user.name}}</div>
       </div>
       <div class="profile-info">
         <div class="info-item">
-          <div class="info-label">Patient ID:</div>
-          <div class="info-value">#PT001</div>
+          <div class="info-label">Name</div>
+          <div class="info-value">{{user.name}}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Age</div>
+          <div class="info-value">{{user.age}}</div>
         </div>
         <div class="info-item">
           <div class="info-label">Date of Birth:</div>
-          <div class="info-value">January 15, 1985</div>
+          <div class="info-value">{{user.date_of_birth}}</div>
         </div>
         <div class="info-item">
           <div class="info-label">Gender:</div>
@@ -23,7 +26,7 @@
         </div>
         <div class="info-item">
           <div class="info-label">Blood Type:</div>
-          <div class="info-value">O+</div>
+          <div class="info-value">{{user.blood_group}}</div>
         </div>
         <div class="info-item">
           <div class="info-label">Email:</div>
@@ -36,10 +39,6 @@
         <div class="info-item">
           <div class="info-label">Address:</div>
           <div class="info-value">{{user.address}}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Emergency Contact:</div>
-          <div class="info-value">Jane Doe (555) 987-6543</div>
         </div>
       </div>
     </div>

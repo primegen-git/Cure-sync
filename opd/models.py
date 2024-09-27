@@ -53,9 +53,7 @@ class Opd(models.Model):
 
     @property
     def patient_count(self):
-        if self.patients.count() is not None:  # type: ignore
-            return self.patients.count()  # type: ignore
-        return 0
+        return self.patients.count()  # type: ignore
 
 
 # NOTE: inventory is created automatically when the doctor is created through the django siganls
@@ -96,7 +94,7 @@ class Inventory_Item(models.Model):
         blank=True,
     )
     quantity = models.PositiveIntegerField("Quantity", default=0)
-    price = models.DecimalField("Price", max_digits=10, default=0, decimal_places=2)
+    price = models.FloatField("Price", default=0)
 
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
@@ -146,22 +144,23 @@ class Appointment(models.Model):
     )
 
     opd = models.ForeignKey(Opd, on_delete=models.CASCADE, related_name="appointments")
-    offline_patient = models.ForeignKey(
+    offline_patient = models.OneToOneField(
         Offline_Patient,
-        on_delete=models.SET_NULL,  # offline patient can be deleted only from the appointment section.
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name="offline_appoinments",
+        related_name="offline_appoinment",
     )
-    online_patient = models.ForeignKey(
+    online_patient = models.OneToOneField(
         Profile,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name="online_appointments",
+        related_name="online_appointment",
     )
 
     appointment_type = models.CharField("Appointment Type", max_length=30)
+    # status is used for distinguish online and the offline request... status (from opd side)
     status = models.CharField(
         "Status", choices=online_request_status, max_length=20, null=True, blank=True
     )
@@ -170,7 +169,8 @@ class Appointment(models.Model):
         max_length=10,
         unique=True,
     )
-    date_of_appointment = models.DateTimeField(auto_now_add=True)
+    appointment_date = models.DateTimeField("Appointment Date", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
     )
@@ -190,14 +190,14 @@ class Appointment(models.Model):
 
 class Patient(models.Model):
     opd = models.ForeignKey(Opd, on_delete=models.CASCADE, related_name="patients")
-    offline_patient = models.ForeignKey(
+    offline_patient = models.OneToOneField(
         Offline_Patient,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="offline_patients",
     )
-    online_patient = models.ForeignKey(
+    online_patient = models.OneToOneField(
         Profile,
         on_delete=models.CASCADE,
         null=True,

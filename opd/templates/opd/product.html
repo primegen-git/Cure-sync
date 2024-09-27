@@ -63,6 +63,11 @@
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
 
+    // Remove search query from URL on page load/refresh
+    if (window.location.search.includes('search_query')) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     function performSearch() {
       const query = searchInput.value.trim();
       if (query) {

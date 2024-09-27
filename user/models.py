@@ -5,14 +5,27 @@ import uuid
 
 
 class Profile(models.Model):
-    gender_type = (
+    BLOOD_TYPE = [
+        ("A+", "A+"),
+        ("A-", "A-"),
+        ("B+", "B+"),
+        ("B-", "B-"),
+        ("AB+", "AB+"),
+        ("AB-", "AB-"),
+        ("O+", "O+"),
+        ("O-", "O-"),
+    ]
+    gender_type = [
         ("male", "male"),
         ("female", "female"),
-    )
+        ("other", "other"),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     name = models.CharField("Full Name", max_length=200, null=True, blank=True)
     gender = models.CharField("Gender", max_length=10, choices=gender_type, null=True)
     age = models.PositiveIntegerField("Age", null=True)
+    date_of_birth = models.DateField("Date of Birth")
+    blood_group = models.CharField("Blood Type", max_length=6, choices=BLOOD_TYPE)
     profile_image = models.ImageField(
         "Image",
         upload_to="profile/",
@@ -28,9 +41,6 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.name)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
     @property
     def username(self):
         return self.user.username
@@ -38,3 +48,8 @@ class Profile(models.Model):
     @property
     def email(self):
         return self.user.email
+
+    def get_opd(self):
+        if hasattr(self, "online_appointment") and self.online_appointment:  # type: ignore
+            return self.online_appointment.opd  # type: ignore
+        return None

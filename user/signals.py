@@ -1,13 +1,16 @@
 from django.db.models.signals import post_save, post_delete
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from .models import Profile
 
 
-def add_user_to_doctor_group(sender, instance, created, **kwargs):
+def create_profile(sender, instance, created, **kwargs):
+    # idea here is to create a profile when the user is save and its group is Profile
     if created:
-        user = instance.user
-        Profile_group = Group.objects.get(name="Profile")
-        user.groups.add(Profile_group)
+        if instance.groups.filter(name="Profile").exists():
+            Profile.objects.create(
+                user=instance,
+                name=instance.first_name,
+            )
 
 
 def updateUser(sender, instance, created, **kwargs):
@@ -25,6 +28,6 @@ def deleteUser(sender, instance, **kwargs):
     user.delete()
 
 
-post_save.connect(receiver=add_user_to_doctor_group, sender=Profile)
+post_save.connect(receiver=create_profile, sender=User)
 post_save.connect(receiver=updateUser, sender=Profile)
 post_delete.connect(receiver=deleteUser, sender=Profile)
