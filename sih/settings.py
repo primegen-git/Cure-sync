@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
+    "localhost",
     "smart-india-hackathon-production.up.railway.app",
     "https://smart-india-hackathon-production.up.railway.app",
 ]

@@ -8,7 +8,7 @@ from opd.utils import (
     get_total_doctor_count,
 )
 from user.utils import (
-    appointment_count,
+    appointment_count_and_id,
     custom_authenticate,
     check_user,
     get_appointment,
@@ -72,6 +72,12 @@ def signup(request):
 def home_page(request):
     # check if the home page is for user or not
     is_user = check_user(request)
+    count = None
+    user_appointment_id = None
+    query = appointment_count_and_id(request)
+    if query is not None:
+        count = query[0]
+        user_appointment_id = query[1]
     if is_user:
         context = {
             "user": is_user,
@@ -79,7 +85,8 @@ def home_page(request):
             "total_doctor_count": get_total_doctor_count,
             "total_appointment_count": get_total_appointment_count,
             "appointments": get_appointment(request),
-            "count": appointment_count(request),
+            "count": count,
+            "user_appointment_id": user_appointment_id,
         }
         return render(request, "user/logged/profile.html", context)
     context = {

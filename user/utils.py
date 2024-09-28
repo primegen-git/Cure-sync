@@ -19,22 +19,34 @@ def get_appointment(request):
     return None
 
 
-def appointment_count(request):
-    user = request.user
-    profile = Profile.objects.get(user=user)
-    if hasattr(profile, "online_appointment") and profile.online_appointment:  # type: ignore
-        user_appoinment_date = profile.online_appointment.appointment_date  # type: ignore
-        opd = profile.get_opd()
-        if opd:
-            appointments = opd.appointments.filter(status__icontains="seen").order_by(
-                "-appointment_date"
-            )  # type: ignore
-            if appointments.exists():
-                count = appointments.filter(
-                    appointment_date__lt=user_appoinment_date
-                ).count()
-                return count
-    return None
+def appointment_count_and_id(request):
+    try:
+        user = request.user
+        profile = Profile.objects.get(user=user)
+
+        if (
+            hasattr(profile, "online_appointment")
+            and profile.online_appointment  # type:ignore
+            and profile.online_appointment.appointment_date  # type: ignore
+        ):
+            user_appointment_date = profile.online_appointment.appointment_date  # type: ignore
+            user_appointment_id = profile.online_appointment.appointment_id  # type: ignore
+
+            opd = profile.get_opd()
+            if opd:
+                appointments = opd.appointments.filter(
+                    status__icontains="seen"
+                ).order_by("-appointment_date")  # type: ignore
+
+                if appointments.exists() and user_appointment_date is not None:
+                    count = appointments.filter(
+                        appointment_date__lt=user_appointment_date
+                    ).count()
+                    return [count, user_appointment_id]
+
+        return None
+    except Exception as e:
+        print(f"some error occur {e}")
 
 
 def custom_authenticate(request):

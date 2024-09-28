@@ -49,7 +49,11 @@
         <tbody>
           {% for appointment in appointments %}
           <tr>
+            {% if appointment.appointment_id == user_appointment_id %}
+            <td style="color: red;">{{ appointment.appointment_id }}</td>
+            {% else %}
             <td>{{ appointment.appointment_id }}</td>
+            {% endif %}
             <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
             <td>{{ appointment.appointment_date|date:"h:i A" }}</td>
           </tr>
@@ -57,9 +61,11 @@
         </tbody>
       </table>
     </div>
+    {% if count is not None %}
     <div class="card stat-card">
       <h3>Total Wating Count</h3>
       <div class="stat-value">{{count}}</div>
+      {% endif %}
     </div>
     {% endif %}
   </main>
