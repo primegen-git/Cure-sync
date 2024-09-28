@@ -53,7 +53,7 @@ def get_total_doctor_count():
 
 
 def get_total_appointment_count():
-    return Appointment.objects.count()
+    return Appointment.objects.filter(status="seen").count()
 
 
 def custom_authenticate(request):
