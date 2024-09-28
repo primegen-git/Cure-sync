@@ -26,7 +26,16 @@ SECRET_KEY = "django-insecure-exd7c_cwp1)715#g+flxq5n8jrp(__w^g-&h((d_acbsbu&u!#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "smart-india-hackathon-production.up.railway.app",
+    "https://smart-india-hackathon-production.up.railway.app",
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://smart-india-hackathon-production.up.railway.app",
+]
 
 
 # Application definition
