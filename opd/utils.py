@@ -53,7 +53,7 @@ def get_total_doctor_count():
 
 
 def get_total_appointment_count():
-    return Appointment.objects.filter(status="seen").count()
+    return Appointment.objects.count()
 
 
 def custom_authenticate(request):
@@ -68,20 +68,23 @@ def custom_authenticate(request):
 
 
 def appointment_handler(id):
-    appointment = Appointment.objects.get(id=id)
-    if appointment.appointment_type == "offline":
-        appointment.offline_patient.delete()  # this is triggred when the appointment is deleted manually
-    appointment.delete()
+    with transaction.atomic():
+        appointment = Appointment.objects.get(id=id)
+        if appointment.appointment_type == "offline":
+            appointment.offline_patient.delete()  # this is triggred when the appointment is deleted manually
+        appointment.delete()
 
 
 def product_handler(id):
-    product = InventoryItem.objects.get(id=id)
-    product.delete()
+    with transaction.atomic():
+        product = InventoryItem.objects.get(id=id)
+        product.delete()
 
 
 def patient_handler(id):
-    patient = Patient.objects.get(id=id)
-    patient.delete()
+    with transaction.atomic():
+        patient = Patient.objects.get(id=id)
+        patient.delete()
 
 
 def search_product(request, search_query):

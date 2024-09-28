@@ -12,7 +12,7 @@ def get_appointment(request):
     opd = profile.get_opd()
     if opd:
         appointments = opd.appointments.filter(status__icontains="seen").order_by(
-            "-appointment_date"
+            "appointment_date"
         )[:5]  # type: ignore
         if appointments.exists():
             return appointments
@@ -70,7 +70,7 @@ def search_specialist_doctor(request, search_query):
 
 
 def search_by_opd(request, search_query):
-    return Opd.objects.filter(name__icontains=search_query)
+    return Opd.objects.filter(name__icontains=search_query).first()
 
 
 load_dotenv()

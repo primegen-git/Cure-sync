@@ -19,8 +19,8 @@
     <header style="display:flex; justify-content: safe;">
       <h1>Search by Specialist</h1>
       <div class="search-bar">
-        <input type="text" name="search_query" id="searchInput" placeholder="Search for bed number or type" />
-        <button id="searchButton" class="search-btn"><i class="fas fa-search"></i></button>
+        <input type="text" name="search_query" id="searchInput" placeholder="Search for Specialist" />
+        <button id=" searchButton" class="search-btn"><i class="fas fa-search"></i></button>
       </div>
       <button onclick="window.location.href='{% url 'user:chatbot' %}'" class="sort-btn">ChatBot</button>
     </header>
@@ -29,15 +29,15 @@
       <a href="{% url 'user:appointment' pk=doctor.id %}" class="bed-card"
         style="text-decoration: none; color: inherit;">
         <div class="doctor-info">
-          <img src="doctor-avatar.png" alt="Doctor Avatar" class="doctor-avatar" />
+          <img src="{{doctor.profile_image.url}}" alt="Doctor Avatar" class="doctor-avatar" />
           <div class="doctor-details">
             <h3>{{doctor.name}}</h3>
             <p>{{doctor.speciality}}</p>
-            <p>Experienced in heart surgeries</p>
+            <p>{{doctor.opd.name}}</p>
           </div>
         </div>
         <div class="bed-availability">
-          <p>No. of beds available: <span>5</span></p>
+          <p>No. of beds available: <span>{{doctor.opd.no_of_beds}}</span></p>
         </div>
       </a>
       {% endfor %}
@@ -57,6 +57,10 @@
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
 
+    // Remove search query from URL on page load/refresh
+    if (window.location.search.includes('search_query')) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
     function performSearch() {
       const query = searchInput.value.trim();
       if (query) {

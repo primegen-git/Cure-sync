@@ -29,6 +29,7 @@ class OfflinePatientAppointmentForm(forms.Form):
             offline_patient=patient,
             appointment_id=self.cleaned_data["appointment_id"],
             appointment_date=self.cleaned_data["appointment_date"],
+            status="seen",
         )
 
     def __init__(self, *args, **kwargs):

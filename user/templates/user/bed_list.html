@@ -14,9 +14,6 @@
       <h1>Search by Bed</h1>
       <form id="search_form" method="post" action="">
         {% csrf_token %}
-        <div class="search-bar">
-          <input type="text" name="search_query" id="search_text" placeholder="Search for bed number or type" />
-        </div>
       </form>
     </header>
     <div class="sort-options">
@@ -28,11 +25,11 @@
       <a href="{% url 'user:appointment' pk=doctor.id %}" class="bed-card"
         style="text-decoration: none; color: inherit;">
         <div class="doctor-info">
-          <img src="doctor-avatar.png" alt="Doctor Avatar" class="doctor-avatar" />
+          <img src="{{doctor.profile_image.url}}" alt="Doctor Avatar" class="doctor-avatar" />
           <div class="doctor-details">
             <h3>{{doctor.name}}</h3>
             <p>{{doctor.speciality}}</p>
-            <p>Experience: <span>{{doctor.experience}}</span></p>
+            <p>Experienced in heart surgeries</p>
           </div>
         </div>
         <div class="bed-availability">

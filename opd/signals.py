@@ -45,7 +45,9 @@ def increment_appointment(sender, instance, created, **kwargs):
     if created:
         with transaction.atomic():
             opd = instance.opd
+            print(opd.no_of_appointment)
             opd.no_of_appointment = models.F("no_of_appointment") + 1
+            print(opd.no_of_appointment)
             opd.save()
 
             if instance.online_patient:
@@ -59,7 +61,9 @@ def decrement_appointment(sender, instance, **kwargs):
     with transaction.atomic():
         opd = instance.opd
         if not kwargs.get("raw", False):
+            print(opd.no_of_appointment)
             opd.no_of_appointment = models.F("no_of_appointment") - 1
+            print(opd.no_of_appointment)
             opd.save()
 
 
@@ -84,11 +88,11 @@ def decrement_bed(sender, instance, **kwargs):
         opd.save()
 
 
-@receiver(post_delete, sender=Patient)
-def delete_offline_patient(sender, instance, **kwargs):
-    with transaction.atomic():
-        if instance.patient_type == "offline":
-            instance.offline_patient.delete()
+# @receiver(post_delete, sender=Patient)
+# def delete_offline_patient(sender, instance, **kwargs):
+#     with transaction.atomic():
+#         if instance.patient_type == "offline":
+#             instance.offline_patient.delete()
 
 
 # @receiver(post_delete, sender=Appointment)

@@ -115,16 +115,19 @@ def bed_list(request):
 
 def opd_list(request):
     is_user = check_user(request)
+    search = False
     if is_user:
         base_template = "user/logged/index.html"
     else:
         base_template = "base.html"
     search_query = request.GET.get("search_query", "")
     if search_query:
-        doctors = search_by_opd(request, search_query)
+        opd = search_by_opd(request, search_query)
+        doctors = opd.owner  # type: ignore
+        search = True
     else:
         doctors = Doctor.objects.all()
-    context = {"doctors": doctors, "base_template": base_template}
+    context = {"doctors": doctors, "base_template": base_template, "search": search}
     return render(request, "user/opd_list.html", context)
 
 
@@ -170,7 +173,6 @@ def appointment(request, pk):
                 Appointment.objects.create(
                     opd=doctor.opd,  # type: ignore
                     online_patient=request.user.profile,
-                    appointment_type="online",
                     status="not_seen",
                 )
                 doctor.opd.save()

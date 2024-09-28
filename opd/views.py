@@ -92,7 +92,9 @@ def appointment(request):
     request_count = request.user.doctor.opd.appointments.filter(
         Q(online_patient__isnull=False, status="not_seen")
     ).count()
-    total_appointment = request.user.doctor.opd.no_of_appointment
+    total_appointment = request.user.doctor.opd.appointments.filter(
+        status="seen"
+    ).count()
     context = {
         "appointments": appointments,
         "total_appointment": total_appointment,
@@ -195,11 +197,10 @@ def online_appointment_booking(request, id):
         if form.is_valid():
             appointment = Appointment.objects.get(id=id)
             appointment.opd = opd
-            appointment.appointment_type = "offline"
+            appointment.appointment_type = "online"
             appointment.status = "seen"
             appointment.appointment_id = request.POST["appointment_id"]
             appointment.appointment_date = request.POST["appointment_date"]
-            opd.save()
             appointment.save()
             messages.success(request, "Appointment is successfully added")
             return redirect("opd:appointment")

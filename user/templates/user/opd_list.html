@@ -6,33 +6,52 @@
 {% block content %}
 <div class="dashboard-container">
   <main class="main-content">
-    <button onclick="window.history.back()" class="back-btn" style="margin-bottom: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+    <button onclick="window.history.back()" class="back-btn"
+      style="margin-bottom: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
       <span style="margin-right: 8px;">←</span> Back
-  </button>
+    </button>
     <header>
       <h1>Search by OPD</h1>
       <div class="search-bar">
-        <input type="text" name="search_query" id="searchInput" placeholder="Search for bed number or type" />
+        <input type="text" name="search_query" id="searchInput" placeholder="Search By Opd" />
         <button id="searchButton" class="search-btn"><i class="fas fa-search"></i></button>
       </div>
     </header>
     <div class="bed-list">
+      {% if search %}
+      <a href="{% url 'user:appointment' pk=doctors.id %}" class="bed-card"
+        style="text-decoration: none; color: inherit;">
+        <div class="doctor-info">
+          <img src="{{doctors.profile_image.url}}" alt="Doctor Avatar" class="doctor-avatar" />
+          <div class="doctor-details">
+            <h3>{{doctors.name}}</h3>
+            <p>{{doctors.speciality}}</p>
+            <p>{{doctors.opd.name}}</p>
+          </div>
+        </div>
+        <div class="bed-availability">
+          <p>No. of beds available: <span>{{doctor.opd.no_of_beds}}</span></p>
+        </div>
+      </a>
+
+      {% else %}
       {% for doctor in doctors %}
       <a href="{% url 'user:appointment' pk=doctor.id %}" class="bed-card"
         style="text-decoration: none; color: inherit;">
         <div class="doctor-info">
-          <img src="doctor-avatar.png" alt="Doctor Avatar" class="doctor-avatar" />
+          <img src="{{doctor.profile_image.url}}" alt="Doctor Avatar" class="doctor-avatar" />
           <div class="doctor-details">
             <h3>{{doctor.name}}</h3>
             <p>{{doctor.speciality}}</p>
-            <p>Experienced in heart surgeries</p>
+            <p>{{doctor.opd.name}}</p>
           </div>
         </div>
         <div class="bed-availability">
-          <p>No. of beds available: <span>5</span></p>
+          <p>No. of beds available: <span>{{doctor.opd.no_of_beds}}</span></p>
         </div>
       </a>
       {% endfor %}
+      {% endif %}
     </div>
     <div class="pagination">
       <button><i class="fas fa-chevron-left"></i></button>
@@ -49,6 +68,10 @@
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
 
+    // Remove search query from URL on page load/refresh
+    if (window.location.search.includes('search_query')) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
     function performSearch() {
       const query = searchInput.value.trim();
       if (query) {

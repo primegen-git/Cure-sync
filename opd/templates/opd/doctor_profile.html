@@ -3,7 +3,7 @@
 {% endblock css %} {% block content %}
 <main class="main-content">
   <div class="profile-header">
-    <img src="doctor-avatar.jpg" alt="Doctor Image" class="profile-image" />
+    <img src="{{doctor.profile_image.url}}" alt="Doctor Image" class="profile-image" />
     <div>
       <h1 class="profile-name">{{doctor.name}}</h1>
       <br />

@@ -128,7 +128,7 @@ class Appointment(models.Model):
     opd = models.ForeignKey(Opd, on_delete=models.CASCADE, related_name="appointments")
     offline_patient = models.OneToOneField(
         Offline_Patient,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="offline_appoinment",
