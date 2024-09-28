@@ -2,11 +2,10 @@ from functools import wraps
 from django.contrib.auth.models import Group, User
 from django.contrib.auth import authenticate
 from django.forms import models
-from django.db import models
+from django.db import models, transaction
 from opd.models import (
     Appointment,
-    Inventory_Item,
-    Medicine,
+    InventoryItem,
     Offline_Patient,
     Opd,
     Doctor,
@@ -76,7 +75,7 @@ def appointment_handler(id):
 
 
 def product_handler(id):
-    product = Inventory_Item.objects.get(id=id)
+    product = InventoryItem.objects.get(id=id)
     product.delete()
 
 
@@ -87,8 +86,7 @@ def patient_handler(id):
 
 def search_product(request, search_query):
     return request.user.doctor.opd.inventory.inventory_items.filter(
-        Q(medicine__name__icontains=search_query)
-        | Q(medicine__category__icontains=search_query)
+        name__icontains=search_query
     )
 
 
@@ -118,14 +116,15 @@ def search_patient(request, search_query):
 
 
 def create_patient(request, id):
-    appointment = Appointment.objects.get(id=id)
-    patient = Patient.objects.create(
-        opd=request.user.doctor.opd,
-        patient_id=appointment.appointment_id,
-    )
+    with transaction.atomic():
+        appointment = Appointment.objects.get(id=id)
+        patient = Patient.objects.create(
+            opd=request.user.doctor.opd,
+            patient_id=appointment.appointment_id,
+        )
 
-    if appointment.appointment_type == "offline":
-        patient.offline_patient = appointment.offline_patient
-    else:
-        patient.online_patient = appointment.online_patient
-    return patient
+        if appointment.appointment_type == "offline":
+            patient.offline_patient = appointment.offline_patient
+        else:
+            patient.online_patient = appointment.online_patient
+        return patient

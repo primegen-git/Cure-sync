@@ -26,7 +26,6 @@
       <thead>
         <tr>
           <th>Product Name</th>
-          <th>Category</th>
           <th>Quantity</th>
           <th>Price</th>
           <th>Action</th>
@@ -36,9 +35,8 @@
         {% for product in products %}
         <tr>
           <td>
-            <span>{{product.medicine.name}}</span>
+            <span>{{product.name}}</span>
           </td>
-          <td>{{product.medicine.category}}</td>
           <td>{{product.quantity}}</td>
           <td>Rs {{product.price}}</td>
           <td>

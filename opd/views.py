@@ -10,7 +10,7 @@ from opd.forms import (
     OfflinePatientAppointmentForm,
     OnlinePatientAppointmentForm,
 )
-from opd.models import Doctor, Appointment, Medicine, Inventory_Item, Patient
+from opd.models import Doctor, Appointment, InventoryItem, Patient
 from opd.utils import (
     get_product_count,
     is_doctor,
@@ -227,9 +227,8 @@ def medicine(request, id):
             medicine_description.append(f"{name}: {requested_quantity}")
 
             try:
-                medicine_obj = Medicine.objects.get(name=name)
-                inventory_item = Inventory_Item.objects.filter(
-                    inventory=request.user.doctor.opd.inventory, medicine=medicine_obj
+                inventory_item = InventoryItem.objects.filter(
+                    inventory=request.user.doctor.opd.inventory, name=name
                 ).first()
 
                 if inventory_item:
@@ -246,7 +245,7 @@ def medicine(request, id):
                 else:
                     available_quantity = 0
 
-            except Medicine.DoesNotExist:
+            except InventoryItem.DoesNotExist:
                 available_quantity = 0
 
             updated_medication_list.append(
@@ -279,20 +278,9 @@ def add_product(request):
     if request.method == "POST":
         form = InventoryItemsForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data["name"]
-            quantity = form.cleaned_data["quantity"]
-            price = form.cleaned_data["price"]
-            category = form.cleaned_data["type"]
-            medicine = Medicine.objects.create(
-                name=name,
-                category=category,
-            )
-            inventory_item = Inventory_Item.objects.create(
-                inventory=request.user.doctor.opd.inventory,
-                medicine=medicine,
-                quantity=quantity,
-                price=price,
-            )
+            instance = form.save(commit=False)
+            instance.inventory = request.user.doctor.opd.inventory
+            instance.save()
             messages.success(request, "Product has been added")
             return redirect("opd:product_list")
         else:

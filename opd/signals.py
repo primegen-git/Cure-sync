@@ -91,11 +91,11 @@ def delete_offline_patient(sender, instance, **kwargs):
             instance.offline_patient.delete()
 
 
-@receiver(post_delete, sender=Appointment)
-def delete_offline_appointment(sender, instance, **kwargs):
-    with transaction.atomic():
-        if instance.appointment_type == "offline":
-            instance.offline_patient.delete()
+# @receiver(post_delete, sender=Appointment)
+# def delete_offline_appointment(sender, instance, **kwargs):
+#     with transaction.atomic():
+#         if instance.appointment_type == "offline":
+#             instance.offline_patient.delete()
 
 
 # save/create signals

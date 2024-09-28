@@ -69,32 +69,14 @@ class Inventory(models.Model):
         return f" Inventory of {str(self.opd.owner.name)}"
 
 
-class Medicine(models.Model):
-    type = (("oral", "oral"), ("vascular", "vascular"), ("applicant", "applicant"))
-    name = models.CharField("Name", max_length=255)
-    category = models.CharField("Category", choices=type, max_length=30)
-    created_at = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(
-        default=uuid.uuid4, unique=True, primary_key=True, editable=False
-    )
-
-    def __str__(self):
-        return str(self.name)
-
-
-class Inventory_Item(models.Model):
+class InventoryItem(models.Model):
     inventory = models.ForeignKey(
         Inventory, on_delete=models.CASCADE, related_name="inventory_items"
     )
-    medicine = models.ForeignKey(
-        Medicine,
-        on_delete=models.CASCADE,
-        related_name="inventory_items",
-        null=True,
-        blank=True,
-    )
+    name = models.CharField("Product Name", max_length=50)
     quantity = models.PositiveIntegerField("Quantity", default=0)
     price = models.FloatField("Price", default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
@@ -104,7 +86,7 @@ class Inventory_Item(models.Model):
         verbose_name_plural = "Inventory Items"
 
     def __str__(self):
-        return f"{self.medicine}  in {self.inventory}"
+        return f"{self.name}  in {self.inventory}"
 
 
 class Offline_Patient(models.Model):

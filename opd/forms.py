@@ -1,5 +1,5 @@
 from django import forms
-from .models import Medicine, Offline_Patient, Appointment
+from .models import InventoryItem, Offline_Patient, Appointment
 
 
 class OfflinePatientAppointmentForm(forms.Form):
@@ -28,6 +28,7 @@ class OfflinePatientAppointmentForm(forms.Form):
             opd=opd,
             offline_patient=patient,
             appointment_id=self.cleaned_data["appointment_id"],
+            appointment_date=self.cleaned_data["appointment_date"],
         )
 
     def __init__(self, *args, **kwargs):
@@ -47,10 +48,11 @@ class OnlinePatientAppointmentForm(forms.ModelForm):
         }
 
 
-class InventoryItemsForm(forms.Form):
-    name = forms.CharField(max_length=30, label="Medicine Name")
-    quantity = forms.IntegerField(min_value=0, label="Quantity")
-    price = forms.DecimalField(
-        min_value=0, max_digits=10, decimal_places=2, label="Price"
-    )
-    type = forms.ChoiceField(choices=Medicine.type, label="Category")
+class InventoryItemsForm(forms.ModelForm):
+    class Meta:
+        model = InventoryItem
+        fields = [
+            "name",
+            "quantity",
+            "price",
+        ]
