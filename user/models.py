@@ -53,3 +53,8 @@ class Profile(models.Model):
         if hasattr(self, "online_appointment") and self.online_appointment:  # type: ignore
             return self.online_appointment.opd  # type: ignore
         return None
+
+    def get_appointment(self):
+        if hasattr(self, "online_appointment") and self.online_appointment:  # type: ignore
+            return self.online_appointment  # type: ignore
+        return None

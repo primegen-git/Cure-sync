@@ -7,6 +7,7 @@ from opd.utils import (
     get_total_bed_count,
     get_total_doctor_count,
 )
+from user.models import Profile
 from user.utils import (
     appointment_count_and_id,
     custom_authenticate,
@@ -207,7 +208,20 @@ def medical_history(request):
 
 
 def message(request):
-    context = {}
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Exception as e:
+        return redirect("user:login")
+    accepted = False
+    doctor = None
+    appointment = profile.get_appointment()
+    print(f"appointment: {appointment}")
+    if appointment is not None:
+        doctor = profile.get_opd().owner  # type: ignore
+        print(f"doctor: {doctor}")
+        if appointment.status == "seen":
+            accepted = True
+    context = {"doctor": doctor, "appointment": appointment, "acceted": accepted}
     return render(request, "user/logged/message.html", context)
 
 
