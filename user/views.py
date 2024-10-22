@@ -1,7 +1,9 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
-from opd.models import Doctor, Appointment
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group
+from django.shortcuts import redirect, render
+
+from opd.models import Appointment, Doctor
 from opd.utils import (
     get_total_appointment_count,
     get_total_bed_count,
@@ -10,18 +12,15 @@ from opd.utils import (
 from user.models import Profile
 from user.utils import (
     appointment_count_and_id,
-    custom_authenticate,
     check_user,
+    custom_authenticate,
     get_appointment,
+    getResponse,
     search_by_opd,
     search_specialist_doctor,
-    getResponse,
 )
 
-
-from .forms import CustomUserCreationForm
-from django.contrib.auth.models import Group
-
+from .forms import CustomUserCreationForm, ProfileCreationForm
 
 # TODO: remove the message after a time
 
@@ -53,12 +52,10 @@ def signup(request):
             user.username = user.username.lower()
             user.save()
 
-            # Add user to the group
-            profile_group = Group.objects.get(name="Profile")
-            user.groups.add(profile_group)
-
             messages.success(request, "user has been successfully created")
-            return redirect("user:login")
+            # login the user so that request.user.profile can get the profile...
+            login(request, user)
+            return redirect("user:edit_profile")
 
         else:
             messages.error(request, "Some error occurs in the form submission")
@@ -96,6 +93,26 @@ def home_page(request):
         "total_appointment_count": get_total_appointment_count,
     }
     return render(request, "user/index.html", context)
+
+
+def edit_profile(request):
+    if request.method == "POST":
+        form = ProfileCreationForm(
+            request.POST, request.FILES, instance=request.user.profile
+        )  # NOTE: here we have to pass the instance object because we are here editing the profile object not creating it..
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile has been successfully created")
+            return redirect("user:user_profile")
+
+        messages.error(request, "Some error occur in form submission")
+        return redirect("user:edit_profile")
+    else:
+        print(f"Request.user.profile: {request.user.profile}", end="\n")
+        form = ProfileCreationForm(instance=request.user.profile)
+
+    context = {"form": form}
+    return render(request, "user/edit_profile.html", context)
 
 
 def profile(request):
@@ -202,9 +219,6 @@ def doctor_profile(request, pk):
 
 
 # NOTE: All the method after this are related to the logged in user
-def medical_history(request):
-    context = {}
-    return render(request, "user/logged/medical_history.html", context)
 
 
 def message(request):

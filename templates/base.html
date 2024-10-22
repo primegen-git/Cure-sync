@@ -1,18 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script> -->
-  {% block css %} {% endblock css %}
-</head>
-
-<body>
-
-  {% block content %}
-  {% endblock content %}
-</body>
-{% block js %} {% endblock js %}
-
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script> -->
+        {% block css %}
+        {% endblock css %}
+    </head>
+    <body>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert--{{ message.tags }}">
+                    <p class="alert__message">{{ message }}</p>
+                    <button class="alert__close">x</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}
+        {% endblock content %}
+    </body>
+    {% block js %}
+    {% endblock js %}
 </html>

@@ -23,6 +23,7 @@ body {
 .profile-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
 .profile-image {
@@ -30,6 +31,24 @@ body {
   height: 100px;
   border-radius: 50%;
   margin-right: 20px;
+}
+.profile-header button {
+  padding: 10px 15px;
+  background-color: #f0f2f5;
+  color: #333333;
+  border: 1px solid #d1d9e6;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.profile-header button:hover {
+  background-color: #e4e6e9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .profile-name {
   font-size: 24px;

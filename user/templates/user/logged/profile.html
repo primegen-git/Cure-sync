@@ -1,82 +1,74 @@
-{% extends 'user/logged/index.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/profile.css' %}" />
-{% endblock css %} {% block content %}
-
-<div class="container">
-  <main class="main-content">
-    <div class="header">
-      <h1>User Dashboard</h1>
-      <input type="text" class="search-bar" placeholder="Search for anything" />
-    </div>
-    <div class="stats-container">
-      <div class="card stat-card">
-        <h3>Available Beds</h3>
-        <div class="stat-value">{{total_beds_count}}</div>
-      </div>
-      <div class="card stat-card">
-        <h3>Active Doctors</h3>
-        <div class="stat-value">{{total_doctor_count}}</div>
-      </div>
-    </div>
-    <div class="card">
-      <h2>Quick Actions</h2>
-      <div class="btn-container">
-        <button onclick="window.location.href='{% url 'user:user_profile' %}'">
-          Profile
-        </button>
-        <button onclick="window.location.href='{% url 'user:bed_list' %}'">
-          Search by Bed
-        </button>
-        <button onclick="window.location.href='{% url 'user:search_specialist' %}'">
-          Search by Specialties
-        </button>
-        <button onclick="window.location.href='{% url 'user:opd_list' %}'">
-          Search by OPD
-        </button>
-      </div>
-    </div>
-    {% if appointments %}
-    <div class="card">
-      <h2>Live Appointment View</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for appointment in appointments %}
-          <tr>
-            {% if appointment.appointment_id == user_appointment_id %}
-            <td style="color: red;">{{ appointment.appointment_id }}</td>
-            {% else %}
-            <td>{{ appointment.appointment_id }}</td>
+{% extends 'user/logged/index.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/profile.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="container">
+        <main class="main-content">
+            <div class="header">
+                <h1>User Dashboard</h1>
+            </div>
+            <div class="stats-container">
+                <div class="card stat-card">
+                    <h3>Available Beds</h3>
+                    <div class="stat-value">{{ total_beds_count }}</div>
+                </div>
+                <div class="card stat-card">
+                    <h3>Active Doctors</h3>
+                    <div class="stat-value">{{ total_doctor_count }}</div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Quick Actions</h2>
+                <div class="btn-container">
+                    <button onclick="window.location.href='{% url 'user:user_profile' %}'">Profile</button>
+                    <button onclick="window.location.href='{% url 'user:bed_list' %}'">Search by Bed</button>
+                    <button onclick="window.location.href='{% url 'user:search_specialist' %}'">Search by Specialties</button>
+                    <button onclick="window.location.href='{% url 'user:opd_list' %}'">Search by OPD</button>
+                </div>
+            </div>
+            {% if appointments %}
+                <div class="card">
+                    <h2>Live Appointment View</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                                <tr>
+                                    {% if appointment.appointment_id == user_appointment_id %}
+                                        <td style="color: red;">{{ appointment.appointment_id }}</td>
+                                    {% else %}
+                                        <td>{{ appointment.appointment_id }}</td>
+                                    {% endif %}
+                                    <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
+                                    <td>{{ appointment.appointment_date|date:"h:i A" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if count is not None %}
+                    <div class="card stat-card">
+                        <h3>Total Wating Count</h3>
+                        <div class="stat-value">{{ count }}</div>
+                    {% endif %}
+                </div>
             {% endif %}
-            <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
-            <td>{{ appointment.appointment_date|date:"h:i A" }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+        </main>
     </div>
-    {% if count is not None %}
-    <div class="card stat-card">
-      <h3>Total Wating Count</h3>
-      <div class="stat-value">{{count}}</div>
-      {% endif %}
-    </div>
-    {% endif %}
-  </main>
-</div>
-
-{% endblock content %} {% block js %}
-<script>
+{% endblock content %}
+{% block js %}
+    <script>
   document.addEventListener("DOMContentLoaded", function () {
     const dashboardElement = document.getElementById("dashboard");
     dashboardElement.classList.add("active");
   });
-</script>
-
+    </script>
 {% endblock js %}

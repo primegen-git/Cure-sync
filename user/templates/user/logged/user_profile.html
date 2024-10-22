@@ -1,47 +1,53 @@
-{% extends 'user/logged/index.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/user_profile.css' %}" />
-{% endblock css %} {% block content %}
-<div class="container">
-  <main class="main-content">
-    <div class="profile-card">
-      <div class="profile-header">
-        <img src="{{user.profile_image.url}}" alt="User Avatar" class="profile-image" />
-      </div>
-      <div class="profile-info">
-        <div class="info-item">
-          <div class="info-label">Name</div>
-          <div class="info-value">{{user.name}}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Age</div>
-          <div class="info-value">{{user.age}}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Date of Birth:</div>
-          <div class="info-value">{{user.date_of_birth}}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Gender:</div>
-          <div class="info-value">{{user.gender}}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Blood Type:</div>
-          <div class="info-value">{{user.blood_group}}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Email:</div>
-          <div class="info-value">{{user.email}}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Phone:</div>
-          <div class="info-value">{{user.phone_number}}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Address:</div>
-          <div class="info-value">{{user.address}}</div>
-        </div>
-      </div>
+{% extends 'user/logged/index.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/user_profile.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="container">
+        <main class="main-content">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <img src="{{ user.profile_image.url }}"
+                         alt="User Avatar"
+                         class="profile-image" />
+                    <button onclick="window.location.href='{% url 'user:edit_profile' %}'">Edit Profile</button>
+                </div>
+                <div class="profile-info">
+                    <div class="info-item">
+                        <div class="info-label">Name</div>
+                        <div class="info-value">{{ user.name }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Age</div>
+                        <div class="info-value">{{ user.age }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Date of Birth:</div>
+                        <div class="info-value">{{ user.date_of_birth }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Gender:</div>
+                        <div class="info-value">{{ user.gender }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Blood Type:</div>
+                        <div class="info-value">{{ user.blood_group }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">{{ user.email }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone:</div>
+                        <div class="info-value">{{ user.phone_number }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Address:</div>
+                        <div class="info-value">{{ user.address }}</div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-  </main>
-</div>
 {% endblock content %}

@@ -1,6 +1,8 @@
-from django.db import models
-from django.contrib.auth.models import User
 import uuid
+
+from django.contrib.auth.models import User
+from django.db import models
+
 # Create your models here.
 
 
@@ -24,8 +26,10 @@ class Profile(models.Model):
     name = models.CharField("Full Name", max_length=200, null=True, blank=True)
     gender = models.CharField("Gender", max_length=10, choices=gender_type, null=True)
     age = models.PositiveIntegerField("Age", null=True)
-    date_of_birth = models.DateField("Date of Birth")
-    blood_group = models.CharField("Blood Type", max_length=6, choices=BLOOD_TYPE)
+    date_of_birth = models.DateField("Date of Birth", null=True)
+    blood_group = models.CharField(
+        "Blood Type", max_length=6, choices=BLOOD_TYPE, null=True
+    )
     profile_image = models.ImageField(
         "Image",
         upload_to="profile/",
