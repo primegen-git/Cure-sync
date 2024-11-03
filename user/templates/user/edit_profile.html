@@ -1,24 +1,26 @@
-{% extends 'base.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/form.css' %}" />
-{% endblock css %} {% block content %}
-
-<div class="container">
-  <div class="form-card">
-    <h2>Profile Creation Form</h2>
-    <form method="POST" action="", enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="form-group">
-        {% for field in form %}
-        <label for="{{field.id_for_label}}">{{field.label}}</label>
-        {{field}}
-        <br></br>
-        {% endfor %}
-      </div>
-
-      <div class="form-footer">
-        <button type="reset" class="btn btn-secondary">Reset</button>
-        <button type="submit" class="btn">Submit</button>
-      </div>
-    </form>
-  </div>
-  {% endblock content %}
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/form.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="container">
+        <div class="form-card">
+            <h2>Edit Profile</h2>
+            <form method="POST" action="", enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    {% for field in form %}
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        <br>
+                    </br>
+                {% endfor %}
+            </div>
+            <div class="form-footer">
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn">Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
