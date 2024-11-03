@@ -234,8 +234,9 @@ def message(request):
         doctor = profile.get_opd().owner  # type: ignore
         print(f"doctor: {doctor}")
         if appointment.status == "seen":
+            print("status is seen:")
             accepted = True
-    context = {"doctor": doctor, "appointment": appointment, "acceted": accepted}
+    context = {"doctor": doctor, "appointment": appointment, "accepted": accepted}
     return render(request, "user/logged/message.html", context)
 
 
