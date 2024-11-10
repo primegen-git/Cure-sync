@@ -15,7 +15,7 @@ forms.py: (Optional) Defines custom forms used in the app
 
 Applications:
 Home: The landing page that leads directly into index.html
-Hospital: Aplication dealing with hospital requests and doctor user details and features
+Hospital: Application dealing with hospital requests and doctor user details and features
 OPD: Application dealing with OPD booking, appointments and other user based features
 SIH: Adding User interface and accessibility
 
@@ -36,7 +36,7 @@ hospital/ - Handles the hospital details to be shown
 Sih urls.py
 /admin/: Points to the Django admin interface.
 path("", include(home_urls, namespace="home")): Includes URLs from the home app, accessible through the root URL (/) and assigned the namespace "home".
-Similar patterns exist for the hospital, user, and opd apps, each with their own namespace.
+Similar patterns exist for the hospital, user, and OPD apps, each with their own namespace.
 
 Opd urls.py
 Login: /login/ - Handles the login process for doctors.
