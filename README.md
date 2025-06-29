@@ -76,16 +76,3 @@ opd_fullstack/
 
 ## Screenshots
 
-> _Add screenshots of the dashboard, patient management, and analytics pages here for better presentation._
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for improvements or bug fixes.
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-**Developed by [Your Name]**
