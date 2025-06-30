@@ -43,6 +43,9 @@ opd_fullstack/
 - **static/** & **staticfiles/**: CSS, JS, and image assets
 - **templates/**: HTML templates for all modules
 
+## Block Diagram
+  ![diagram](assets/block_diagram)
+
 ## Getting Started
 
 1. **Clone the repository:**
