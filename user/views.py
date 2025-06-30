@@ -2,6 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.shortcuts import redirect, render
+from django.http import HttpResponseServerError
+
+import logging
 
 from opd.models import Appointment, Doctor
 from opd.utils import (
@@ -22,225 +25,301 @@ from user.utils import (
 
 from .forms import CustomUserCreationForm, ProfileCreationForm
 
-# TODO: remove the message after a time
+logger = logging.getLogger(__name__)
 
 
 def user_login(request):
-    if request.method == "POST":
-        is_user = custom_authenticate(request)
-        if is_user:
-            login(request, is_user)
-            messages.success(request, "Welcome back")
-            return redirect("user:home_page")
-        messages.error(request, "something wrong with user or password")
-        return redirect("user:login")
-    context = {}
-    return render(request, "user/user_login.html", context)
+    try:
+        if request.method == "POST":
+            is_user = custom_authenticate(request)
+            if is_user:
+                login(request, is_user)
+                return redirect("user:home_page")
+            messages.error(request, "something wrong with user or password")
+            return redirect("user:login")
+        context = {}
+        return render(request, "user/user_login.html", context)
+    except Exception as e:
+        logger.error(f"Error in user_login: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def user_logout(request):
-    logout(request)
-    messages.success(request, "you have been logout")
-    return redirect("user:home_page")
+    try:
+        logout(request)
+        messages.success(request, "you have been logout")
+        return redirect("user:home_page")
+    except Exception as e:
+        logger.error(f"Error in user_logout: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def signup(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            user.save()
+    try:
+        if request.method == "POST":
+            form = CustomUserCreationForm(request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.username = user.username.lower()
+                user.save()
 
-            messages.success(request, "user has been successfully created")
-            # login the user so that request.user.profile can get the profile...
-            login(request, user)
-            return redirect("user:edit_profile")
-
+                messages.success(request, "user has been successfully created")
+                login(request, user)
+                return redirect("user:edit_profile")
+            else:
+                messages.error(request, "Some error occurs in the form submission")
+                return redirect("user:signup")
         else:
-            messages.error(request, "Some error occurs in the form submission")
-            return redirect("user:signup")
-    else:
-        form = CustomUserCreationForm()
+            form = CustomUserCreationForm()
 
-    context = {"form": form}
-    return render(request, "signup.html", context)
+        context = {"form": form}
+        return render(request, "signup.html", context)
+    except Exception as e:
+        logger.error(f"Error in signup: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def home_page(request):
-    # check if the home page is for user or not
-    is_user = check_user(request)
-    count = None
-    user_appointment_id = None
-    query = appointment_count_and_id(request)
-    if query is not None:
-        count = query[0]
-        user_appointment_id = query[1]
-    if is_user:
+    try:
+        is_user = check_user(request)
+        count = None
+        user_appointment_id = None
+        query = appointment_count_and_id(request)
+        if query is not None:
+            count = query[0]
+            user_appointment_id = query[1]
+        if is_user:
+            context = {
+                "user": is_user,
+                "total_beds_count": get_total_bed_count,
+                "total_doctor_count": get_total_doctor_count,
+                "total_appointment_count": get_total_appointment_count,
+                "appointments": get_appointment(request),
+                "count": count,
+                "user_appointment_id": user_appointment_id,
+            }
+            return render(request, "user/logged/profile.html", context)
         context = {
-            "user": is_user,
             "total_beds_count": get_total_bed_count,
             "total_doctor_count": get_total_doctor_count,
             "total_appointment_count": get_total_appointment_count,
-            "appointments": get_appointment(request),
-            "count": count,
-            "user_appointment_id": user_appointment_id,
         }
-        return render(request, "user/logged/profile.html", context)
-    context = {
-        "total_beds_count": get_total_bed_count,
-        "total_doctor_count": get_total_doctor_count,
-        "total_appointment_count": get_total_appointment_count,
-    }
-    return render(request, "user/index.html", context)
+        return render(request, "user/index.html", context)
+    except Exception as e:
+        logger.error(f"Error in home_page: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def edit_profile(request):
-    if request.method == "POST":
-        form = ProfileCreationForm(
-            request.POST, request.FILES, instance=request.user.profile
-        )  # NOTE: here we have to pass the instance object because we are here editing the profile object not creating it..
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Profile has been successfully created")
-            return redirect("user:user_profile")
+    try:
+        if request.method == "POST":
+            form = ProfileCreationForm(
+                request.POST, request.FILES, instance=request.user.profile
+            )
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Profile has been successfully created")
+                return redirect("user:user_profile")
+            messages.error(request, "Some error occur in form submission")
+            return redirect("user:edit_profile")
+        else:
+            form = ProfileCreationForm(instance=request.user.profile)
 
-        messages.error(request, "Some error occur in form submission")
-        return redirect("user:edit_profile")
-    else:
-        print(f"Request.user.profile: {request.user.profile}", end="\n")
-        form = ProfileCreationForm(instance=request.user.profile)
-
-    context = {"form": form}
-    return render(request, "user/edit_profile.html", context)
+        context = {"form": form}
+        return render(request, "user/edit_profile.html", context)
+    except Exception as e:
+        logger.error(f"Error in edit_profile: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def profile(request):
-    context = {}
-    return render(request, "user/profile.html", context)
+    try:
+        context = {}
+        return render(request, "user/profile.html", context)
+    except Exception as e:
+        logger.error(f"Error in profile: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def bed_list(request):
-    is_user = check_user(request)
-    if is_user:
-        base_template = "user/logged/index.html"
-    else:
-        base_template = "base.html"
-    doctors = Doctor.objects.all()
-    context = {"doctors": doctors, "base_template": base_template}
-    return render(request, "user/bed_list.html", context)
+    try:
+        is_user = check_user(request)
+        if is_user:
+            base_template = "user/logged/index.html"
+        else:
+            base_template = "base.html"
+        sort = request.GET.get("sort")
+        if sort == "beds":
+            doctors = Doctor.objects.all().order_by("-opd__no_of_beds")
+        else:
+            doctors = Doctor.objects.all()
+        context = {"doctors": doctors, "base_template": base_template}
+        return render(request, "user/bed_list.html", context)
+    except Exception as e:
+        logger.error(f"Error in bed_list: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def opd_list(request):
-    is_user = check_user(request)
-    search = False
-    if is_user:
-        base_template = "user/logged/index.html"
-    else:
-        base_template = "base.html"
-    search_query = request.GET.get("search_query", "")
-    if search_query:
-        opd = search_by_opd(request, search_query)
-        doctors = opd.owner  # type: ignore
-        search = True
-    else:
-        doctors = Doctor.objects.all()
-    context = {"doctors": doctors, "base_template": base_template, "search": search}
-    return render(request, "user/opd_list.html", context)
+    try:
+        is_user = check_user(request)
+        search = False
+        if is_user:
+            base_template = "user/logged/index.html"
+        else:
+            base_template = "base.html"
+        search_query = request.GET.get("search_query", "")
+        if search_query:
+            opd = search_by_opd(request, search_query)
+            doctors = opd.owner  # type: ignore
+            search = True
+        else:
+            doctors = Doctor.objects.all()
+        context = {"doctors": doctors, "base_template": base_template, "search": search}
+        return render(request, "user/opd_list.html", context)
+    except Exception as e:
+        logger.error(f"Error in opd_list: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def hospital_detail(request):
-    context = {}
-    return render(request, "user/hospital_detail.html", context)
+    try:
+        context = {}
+        return render(request, "user/hospital_detail.html", context)
+    except Exception as e:
+        logger.error(f"Error in hospital_detail: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def search_specialist(request):
-    is_user = check_user(request)
-    if is_user:
-        base_template = "user/logged/index.html"
-    else:
-        base_template = "base.html"
-    search_query = request.GET.get("search_query", "")
-    if search_query:
-        doctors = search_specialist_doctor(request, search_query)
-    else:
-        doctors = Doctor.objects.all()
-    context = {"doctors": doctors, "base_template": base_template}
-    return render(request, "user/search_specialist.html", context)
+    try:
+        is_user = check_user(request)
+        if is_user:
+            base_template = "user/logged/index.html"
+        else:
+            base_template = "base.html"
+        search_query = request.GET.get("search_query", "")
+        if search_query:
+            doctors = search_specialist_doctor(request, search_query)
+        else:
+            doctors = Doctor.objects.all()
+        context = {"doctors": doctors, "base_template": base_template}
+        return render(request, "user/search_specialist.html", context)
+    except Exception as e:
+        logger.error(f"Error in search_specialist: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def chatbot(request):
-    user_message = request.GET.get("message", "")
-    if user_message:
-        print("inside the if statement")
-        bot_response = getResponse(user_message)  # Assuming you have this function
-    else:
-        bot_response = ""
-
-    context = {"bot_response": bot_response, "user_message": user_message}
-    return render(request, "user/chatbot.html", context)
+    try:
+        user_message = request.GET.get("message", "")
+        if user_message:
+            bot_response = getResponse(user_message)
+        else:
+            bot_response = ""
+        context = {"bot_response": bot_response, "user_message": user_message}
+        return render(request, "user/chatbot.html", context)
+    except Exception as e:
+        logger.error(f"Error in chatbot: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def appointment(request, pk):
-    doctor = Doctor.objects.get(id=pk)
-    search_query = request.GET.get("search_query")
-    if search_query == "booking":
-        is_user = check_user(request)
-        if is_user:
-            try:
-                Appointment.objects.create(
-                    opd=doctor.opd,  # type: ignore
-                    online_patient=request.user.profile,
-                    status="not_seen",
-                )
-                doctor.opd.save()
-                messages.success(
-                    request, "You appoinment request has been send successfully"
-                )
-                return redirect("user:home_page")
-            except Exception as e:
-                messages.error(request, f"Error creating appointment: {str(e)}")
-                return redirect("user:appointment", pk=doctor.id)
-        return redirect("user:login")
-    total_bed_count = doctor.opd.no_of_beds  # type: ignore
-    total_appointment_count = doctor.opd.no_of_appointment  # type: ignore
-    context = {
-        "doctor": doctor,
-        "total_appointment_count": total_appointment_count,
-        "total_bed_count": total_bed_count,
-    }
-    return render(request, "user/appointment.html", context)
+    try:
+        doctor = Doctor.objects.get(id=pk)
+        search_query = request.GET.get("search_query")
+        if search_query == "booking":
+            is_user = check_user(request)
+            if is_user:
+                try:
+                    Appointment.objects.create(
+                        opd=doctor.opd,  # type: ignore
+                        online_patient=request.user.profile,
+                        status="not_seen",
+                    )
+                    doctor.opd.save()
+                    messages.success(
+                        request, "You appoinment request has been send successfully"
+                    )
+                    return redirect("user:home_page")
+                except Exception as e:
+                    logger.error(f"Error creating appointment: {e}", exc_info=True)
+                    messages.error(request, f"Error creating appointment: {str(e)}")
+                    return redirect("user:appointment", pk=doctor.id)
+            return redirect("user:login")
+        total_bed_count = doctor.opd.no_of_beds  # type: ignore
+        total_appointment_count = doctor.opd.no_of_appointment  # type: ignore
+        context = {
+            "doctor": doctor,
+            "total_appointment_count": total_appointment_count,
+            "total_bed_count": total_bed_count,
+        }
+        return render(request, "user/appointment.html", context)
+    except Exception as e:
+        logger.error(f"Error in appointment: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def doctor_profile(request, pk):
-    doctor = Doctor.objects.get(id=pk)
-    context = {"doctor": doctor}
-    return render(request, "user/doctor_profile.html", context)
-
-
-# NOTE: All the method after this are related to the logged in user
+    try:
+        doctor = Doctor.objects.get(id=pk)
+        context = {"doctor": doctor}
+        return render(request, "user/doctor_profile.html", context)
+    except Exception as e:
+        logger.error(f"Error in doctor_profile: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def message(request):
     try:
         profile = Profile.objects.get(user=request.user)
+        accepted = False
+        doctor = None
+        appointment = profile.get_appointment()
+        if appointment is not None:
+            doctor = profile.get_opd().owner  # type: ignore
+            if appointment.status == "seen":
+                accepted = True
+        context = {"doctor": doctor, "appointment": appointment, "accepted": accepted}
+        return render(request, "user/logged/message.html", context)
     except Exception as e:
-        return redirect("user:login")
-    accepted = False
-    doctor = None
-    appointment = profile.get_appointment()
-    print(f"appointment: {appointment}")
-    if appointment is not None:
-        doctor = profile.get_opd().owner  # type: ignore
-        print(f"doctor: {doctor}")
-        if appointment.status == "seen":
-            print("status is seen:")
-            accepted = True
-    context = {"doctor": doctor, "appointment": appointment, "accepted": accepted}
-    return render(request, "user/logged/message.html", context)
+        logger.error(f"Error in message: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later."
+        )
 
 
 def user_profile(request):
-    is_user = check_user(request)
-    context = {"user": is_user.profile}  # type: ignore
-    return render(request, "user/logged/user_profile.html", context)
+    try:
+        is_user = check_user(request)
+        context = {"user": is_user.profile}  # type: ignore
+        return render(request, "user/logged/user_profile.html", context)
+    except Exception as e:
+        logger.error(f"Error in user_profile: {e}", exc_info=True)
+        return HttpResponseServerError("An unexpected error occurred. Please try")
