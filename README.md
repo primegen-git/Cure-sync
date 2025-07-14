@@ -1,4 +1,4 @@
-# OPD Fullstack - Hospital Outpatient Department Management System
+# OPD Fullstack - Outpatient Department Management System
 
 A comprehensive full-stack web application for managing hospital outpatient department (OPD) operations, built with Django.
 
