@@ -79,3 +79,34 @@ opd_fullstack/
 
 ## Screenshots
 
+### System Overview
+![System Overview](assets/common_panel.png)
+
+### User Landing Page
+![User Landing Page](assets/user_landing_page.png)
+
+### User Dashboard
+![User Dashboard](assets/user_dashboard.png)
+
+### User Profile
+![User Profile](assets/user_profile.png)
+
+### Patient Management
+![Patient Management](assets/patient.png)
+
+### User Appointment Workflow
+![User Appointment Page](assets/user_appointment_page.png)
+
+### Doctor Profile View
+![Doctor Profile](assets/doctor_profile.png)
+
+### Doctor Appointment Management
+![Doctor Appointment](assets/doctor_appointment.png)
+
+### Inventory Overview
+![Inventory](assets/inventory.png)
+
+## Special Thanks
+
+Special thanks to the LLM and my teammates.
+

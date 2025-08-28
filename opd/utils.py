@@ -126,8 +126,8 @@ def create_patient(request, id):
             patient_id=appointment.appointment_id,
         )
 
-        if appointment.appointment_type == "offline":
+        if appointment.patient_type == "offline":
             patient.offline_patient = appointment.offline_patient
         else:
-            patient.online_patient = appointment.online_patient
+            patient.online_patient = appointment.patient_profile
         return patient

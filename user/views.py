@@ -6,7 +6,7 @@ from django.http import HttpResponseServerError
 
 import logging
 
-from opd.models import Appointment, Doctor
+from opd.models import Appointment, Doctor, Opd
 from opd.utils import (
     get_total_appointment_count,
     get_total_bed_count,
@@ -255,8 +255,8 @@ def appointment(request, pk):
             if is_user:
                 try:
                     Appointment.objects.create(
-                        opd=doctor.opd,  # type: ignore
-                        online_patient=request.user.profile,
+                        opd=Opd.objects.get_or_create(owner=doctor)[0],  # Ensure OPD exists safely
+                        patient_profile=request.user.profile,
                         status="not_seen",
                     )
                     doctor.opd.save()
