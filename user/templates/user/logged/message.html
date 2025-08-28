@@ -1,70 +1,65 @@
-{% extends 'user/logged/index.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/message.css' %}" />
-{% endblock css %} {% block content %}
-
-{% if appointment %}
-<div class="container">
-  <h1>Your Appointment Requests</h1>
-  {% if not accepted %}
-  <div class="request-card">
-    <div class="request-header">
-      <div class="doctor-info">{{doctor.name}} - {{doctor.speciality}}</div>
-      <span class="status status-pending">Pending</span>
+{% extends 'user/logged/index.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/message.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <h1>Appointment Requests</h1>
     </div>
-    <div class="request-details">
-      <p><strong>Sent:</strong> {{ appointment.created_at|date:"M d, Y" }}, {{ appointment.created_at|date:"h:i, A" }}
-      </p>
-      <p><a href="{% url 'user:doctor_profile'  pk=doctor.id %}" class="view-profile">View Doctor's Profile</a></p>
-    </div>
-  </div>
 
-  {% else %}
-  <div class="request-card">
-    <div class="request-header">
-      <div class="doctor-info">{{doctor.name}} - {{doctor.speciality}}</div>
-      <span class="status status-accepted">Accepted</span>
-    </div>
-    <div class="request-details">
-      <p><strong>Sent:</strong> {{ appointment.created_at|date:"M d, Y" }}, {{ appointment.created_at|date:"h:i, A" }}
-      </p>
-      <p><strong>Accepted:</strong> {{ appointment.appointment_date|date:"M d, Y" }}, {{
-        appointment.appointment_date|date:"h:i, A"
-        }}
-      </p>
-      <p><strong>Appointment ID:</strong>{{appointment.appointment_id}}</p>
-      <p><a href="{% url 'user:doctor_profile'  pk=doctor.id %}" class="view-profile">View Doctor's Profile</a></p>
-    </div>
-  </div>
-</div>
-{% endif %}
-{% else %}
-<div class="container">
-  <h1>No Online Appointment Request</h1>
-  {% endif %}
+    {% if appointment %}
+        <div class="card request-card">
+            <div class="request-header">
+                <div class="doctor-info">
+                    <h2 class="doctor-name">{{ doctor.name }}</h2>
+                    <p class="doctor-specialty">{{ doctor.speciality }}</p>
+                </div>
+                {% if not accepted %}
+                    <span class="status status-pending">Pending</span>
+                {% else %}
+                    <span class="status status-accepted">Accepted</span>
+                {% endif %}
+            </div>
+            <div class="request-details">
+                <div class="detail-item">
+                    <span class="detail-label">Request Sent</span>
+                    <span class="detail-value">{{ appointment.created_at|date:"M d, Y" }} at {{ appointment.created_at|date:"h:i A" }}</span>
+                </div>
+                {% if accepted %}
+                    <div class="detail-item">
+                        <span class="detail-label">Appointment Date</span>
+                        <span class="detail-value">{{ appointment.appointment_date|date:"M d, Y" }} at {{ appointment.appointment_date|date:"h:i A" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Appointment ID</span>
+                        <span class="detail-value highlight">{{ appointment.appointment_id }}</span>
+                    </div>
+                {% endif %}
+                <div class="detail-item-action">
+                     <a href="{% url 'user:doctor_profile' pk=doctor.id %}" class="btn btn-secondary">
+                        <i class="fas fa-user-md"></i> View Doctor's Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="card empty-state">
+            <div class="empty-icon"><i class="fas fa-inbox"></i></div>
+            <h2>No Appointment Requests</h2>
+            <p>You have not made any online appointment requests yet.</p>
+        </div>
+    {% endif %}
+{% endblock content %}
 
-  {% endblock content %}
-
-
-
-  <!-- <div class="messages-container"> -->
-  <!--   <div class="messages-header"> -->
-  <!--     <h1>Your Messages</h1> -->
-  <!--   </div> -->
-  <!--   <div class="message-card"> -->
-  <!--     <div class="message-header"> -->
-  <!--       <span>Message from Dr. Smith</span> -->
-  <!--       <span class="status status-pending">Pending</span> -->
-  <!--     </div> -->
-  <!--     <p>Your appointment request has been received.</p> -->
-  <!--     <p><small>Date Sent: March 15, 2024</small></p> -->
-  <!--   </div> -->
-  <!--   <div class="message-card"> -->
-  <!--     <div class="message-header"> -->
-  <!--       <span>Message from the OPD</span> -->
-  <!--       <span class="status status-accepted">Accepted</span> -->
-  <!--     </div> -->
-  <!--     <p>Your appointment on March 20, 2024, has been confirmed.</p> -->
-  <!--     <p><small>Date Sent: March 12, 2024</small></p> -->
-  <!--   </div> -->
-  <!--   <!-- More messages can be dynamically added here --> -->
-  <!-- </div> -->
+{% block js %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Add 'active' class to the message link in the sidebar
+            const messageLink = document.querySelector("#message .nav-link");
+            if (messageLink) {
+                messageLink.classList.add("active");
+            }
+        });
+    </script>
+{% endblock js %}

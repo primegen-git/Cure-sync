@@ -1,10 +1,14 @@
-<!-- NOTE: change the symbol of the dashboard element -->
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CureSync Dashboard</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
         {% block css %}
         {% endblock css %}
@@ -12,27 +16,39 @@
     <body>
         <div class="dashboard-container">
             <aside class="sidebar">
-                <div class="logo">
-                    <h2 style="color: #2a7fba">CureSync</h2>
+                <div class="sidebar-header">
+                    <img class="logo" src="/media/profile/logo_processed.png" alt="CureSync Logo" />
+                    <h2>CureSync</h2>
                 </div>
-                <nav>
-                    <ul>
-                        <li id="dashboard">
-                            <a href="{% url 'user:home_page' %}"><span class="icon">👥</span> Profile</a>
-                        </li>
-                        <li id="message">
-                            <a href="{% url 'user:message' %}"><span class="icon">📦</span> Message</a>
-                        </li>
-                        <li id="logout">
-                            <a href="{% url 'user:logout' %}"><span class="icon">👨‍⚕️</span> Logout</a>
-                        </li>
-                    </ul>
-                </nav>
+				<nav class="sidebar-nav">
+					<ul>
+						<li class="nav-item" id="dashboard">
+							<a href="{% url 'user:home_page' %}" class="nav-link">
+								<i class="nav-icon fas fa-user-circle"></i>
+								<span>Profile</span>
+							</a>
+						</li>
+						<li class="nav-item" id="message">
+							<a href="{% url 'user:message' %}" class="nav-link">
+								<i class="nav-icon fas fa-envelope"></i>
+								<span>Message</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+                <div class="sidebar-footer">
+                   <a href="{% url 'user:logout' %}" class="nav-link logout-link">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                   </a>
+                </div>
             </aside>
-            {% block content %}
-            {% endblock content %}
+            <main class="main-content">
+                {% block content %}
+                {% endblock content %}
+            </main>
         </div>
+        {% block js %}
+        {% endblock js %}
     </body>
-    {% block js %}
-    {% endblock js %}
 </html>

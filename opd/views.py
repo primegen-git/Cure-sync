@@ -9,6 +9,7 @@ from opd.forms import (
     InventoryItemsForm,
     OfflinePatientAppointmentForm,
     OnlinePatientAppointmentForm,
+    DoctorProfileForm,
 )
 from opd.models import Doctor, Appointment, InventoryItem, Patient
 from opd.utils import (
@@ -112,6 +113,25 @@ def doctor_profile(request):
             "An unexpected error occurred. Please try again later."
         )
 
+@user_passes_test(is_doctor, login_url="home:home_page")
+def edit_doctor_profile(request):
+    try:
+        doctor = request.user.doctor
+        if request.method == "POST":
+            form = DoctorProfileForm(request.POST, request.FILES, instance=doctor)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Profile updated successfully.")
+                return redirect("opd:doctor_profile")
+        else:
+            form = DoctorProfileForm(instance=doctor)
+        context = {"form": form}
+        return render(request, "opd/form/edit_doctor_profile.html", context)
+    except Exception as e:
+        logger.error(f"Error in edit_doctor_profile: {e}", exc_info=True)
+        return HttpResponseServerError(
+            "An unexpected error occurred. Please try again later.")
+
 
 @user_passes_test(is_doctor, login_url="home:home_page")
 def appointment(request):
@@ -119,17 +139,20 @@ def appointment(request):
         search_query = request.GET.get("search_query", "")
         if search_query:
             appointments = search_appointment(request, search_query)
+            # Set request_count and total_appointment to default values in search mode
+            request_count = 0
+            total_appointment = appointments.count()
         else:
             appointments = request.user.doctor.opd.appointments.filter(
                 Q(offline_patient__isnull=False)
-                | Q(online_patient__isnull=False, status="seen")
+                | Q(patient_profile__isnull=False, status="seen")
             )
-        request_count = request.user.doctor.opd.appointments.filter(
-            Q(online_patient__isnull=False, status="not_seen")
-        ).count()
-        total_appointment = request.user.doctor.opd.appointments.filter(
-            status="seen"
-        ).count()
+            request_count = request.user.doctor.opd.appointments.filter(
+                Q(patient_profile__isnull=False, status="not_seen")
+            ).count()
+            total_appointment = request.user.doctor.opd.appointments.filter(
+                status="seen"
+            ).count()
         context = {
             "appointments": appointments,
             "total_appointment": total_appointment,
@@ -164,7 +187,7 @@ def appointment_request(request):
             except Appointment.DoesNotExist:
                 return HttpResponseBadRequest("Appointment does not exist")
         appointments = request.user.doctor.opd.appointments.filter(
-            Q(online_patient__isnull=False, status="not_seen")
+                    Q(patient_profile__isnull=False, status="not_seen")
         )
         context = {"appointments": appointments}
         return render(request, "opd/online_appointment_request.html", context)
@@ -183,18 +206,6 @@ def patient_report(request, id):
         return render(request, "opd/patient_report.html", context)
     except Exception as e:
         logger.error(f"Error in patient_report: {e}", exc_info=True)
-        return HttpResponseServerError(
-            "An unexpected error occurred. Please try again later."
-        )
-
-
-@user_passes_test(is_doctor, login_url="home:home_page")
-def earning(request):
-    try:
-        context = {}
-        return render(request, "opd/earning.html", context)
-    except Exception as e:
-        logger.error(f"Error in earning: {e}", exc_info=True)
         return HttpResponseServerError(
             "An unexpected error occurred. Please try again later."
         )
@@ -270,8 +281,7 @@ def online_appointment_booking(request, id):
             if form.is_valid():
                 appointment = Appointment.objects.get(id=id)
                 appointment.opd = opd
-                appointment.appointment_type = "online"
-                appointment.status = "seen"
+                appointment.patient_type = "online"
                 appointment.appointment_id = request.POST["appointment_id"]
                 appointment.appointment_date = request.POST["appointment_date"]
                 appointment.save()

@@ -1,35 +1,60 @@
-{% extends 'opd/index.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/form/medicine_report.css' %}" />
-{% endblock css %} {% block content %}
-<div class="container">
-  <div class="report-header">
-    <h1>Medicine Report</h1>
-    <input type="text" class="search-bar" placeholder="Search medicines..." />
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Medicine Name</th>
-        <th>Quantity Required</th>
-        <th>Quantity Available</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for med in medications %}
-      <tr>
-        <td>{{med.name}}</td>
-        <td>{{med.requested_quantity}}</td>
-        <td>{{med.available_quantity}}</td>
-        {% if med.requested_quantity <= med.available_quantity %}
-        <td><span class="status status-available">Available</span></td>
-        {% else %}
-        <td><span class="status status-unavailable">Insufficient</span></td>
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+{% extends 'opd/index.html' %}
+{% load static %}
+{% block css %}
+    {# This page reuses the styles from the appointments page for consistency #}
+    <link rel="stylesheet" href="{% static 'styles/opd_appointment.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <div class="header-main">
+            <h1>Medicine Report</h1>
+        </div>
+        <div class="header-actions">
+            <div class="search-form">
+                <input type="text" id="searchInput" placeholder="Search medicines..." />
+                <button class="btn-search"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </div>
 
+    <div class="card table-card">
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Quantity Required</th>
+                        <th>Quantity Available</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for med in medications %}
+                    <tr>
+                        <td>{{med.name}}</td>
+                        <td>{{med.requested_quantity}}</td>
+                        <td>{{med.available_quantity}}</td>
+                        <td>
+                            {% if med.requested_quantity <= med.available_quantity %}
+                                <span class="badge status-available">Available</span>
+                            {% else %}
+                                <span class="badge status-unavailable">Insufficient</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-pills"></i></div>
+                                    <h2>No Medication Data</h2>
+                                    <p>There is no medication report data to display at this time.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock content %}

@@ -1,57 +1,41 @@
-{% extends 'base.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/ eform.css' %}" />
-<link rel="stylesheet" href="{% static 'styles/form.css' %}" />
-{% endblock css %} {% block content %}
-<div class="container">
-  <div class="form-card">
-    <h2>Appointment Form</h2>
-    <form method="POST" action="">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="name">{{form.name.label}}</label>
-        <input type="text" id="name" name="name" required /><br></br>
-        <label for="age">{{form.age.label}}</label>
-        <input type="text" id="age" name="age" required />
-      </div>
-
-      <label for="appointment_id">{{form.appointment_id.label}}</label>
-      <input type="text" id="appointment_id" name="appointment_id" required /><br></br>
-
-      <div class="form-group">
-        <label>Gender</label>
-        <div class="radio-group">
-          <label>
-            <input type="radio" name="gender" value="male" required /> Male
-          </label>
-          <label>
-            <input type="radio" name="gender" value="female" /> Female
-          </label>
+{% extends 'opd/index.html' %}
+{% load static %}
+{% block css %}
+    {# This page reuses the general form styles for consistency #}
+    <link rel="stylesheet" href="{% static 'styles/form.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <div class="header-main">
+            <a href="javascript:window.history.back()" class="btn btn-secondary back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <h1>Book Offline Appointment</h1>
         </div>
-      </div>
+    </div>
 
-      <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" name="phone_number" pattern="[0-9]{10}" required />
-      </div>
-
-      <div class="form-group">
-        <label for="address">Address</label>
-        <textarea id="address" name="address" rows="3" required></textarea>
-      </div>
-
-
-      <div class="form-group">
-        <label for="date-time">Appointment_Date</label>
-        <input type="datetime-local" id="date-time" name="appointment_date" required></input>
-        <!-- {{ form.appointment_date }} -->
-      </div>
-
-
-      <div class="form-footer">
-        <button type="reset" class="btn btn-secondary">Reset</button>
-        <button type="submit" class="btn">Submit</button>
-      </div>
-    </form>
-  </div>
-</div>
+    <div class="card form-card">
+        <form method="POST" action="" class="styled-form">
+            {% csrf_token %}
+            <div class="form-grid">
+                {# This loop will render all your form fields consistently #}
+                {% for field in form %}
+                    <div class="form-group field-{{ field.name }}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="help-text">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <p class="error-text">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-footer">
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary">Book Appointment</button>
+            </div>
+        </form>
+    </div>
 {% endblock content %}

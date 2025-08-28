@@ -1,92 +1,104 @@
-{% extends 'base.html' %}
+{% extends 'user/logged/index.html' %}
 {% load static %}
 {% block css %}
-<link rel="stylesheet" href={% static 'styles/chatbot.css' %} />
+    <link rel="stylesheet" href="{% static 'styles/chatbot.css' %}" />
 {% endblock css %}
 {% block content %}
-<div class="chat-container">
-  <div class="chat-header">
-    <a style="text-decoration: none; color: inherit;" href="{% url 'user:search_specialist'  %}">
-      <div class="back-button">&#8592;</div>
-    </a>
-    <h2>MediBuddy</h2>
-    <div class="heart-icon">&#10084;</div>
-  </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="message bot-message">
-      Hello! How can I assist you today?
+    <div class="page-header">
+        <div class="header-main">
+            <a href="{% url 'user:search_specialist' %}" class="btn btn-secondary back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <h1>MediBuddy</h1>
+        </div>
     </div>
-  </div>
-  <div class="chat-input">
-    <input type="text" id="userInput" placeholder="Type a message..." />
-    <button onclick="sendMessage()" id="sendButton">Send</button>
-  </div>
-</div>
+
+    <div class="chat-window">
+        <div class="chat-messages" id="chatMessages">
+            </div>
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="Ask about symptoms, doctors, or appointments..." />
+            <button id="sendButton" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
 {% endblock content %}
+
 {% block js %}
-<script>
+    <script>
+      let chatHistory = [];
+      const initialBotMessage = "Hello! I'm MediBuddy. How can I assist you today?";
 
-  let chatHistory = [];
+      function sendMessage() {
+        const userInput = document.getElementById("userInput");
+        const message = userInput.value.trim();
+        if (message) {
+          // Add user message to UI and history
+          appendMessage("user-message", message);
+          chatHistory.push({ type: "user", content: message });
+          userInput.value = "";
 
-  function sendMessage() {
-    const userInput = document.getElementById("userInput");
-    const message = userInput.value.trim();
-    if (message) {
-      appendMessage("user-message", message);
-      chatHistory.push({type: "user-message", content: message});
-      userInput.value = "";
-
-      // Send the message to the backend via URL parameter
-      window.location.href = `{% url 'user:chatbot' %}?message=${encodeURIComponent(message)}`;
-    }
-  }
-
-  function appendMessage(type, content) {
-    const chatMessages = document.getElementById("chatMessages");
-    const messageDiv = document.createElement("div");
-    messageDiv.className = `message ${type}`;
-    messageDiv.textContent = content;
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  function loadChatHistory() {
-    const chatMessages = document.getElementById("chatMessages");
-    chatMessages.innerHTML = ''; // Clear existing messages
-    chatHistory.forEach(message => {
-      appendMessage(message.type, message.content);
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const botResponse = "{{ bot_response|escapejs }}";
-    const userMessage = "{{ user_message|escapejs }}";
-
-    // Load chat history from localStorage if available
-    const storedHistory = localStorage.getItem('chatHistory');
-    if (storedHistory) {
-      chatHistory = JSON.parse(storedHistory);
-    }
-
-    if (userMessage && !chatHistory.some(msg => msg.content === userMessage)) {
-      chatHistory.push({type: "user-message", content: userMessage});
-    }
-    if (botResponse && !chatHistory.some(msg => msg.content === botResponse)) {
-      chatHistory.push({type: "bot-message", content: botResponse});
-    }
-
-    // Save updated chat history to localStorage
-    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-
-    loadChatHistory();
-
-    document.getElementById("userInput").addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        sendMessage();
+          // Save to localStorage and redirect to get bot response
+          localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+          window.location.href = `{% url 'user:chatbot' %}?message=${encodeURIComponent(message)}`;
+        }
       }
-    });
 
-    document.getElementById("sendButton").addEventListener("click", sendMessage);
-  });
-</script>
+      function appendMessage(type, content) {
+        const chatMessages = document.getElementById("chatMessages");
+        const messageWrapper = document.createElement("div");
+        messageWrapper.className = `message-wrapper ${type}-wrapper`;
+
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message";
+        messageDiv.textContent = content;
+
+        messageWrapper.appendChild(messageDiv);
+        chatMessages.appendChild(messageWrapper);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function loadChatHistory() {
+        const chatMessages = document.getElementById("chatMessages");
+        chatMessages.innerHTML = ''; // Clear existing messages
+
+        if (chatHistory.length === 0) {
+            chatHistory.push({ type: 'bot', content: initialBotMessage });
+        }
+
+        chatHistory.forEach(message => {
+          appendMessage(`${message.type}-message`, message.content);
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const botResponse = "{{ bot_response|escapejs }}";
+        const userMessage = "{{ user_message|escapejs }}";
+        const storedHistory = localStorage.getItem('chatHistory');
+
+        if (storedHistory) {
+          chatHistory = JSON.parse(storedHistory);
+        }
+
+        // Prevents adding duplicate messages on page reload
+        if (userMessage && chatHistory[chatHistory.length - 1]?.content !== userMessage) {
+           chatHistory.push({ type: "user", content: userMessage });
+        }
+        if (botResponse && chatHistory[chatHistory.length - 1]?.content !== botResponse) {
+           chatHistory.push({ type: "bot", content: botResponse });
+        }
+
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        loadChatHistory();
+
+        const userInput = document.getElementById("userInput");
+        userInput.addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+          }
+        });
+
+        document.getElementById("sendButton").addEventListener("click", sendMessage);
+      });
+    </script>
 {% endblock js %}

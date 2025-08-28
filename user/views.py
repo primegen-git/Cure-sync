@@ -266,7 +266,7 @@ def appointment(request, pk):
                     return redirect("user:home_page")
                 except Exception as e:
                     logger.error(f"Error creating appointment: {e}", exc_info=True)
-                    messages.error(request, f"Error creating appointment: {str(e)}")
+                    messages.error(request, f"Error creating appointment")
                     return redirect("user:appointment", pk=doctor.id)
             return redirect("user:login")
         total_bed_count = doctor.opd.no_of_beds  # type: ignore

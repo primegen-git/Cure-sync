@@ -2,74 +2,97 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'styles/product.css' %}" />
+    {# This page reuses the styles from the appointments page for consistency #}
+    <link rel="stylesheet" href="{% static 'styles/opd_appointment.css' %}" />
 {% endblock css %}
 
 {% block content %}
-<main class="main-content">
-  <header>
-    <h1>Products & Stock</h1>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search for products" />
-      <button class="search-btn" id="searchButton"><i class="fas fa-search"></i></button>
+    <div class="page-header">
+        <div class="header-main">
+            <h1>Products & Stock</h1>
+        </div>
+        <div class="header-actions">
+            <div class="search-form">
+                <input type="text" id="searchInput" placeholder="Search for products..." />
+                <button class="btn-search" onclick="performSearch()"><i class="fas fa-search"></i></button>
+            </div>
+            <a href="{% url 'opd:add_product' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Product
+            </a>
+        </div>
     </div>
-    <button onclick="window.location.href='{% url 'opd:add_product' %}'" class="add-product-btn">+ Add Product</button>
-  </header>
-  <div class="stock-stats">
-    <div class="stat-card">
-      <h3>Total Products</h3>
-      <div class="stat-value">{{count}}</div>
+
+    <div class="stats-grid">
+         <div class="stat-card">
+            <h3 class="card-title">Total Products</h3>
+            <p class="stat-value">{{count}}</p>
+        </div>
     </div>
-  </div>
-  <div class="product-list">
-    <table>
-      <thead>
-        <tr>
-          <th>Product Name</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for product in products %}
-        <tr>
-          <td>
-            <span>{{product.name}}</span>
-          </td>
-          <td>{{product.quantity}}</td>
-          <td>Rs {{product.price}}</td>
-          <td>
-            <button class="action-btn">📝</button>
-            <button onclick="window.location.href='{% url 'opd:confirmation_page' %}?section=product&id={{product.id}}'"
-              class="action-btn">🗑️</button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</main>
+
+    <div class="card table-card">
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity in Stock</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{product.name}}</td>
+                        <td>{{product.quantity}}</td>
+                        <td>Rs {{product.price}}</td>
+                        <td class="actions-cell">
+                            <a href="#" class="btn-action" title="Edit Product">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            <a href="{% url 'opd:confirmation_page' %}?section=product&id={{product.id}}" class="btn-action btn-danger" title="Delete Product">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-box-archive"></i></div>
+                                    <h2>No Products Found</h2>
+                                    <p>There are no products in your inventory. Add a new product to get started.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 {% endblock content %}
 
 {% block js %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const productElement = document.getElementById("product");
-    productElement.classList.add("active");
+    const productLink = document.querySelector("#product .nav-link");
+    if (productLink) {
+      productLink.classList.add("active");
+    }
 
     const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
-
-    // Remove search query from URL on page load/refresh
     if (window.location.search.includes('search_query')) {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    function performSearch() {
+    window.performSearch = function() {
       const query = searchInput.value.trim();
+      const url = "{% url 'opd:product_list' %}";
       if (query) {
-        window.location.href = "{% url 'opd:product_list' %}" + '?search_query=' + encodeURIComponent(query);
+        window.location.href = url + '?search_query=' + encodeURIComponent(query);
+      } else {
+        window.location.href = url;
       }
     }
 
@@ -78,11 +101,6 @@
         event.preventDefault();
         performSearch();
       }
-    });
-
-    searchButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      performSearch();
     });
   });
 </script>

@@ -1,96 +1,144 @@
-{% extends 'opd/index.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/form/medicine.css' %}" />
-{% endblock css %} {% block content %}
+{% extends 'opd/index.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/form/medicine.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <div class="header-main">
+             <a href="javascript:window.history.back()" class="btn btn-secondary back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <h1>Prescribe Medication</h1>
+        </div>
+    </div>
 
-<div class="container">
-  <h2>Medication Assignment</h2>
-  <form id="medicationForm" method="POST" action="">
-    {% csrf_token %}
-    <input
-      type="text"
-      id="medicationSearch"
-      class="search-bar"
-      placeholder="Search for medication..."
-    />
-    <table class="medication-table">
-      <thead>
-        <tr>
-          <th>Medication Name</th>
-          <th>Quantity</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="medicationList"></tbody>
-    </table>
-    <input type="hidden" id="medicationData" name="medicationData" value="" />
-    <button type="submit" class="submit-btn">Assign Medications</button>
-  </form>
-</div>
-{% endblock content %} {% block js %}
+    <div class="card form-card">
+        <form id="medicationForm" method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="medicationSearch">Search and Add Medication</label>
+                <input type="text" id="medicationSearch" placeholder="Type a medication name and press Enter..." />
+            </div>
 
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Medication Name</th>
+                            <th class="col-quantity">Quantity</th>
+                            <th class="col-action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medicationList">
+                        <tr id="emptyRow">
+                            <td colspan="3">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-pills"></i></div>
+                                    <h2>No Medications Added</h2>
+                                    <p>Search for a medication above to add it to the prescription list.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+            </div>
+
+            <input type="hidden" id="medicationData" name="medicationData" value="" />
+
+            <div class="form-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-pills"></i> Assign Medications
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+{% block js %}
 <script>
-  const medicationSearch = document.getElementById("medicationSearch");
-  const medicationList = document.getElementById("medicationList");
-  const medicationForm = document.getElementById("medicationForm");
-  const medicationData = document.getElementById("medicationData");
+    const medicationSearch = document.getElementById("medicationSearch");
+    const medicationList = document.getElementById("medicationList");
+    const medicationForm = document.getElementById("medicationForm");
+    const medicationData = document.getElementById("medicationData");
+    const emptyRow = document.getElementById("emptyRow");
 
-  medicationSearch.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      addMedication(this.value);
-      this.value = "";
+    function checkEmptyState() {
+        const rowCount = medicationList.querySelectorAll("tr:not(#emptyRow)").length;
+        if (rowCount === 0) {
+            emptyRow.style.display = "table-row"; // Show the empty state row
+        } else {
+            emptyRow.style.display = "none"; // Hide it if there are other rows
+        }
     }
-  });
 
-  function addMedication(name) {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-                <td>${name}</td>
-                <td>
-                    <div class="quantity-control">
-                        <button type="button" class="quantity-btn" onclick="changeQuantity(this, -1)">-</button>
-                        <input type="number" class="quantity-input" value="1" min="1" onchange="updateQuantity(this)">
-                        <button type="button" class="quantity-btn" onclick="changeQuantity(this, 1)">+</button>
-                    </div>
-                </td>
-                <td><button type="button" class="remove-btn" onclick="removeMedication(this)">Remove</button></td>
-            `;
-    medicationList.appendChild(row);
-    updateMedicationData();
-  }
-
-  function changeQuantity(btn, change) {
-    const input = btn.parentNode.querySelector(".quantity-input");
-    input.value = Math.max(1, parseInt(input.value) + change);
-    updateMedicationData();
-  }
-
-  function updateQuantity(input) {
-    input.value = Math.max(1, parseInt(input.value));
-    updateMedicationData();
-  }
-
-  function removeMedication(btn) {
-    btn.closest("tr").remove();
-    updateMedicationData();
-  }
-
-  function updateMedicationData() {
-    const medications = [];
-    document.querySelectorAll("#medicationList tr").forEach((row) => {
-      medications.push({
-        name: row.cells[0].textContent,
-        quantity: row.querySelector(".quantity-input").value,
-      });
+    medicationSearch.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const medicationName = this.value.trim();
+            if (medicationName) {
+                addMedication(medicationName);
+                this.value = "";
+            }
+        }
     });
-    medicationData.value = JSON.stringify(medications);
-  }
 
-  medicationForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    updateMedicationData();
-    this.submit();
-  });
+    function addMedication(name) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${name}</td>
+            <td>
+                <div class="quantity-control">
+                    <button type="button" class="quantity-btn" onclick="changeQuantity(this, -1)">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1" onchange="updateQuantity(this)">
+                    <button type="button" class="quantity-btn" onclick="changeQuantity(this, 1)">+</button>
+                </div>
+            </td>
+            <td class="actions-cell">
+                <button type="button" class="btn-action btn-danger" onclick="removeMedication(this)" title="Remove">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+        `;
+        medicationList.appendChild(row);
+        updateMedicationData();
+    }
+
+    function changeQuantity(btn, change) {
+        const input = btn.parentNode.querySelector(".quantity-input");
+        const newValue = parseInt(input.value) + change;
+        input.value = Math.max(1, newValue);
+        updateMedicationData();
+    }
+
+    function updateQuantity(input) {
+        if (parseInt(input.value) < 1 || isNaN(parseInt(input.value))) {
+            input.value = 1;
+        }
+        updateMedicationData();
+    }
+
+    function removeMedication(btn) {
+        btn.closest("tr").remove();
+        updateMedicationData();
+    }
+
+    function updateMedicationData() {
+        const medications = [];
+        document.querySelectorAll("#medicationList tr:not(#emptyRow)").forEach((row) => {
+            medications.push({
+                name: row.cells[0].textContent,
+                quantity: row.querySelector(".quantity-input").value,
+            });
+        });
+        medicationData.value = JSON.stringify(medications);
+        checkEmptyState(); // Check if the table is empty after every update
+    }
+
+    medicationForm.addEventListener("submit", function (e) {
+        updateMedicationData();
+    });
+
+    // Run on page load to set the initial state
+    document.addEventListener("DOMContentLoaded", checkEmptyState);
 </script>
-
 {% endblock js %}

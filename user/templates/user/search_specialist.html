@@ -1,84 +1,77 @@
-{% extends base_template %}
+{% extends 'user/logged/index.html' %}
 {% load static %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'styles/bed_opd_specialist.css' %}" />
-<style>
-  input::placeholder {
-    font-size: 20px;
-  }
-</style>
+    <link rel="stylesheet" href="{% static 'styles/bed_opd_specialist.css' %}" />
 {% endblock css %}
 {% block content %}
-<div class="dashboard-container">
-  <main class="main-content">
-    <button onclick="window.history.back()" class="back-btn"
-      style="margin-bottom: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
-      <span style="margin-right: 8px;">←</span> Back
-    </button>
+    <div class="page-header">
+        <div class="header-main">
+            <a href="javascript:window.history.back()" class="btn btn-secondary back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <h1>Search by Specialist</h1>
+        </div>
+        <div class="header-actions">
+            <form class="search-form" action="." method="get" onsubmit="performSearch(event)">
+                <input type="text" name="search_query" id="searchInput" placeholder="Search for Specialist..." value="{{ request.GET.search_query }}" />
+                <button type="submit" id="searchButton" class="btn-search"><i class="fas fa-search"></i></button>
+            </form>
+            <a href="{% url 'user:chatbot' %}" class="btn btn-secondary">
+                <i class="fas fa-robot"></i> ChatBot
+            </a>
+        </div>
+    </div>
 
-    <header style="display:flex; justify-content: safe;">
-      <h1>Search by Specialist</h1>
-      <div class="search-bar">
-        <input type="text" name="search_query" id="searchInput" placeholder="Search for Specialist" />
-        <button id=" searchButton" class="search-btn"><i class="fas fa-search"></i></button>
-      </div>
-      <button onclick="window.location.href='{% url 'user:chatbot' %}'" class="sort-btn">ChatBot</button>
-    </header>
-    <div class="bed-list">
-      {% for doctor in doctors %}
-      <a href="{% url 'user:appointment' pk=doctor.id %}" class="bed-card"
-        style="text-decoration: none; color: inherit;">
-        <div class="doctor-info">
-          <img src="{{doctor.profile_image.url}}" alt="Doctor Avatar" class="doctor-avatar" />
-          <div class="doctor-details">
-            <h3>{{doctor.name}}</h3>
-            <p>{{doctor.speciality}}</p>
-            <p>{{doctor.opd.name}}</p>
-          </div>
-        </div>
-        <div class="bed-availability">
-          <p>No. of beds available: <span>{{doctor.opd.no_of_beds}}</span></p>
-        </div>
-      </a>
-      {% endfor %}
+    <div class="results-grid">
+        {% for doctor in doctors %}
+            <a href="{% url 'user:appointment' pk=doctor.id %}" class="doctor-card">
+                <div class="card-header">
+                    <img src="{{ doctor.profile_image.url }}" alt="Doctor Avatar" class="doctor-avatar" />
+                    <div class="doctor-details">
+                        <h3 class="doctor-name">{{ doctor.name }}</h3>
+                        <p class="doctor-specialty">{{ doctor.speciality }}</p>
+                    </div>
+                </div>
+                <div class="card-footer opd-info">
+                    <i class="fas fa-hospital"></i>
+                    <span>{{ doctor.opd.name }}</span>
+                </div>
+            </a>
+        {% endfor %}
     </div>
+
     <div class="pagination">
-      <button><i class="fas fa-chevron-left"></i></button>
-      <span>Page 1 of 5</span>
-      <button><i class="fas fa-chevron-right"></i></button>
+        <button class="pagination-btn disabled"><i class="fas fa-chevron-left"></i></button>
+        <span class="page-info">Page 1 of 5</span>
+        <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
     </div>
-  </main>
-</div>
 {% endblock content %}
 {% block js %}
-<script src="{% static 'scripts/form_submit.js' %}"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.querySelector('.search-form');
 
-    // Remove search query from URL on page load/refresh
-    if (window.location.search.includes('search_query')) {
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-    function performSearch() {
-      const query = searchInput.value.trim();
-      if (query) {
-        window.location.href = "{% url 'user:search_specialist' %}" + '?search_query=' + encodeURIComponent(query);
-      }
-    }
+        // This function can be called on form submit
+        window.performSearch = function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const query = searchInput.value.trim();
+            if (query) {
+                const url = "{% url 'user:search_specialist' %}" + '?search_query=' + encodeURIComponent(query);
+                window.location.href = url;
+            } else {
+                // If search is empty, go to the page without the query parameter
+                window.location.href = "{% url 'user:search_specialist' %}";
+            }
+        }
 
-    searchInput.addEventListener('keypress', function (event) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        performSearch();
-      }
+        // Optional: If you want to search on Enter keypress
+        searchInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                performSearch(event);
+            }
+        });
     });
-
-    searchButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      performSearch();
-    });
-  });
 </script>
 {% endblock js %}

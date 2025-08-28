@@ -13,7 +13,9 @@ def get_appointment(request):
     if opd:
         appointments = opd.appointments.filter(status__icontains="seen").order_by(
             "appointment_date"
-        )[:5]  # type: ignore
+        )[
+            :5
+        ]  # type: ignore
         if appointments.exists():
             return appointments
     return None
@@ -36,7 +38,9 @@ def appointment_count_and_id(request):
             if opd:
                 appointments = opd.appointments.filter(
                     status__icontains="seen"
-                ).order_by("-appointment_date")  # type: ignore
+                ).order_by(
+                    "-appointment_date"
+                )  # type: ignore
 
                 if appointments.exists() and user_appointment_date is not None:
                     count = appointments.filter(

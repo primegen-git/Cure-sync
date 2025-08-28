@@ -1,43 +1,59 @@
-{% extends 'base.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/appointment.css' %}" />
-{% endblock css %} {% block content %}
-<div class="container">
+{% extends 'user/logged/index.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/appointment.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <div class="header-main">
+            <a href="javascript:window.history.back()" class="btn btn-secondary back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <h1>Doctor Details</h1>
+        </div>
+    </div>
 
-  <div class="profile-card d-flex flex-wrap">
-    <div class="doctor-image-wrapper d-flex justify-content-center align-items-center">
-      <img src="{{doctor.profile_image.url}}" alt="Doctor image" class="doctor-image" />
+    <div class="profile-layout">
+        <main class="profile-main-content">
+            <div class="card profile-header-card">
+                <img src="{{ doctor.profile_image.url }}" alt="Dr. {{ doctor.name }}" class="profile-avatar" />
+                <div class="header-info">
+                    <h2 class="doctor-name">{{ doctor.name }}</h2>
+                    <p class="doctor-specialty">{{ doctor.speciality }}</p>
+                    <a href="{% url 'user:doctor_profile' pk=doctor.id %}" class="btn btn-secondary profile-link">
+                        <i class="fas fa-user"></i> View Full Profile
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                 <h3 class="section-title">About Dr. {{ doctor.name }}</h3>
+                 <p class="section-content">{{ doctor.about|linebreaksbr }}</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 class="card-title">Available Beds</h3>
+                    <p class="stat-value">{{ total_bed_count }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="card-title">Total Appointments</h3>
+                    <p class="stat-value">{{ total_appointment_count }}</p>
+                </div>
+            </div>
+        </main>
+
+        <aside class="profile-sidebar">
+            <div class="cta-card">
+                <h3 class="cta-title">Request an Appointment</h3>
+                <p class="cta-subtitle">Click below to send a booking request to this doctor.</p>
+                <a href="{% url 'user:appointment' pk=doctor.id %}?search_query=booking" class="btn btn-primary">
+                   <i class="fas fa-calendar-check"></i> Book Appointment
+                </a>
+            </div>
+        </aside>
     </div>
-    <div class="doctor-info d-flex flex-column">
-      <div class="header d-flex justify-content-between align-items-center">
-        <h2 class="doctor-name">{{doctor.name}}</h2>
-        <button id="profile" data-url="{% url 'user:doctor_profile' pk=doctor.id %}"
-          class="profile-btn">Profile</button>
-      </div>
-      <p class="doctor-specialty">{{doctor.speciality}}</p>
-      <p class="doctor-description">{{doctor.about}}</p>
-      <div class="availability d-flex flex-column">
-        <h3>Address</h3>
-        <p class="doctor-address">{{doctor.address}}</p>
-      </div>
-      <button class="appointment-btn">
-        <a href="{% url 'user:appointment' pk=doctor.id %}?search_query=booking"
-          style="text-decoration: none; color:inherit;">
-          Book Appointment
-        </a>
-      </button>
-    </div>
-  </div>
-  <div class="live-appointments d-flex justify-content-between align-items-center">
-    <ul class="appointment-list d-flex justify-content-around">
-      <li class="appointment-item">
-        <span class="appointment-time">No of available bed: {{total_bed_count}}</span>
-      </li>
-      <li class="appointment-item">
-        <span class="appointment-time">No of appointments: {{total_appointment_count}}</span>
-      </li>
-    </ul>
-  </div>
-</div>
-{% endblock content %} {% block js %}
-<script src="{% static 'scripts/user_appointment.js' %}"></script>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'scripts/user_appointment.js' %}"></script>
 {% endblock js %}

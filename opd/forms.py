@@ -1,5 +1,5 @@
 from django import forms
-from .models import InventoryItem, Offline_Patient, Appointment
+from .models import InventoryItem, Offline_Patient, Appointment, Doctor
 
 
 class OfflinePatientAppointmentForm(forms.Form):
@@ -48,6 +48,30 @@ class OnlinePatientAppointmentForm(forms.ModelForm):
             "appointment_date": "appointment_date",
         }
 
+
+class DoctorProfileForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        fields = [
+            "name",
+            "profile_image",
+            "speciality",
+            "phone_number",
+            "address",
+            "experience",
+            "about",
+            "education",
+        ]
+        labels = {
+            "name": "Full Name",
+            "profile_image": "Profile Image",
+            "speciality": "Speciality",
+            "phone_number": "Phone Number",
+            "address": "Address",
+            "experience": "Years of Experience",
+            "about": "About",
+            "education": "Education & Qualifications",
+        }
 
 class InventoryItemsForm(forms.ModelForm):
     class Meta:

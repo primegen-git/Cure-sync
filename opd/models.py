@@ -1,5 +1,3 @@
-# TODO: change the "date_of_appointment" -> date
-# TODO: delete the unnecessary null = true from the field attribute
 from django.db import models, transaction
 from django.contrib.auth.models import User
 import uuid
@@ -116,35 +114,35 @@ class Offline_Patient(models.Model):
         return str(self.name)
 
 
-# TODO: learn how to combine the offline_patient and the online_patient together.
-# TODO: once the above task is completed remove the status property
-# NOTE: make a signal which increase or decrease if the no_of_appointment related to the particular opd
 class Appointment(models.Model):
-    online_request_status = (
-        ("seen", "seen"),
-        ("not_seen", "not_seen"),
+    PATIENT_TYPE_CHOICES = (
+        ("online", "Online Patient"),
+        ("offline", "Offline Patient"),
     )
-
+    STATUS_CHOICES = (
+        ("not_seen", "Not Seen"),
+        ("seen", "Seen"),
+    )
     opd = models.ForeignKey(Opd, on_delete=models.CASCADE, related_name="appointments")
+    patient_type = models.CharField(
+        "Patient Type", choices=PATIENT_TYPE_CHOICES, max_length=10
+    )
+    status = models.CharField(
+        "Status", choices=STATUS_CHOICES, max_length=10, default="not_seen"
+    )
+    patient_profile = models.OneToOneField(
+        Profile,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="appointment_profile",
+    )
     offline_patient = models.OneToOneField(
         Offline_Patient,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="offline_appoinment",
-    )
-    online_patient = models.OneToOneField(
-        Profile,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name="online_appointment",
-    )
-
-    appointment_type = models.CharField("Appointment Type", max_length=30)
-    # status is used for distinguish online and the offline request... status (from opd side)
-    status = models.CharField(
-        "Status", choices=online_request_status, max_length=20, null=True, blank=True
+        related_name="appointment_offline_patient",
     )
     appointment_id = models.CharField(
         "Appointment ID",
@@ -161,13 +159,15 @@ class Appointment(models.Model):
         return str(self.appointment_id)
 
     class Meta:
-        unique_together = [["opd", "online_patient"], ["opd", "offline_patient"]]
+        unique_together = [["opd", "patient_profile"], ["opd", "offline_patient"]]
 
     @property
     def name(self):
-        if self.online_patient:
-            return self.online_patient.name
-        return self.offline_patient.name
+        if self.patient_type == "online" and self.patient_profile:
+            return self.patient_profile.name
+        elif self.patient_type == "offline" and self.offline_patient:
+            return self.offline_patient.name
+        return None
 
 
 class Patient(models.Model):

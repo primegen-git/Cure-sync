@@ -98,7 +98,7 @@ def search_appointment(request, search_query):
     appointments = appointments.filter(
         Q(appointment_id__icontains=search_query)
         | Q(offline_patient__name__icontains=search_query)
-        | Q(online_patient__name__icontains=search_query)
+        | Q(patient_profile__name__icontains=search_query)
     )
 
     return appointments

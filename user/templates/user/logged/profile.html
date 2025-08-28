@@ -4,71 +4,76 @@
     <link rel="stylesheet" href="{% static 'styles/profile.css' %}" />
 {% endblock css %}
 {% block content %}
-    <div class="container">
-        <main class="main-content">
-            <div class="header">
-                <h1>User Dashboard</h1>
-            </div>
-            <div class="stats-container">
-                <div class="card stat-card">
-                    <h3>Available Beds</h3>
-                    <div class="stat-value">{{ total_beds_count }}</div>
-                </div>
-                <div class="card stat-card">
-                    <h3>Active Doctors</h3>
-                    <div class="stat-value">{{ total_doctor_count }}</div>
-                </div>
-            </div>
+    <div class="page-header">
+        <h1>User Dashboard</h1>
+    </div>
+
+    <div class="profile-grid">
+        <div class="main-column">
             <div class="card">
-                <h2>Quick Actions</h2>
-                <div class="btn-container">
-                    <button onclick="window.location.href='{% url 'user:user_profile' %}'">Profile</button>
-                    <button onclick="window.location.href='{% url 'user:bed_list' %}'">Search by Bed</button>
-                    <button onclick="window.location.href='{% url 'user:search_specialist' %}'">Search by Specialties</button>
-                    <button onclick="window.location.href='{% url 'user:opd_list' %}'">Search by OPD</button>
+                <h2 class="card-header">Quick Actions</h2>
+                <div class="action-buttons">
+                    <a href="{% url 'user:user_profile' %}" class="btn btn-secondary"><i class="fas fa-id-card"></i> Your Profile</a>
+                    <a href="{% url 'user:bed_list' %}" class="btn btn-secondary"><i class="fas fa-bed"></i> Search by Bed</a>
+                    <a href="{% url 'user:search_specialist' %}" class="btn btn-secondary"><i class="fas fa-stethoscope"></i> Search Specialties</a>
+                    <a href="{% url 'user:opd_list' %}" class="btn btn-secondary"><i class="fas fa-hospital-user"></i> Search by OPD</a>
                 </div>
             </div>
+
             {% if appointments %}
                 <div class="card">
-                    <h2>Live Appointment View</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for appointment in appointments %}
+                    <h2 class="card-header">Live Appointment View</h2>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
                                 <tr>
-                                    {% if appointment.appointment_id == user_appointment_id %}
-                                        <td style="color: red;">{{ appointment.appointment_id }}</td>
-                                    {% else %}
-                                        <td>{{ appointment.appointment_id }}</td>
-                                    {% endif %}
-                                    <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
-                                    <td>{{ appointment.appointment_date|date:"h:i A" }}</td>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% if count is not None %}
-                    <div class="card stat-card">
-                        <h3>Total Wating Count</h3>
-                        <div class="stat-value">{{ count }}</div>
-                    {% endif %}
+                            </thead>
+                            <tbody>
+                                {% for appointment in appointments %}
+                                    <tr class="{% if appointment.appointment_id == user_appointment_id %}highlight{% endif %}">
+                                        <td>{{ appointment.appointment_id }}</td>
+                                        <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
+                                        <td>{{ appointment.appointment_date|date:"h:i A" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             {% endif %}
-        </main>
+        </div>
+
+        <div class="side-column">
+            <div class="card stat-card">
+                <h3 class="card-title">Available Beds</h3>
+                <p class="stat-value">{{ total_beds_count }}</p>
+            </div>
+            <div class="card stat-card">
+                <h3 class="card-title">Active Doctors</h3>
+                <p class="stat-value">{{ total_doctor_count }}</p>
+            </div>
+
+            {% if count is not None and appointments %}
+                <div class="card stat-card">
+                    <h3 class="card-title">Waiting Patients</h3>
+                    <p class="stat-value">{{ count }}</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock content %}
+
 {% block js %}
     <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const dashboardElement = document.getElementById("dashboard");
-    dashboardElement.classList.add("active");
-  });
+        document.addEventListener("DOMContentLoaded", function () {
+            const dashboardLink = document.querySelector("#dashboard .nav-link");
+            if(dashboardLink) {
+                dashboardLink.classList.add("active");
+            }
+        });
     </script>
 {% endblock js %}

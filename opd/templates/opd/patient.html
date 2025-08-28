@@ -1,83 +1,110 @@
 {% extends 'opd/index.html' %}
 {% load static %}
-
 {% block css %}
-<link rel="stylesheet" href="{% static 'styles/patient.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/opd_appointment.css' %}" />
 {% endblock css %}
-
 {% block content %}
-<main class="main-content">
-  <header>
-    <h1>Patients</h1>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search for patients" />
+    <div class="page-header">
+        <div class="header-main">
+            <h1>Patients</h1>
+        </div>
+        <div class="header-actions">
+            <div class="search-form">
+                <input type="text" id="searchInput" placeholder="Search by patient name..." />
+                <button class="btn-search" onclick="performSearch()"><i class="fas fa-search"></i></button>
+            </div>
+            {# You can link this to your 'add patient' view #}
+            <a href="#" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Patient
+            </a>
+        </div>
     </div>
-  </header>
-  <div class="patient-stats">
-    <div class="stat-card">
-      <h3>Total Patients</h3>
-      <div class="stat-value">{{opd.patient_count}}</div>
-    </div>
-  </div>
-  <div class="patient-list">
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Patient Name</th>
-          <th>Age</th>
-          <th>Gender</th>
-          <th>Date_of_visit</th>
-          <th>Mode</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% if patients %}
-        {% for patient in patients %}
-        <tr>
-          <td><a style="text-decoration: none;" href="{% url 'opd:patient_report' id=patient.id %}">
-              {{patient.patient_id}}</a></td>
-          <td>
-            <span>{{patient.name}}</span>
-          </td>
-          <td>{{patient.age}}</td>
-          <td>{{patient.gender}}</td>
-          <td>{{patient.date}}</td>
-          <td>{{patient.patient_type}}</td>
-          <td>
-            <button class="action-btn">📝</button>&nbsp;
-            <button onclick="window.location.href='{% url 'opd:confirmation_page' %}?section=patient&id={{patient.id}}'"
-              class="action-btn">🗑️</button>
-          </td>
-        </tr>
-        {% endfor %}
-        {% endif %}
-      </tbody>
-    </table>
-  </div>
-  <br />
-  <h2>pagination here</h2>
-</main>
-{% endblock content %}
 
+    <div class="stats-grid">
+         <div class="stat-card">
+            <h3 class="card-title">Total Patients</h3>
+            <p class="stat-value">{{opd.patient_count}}</p>
+        </div>
+    </div>
+
+    <div class="card table-card">
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                      <th>Patient ID</th>
+                      <th>Patient Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Last Visit</th>
+                      <th>Mode</th>
+                      <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                    <tr>
+                      <td>
+                          <a href="{% url 'opd:patient_report' id=patient.id %}" class="table-link">
+                              {{patient.patient_id}}
+                          </a>
+                      </td>
+                      <td>{{patient.name}}</td>
+                      <td>{{patient.age}}</td>
+                      <td>{{patient.gender}}</td>
+                      <td>{{patient.date}}</td>
+                      <td>
+                          <span class="badge mode-{{patient.patient_type|lower}}">{{patient.patient_type}}</span>
+                      </td>
+                      <td class="actions-cell">
+                        <a href="#" class="btn-action" title="Edit Patient">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <a href="{% url 'opd:confirmation_page' %}?section=patient&id={{patient.id}}" class="btn-action btn-danger" title="Delete Patient">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-users"></i></div>
+                                    <h2>No Patients Found</h2>
+                                    <p>There are no patients to display. Add a new patient to get started.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="pagination">
+        </div>
+
+{% endblock content %}
 {% block js %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const patientElement = document.getElementById("patient");
-    patientElement.classList.add("active");
+    const patientLink = document.querySelector("#patient .nav-link");
+    if (patientLink) {
+      patientLink.classList.add("active");
+    }
 
     const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
-
     if (window.location.search.includes('search_query')) {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    function performSearch() {
+    window.performSearch = function() {
       const query = searchInput.value.trim();
+      const url = "{% url 'opd:home_page' %}";
       if (query) {
-        window.location.href = "{% url 'opd:home_page' %}" + '?search_query=' + encodeURIComponent(query);
+        window.location.href = url + '?search_query=' + encodeURIComponent(query);
+      } else {
+        window.location.href = url;
       }
     }
 
@@ -86,11 +113,6 @@
         event.preventDefault();
         performSearch();
       }
-    });
-
-    searchButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      performSearch();
     });
   });
 </script>

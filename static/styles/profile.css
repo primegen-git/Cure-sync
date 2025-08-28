@@ -1,100 +1,146 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f2f5;
+/* This file only contains styles specific to the profile page content. */
+/* All general layout styles are inherited from dashboard.css */
+
+.page-header {
+	margin-bottom: 32px;
 }
-.container {
-  display: flex;
-  width: 100%;
-  margin-right: 0.5rem;
+
+.page-header h1 {
+	font-size: 2rem;
+	font-weight: 600;
+	margin: 0;
 }
-.sidebar {
-  width: 250px;
-  background-color: #fff;
-  height: 100vh;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+
+.profile-grid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 32px;
+	align-items: start;
 }
-.main-content {
-  flex: 1;
-  padding: 20px;
+
+.main-column,
+.side-column {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
 }
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.search-bar {
-  padding: 10px;
-  width: 300px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
+
+/* General Card Styling */
 .card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.stats-container {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-.btn-container {
-  display: flex;
-  gap: 2rem;
-}
-.stat-card {
-  flex: 1;
-  margin-right: 10px;
-}
-.stat-value {
-  font-size: 24px;
-  font-weight: bold;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-th,
-td {
-  text-align: left;
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-}
-th {
-  background-color: #f8f9fa;
+	background-color: #fff;
+	border-radius: 12px;
+	border: 1px solid var(--border-color);
+	padding: 24px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.card h2 {
-  color: #333333;
-  margin-bottom: 15px;
-  font-size: 1.2rem;
+.card-header {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin: 0 0 24px 0;
+	padding-bottom: 16px;
+	border-bottom: 1px solid var(--border-color);
 }
 
-.card button {
-  padding: 10px 15px;
-  background-color: #f0f2f5;
-  color: #333333;
-  border: 1px solid #d1d9e6;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    background-color 0.3s,
-    box-shadow 0.3s;
+/* Action Buttons */
+.action-buttons {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 16px;
 }
 
-.card button:hover {
-  background-color: #e4e6e9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 16px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 500;
+	transition: all 0.2s ease;
+	justify-content: center;
 }
 
-.card button:last-child {
-  margin-bottom: 0;
+.btn-secondary {
+	background-color: var(--background-color);
+	color: var(--text-dark);
+	border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+	background-color: #e9ecef;
+	border-color: #adb5bd;
+}
+
+/* Stat Cards */
+.stat-card .card-title {
+	font-size: 1rem;
+	font-weight: 500;
+	color: var(--text-light);
+	margin: 0 0 8px 0;
+}
+
+.stat-card .stat-value {
+	font-size: 2.25rem;
+	font-weight: 600;
+	color: var(--primary-color);
+	line-height: 1.2;
+}
+
+/* Data Table */
+.table-wrapper {
+	overflow-x: auto;
+}
+
+.data-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+
+.data-table th,
+.data-table td {
+	text-align: left;
+	padding: 14px 16px;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.data-table thead th {
+	font-weight: 600;
+	background-color: #f9fafb;
+	color: var(--text-light);
+	text-transform: uppercase;
+	font-size: 0.8rem;
+	letter-spacing: 0.5px;
+}
+
+.data-table tbody tr:nth-child(even) {
+	background-color: #f9fafb;
+}
+
+.data-table tbody tr:hover {
+	background-color: var(--primary-light);
+}
+
+.data-table tr.highlight td {
+	color: var(--primary-color);
+	font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+	.profile-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.side-column {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 576px) {
+	.side-column {
+		grid-template-columns: 1fr;
+	}
 }

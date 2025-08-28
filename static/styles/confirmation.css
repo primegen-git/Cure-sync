@@ -1,56 +1,86 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+/* This file contains styles for the confirmation page. */
+
+.page-header {
+	margin-bottom: 32px;
 }
-.confirmation-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+
+.page-header h1 {
+	font-size: 2rem;
+	font-weight: 600;
+	margin: 0;
 }
-.confirmation-box {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 20px 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+
+/* Confirmation Card */
+.card.confirmation-card {
+	max-width: 500px;
+	margin: 40px auto;
+	/* Center the card */
+	background-color: #fff;
+	border-radius: 12px;
+	border: 1px solid var(--border-color);
+	padding: 40px;
+	text-align: center;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
 }
-h2 {
-  margin: 0 0 10px;
+
+.confirmation-icon {
+	font-size: 3rem;
+	color: var(--logout-red);
+	margin-bottom: 24px;
 }
-p {
-  color: #666;
-  margin-bottom: 20px;
+
+.confirmation-title {
+	font-size: 1.75rem;
+	font-weight: 600;
+	margin: 0 0 12px 0;
+	color: var(--text-dark);
 }
+
+.confirmation-text {
+	color: var(--text-light);
+	margin-bottom: 32px;
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
 .button-group {
-  display: flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: center;
+	gap: 16px;
 }
+
+/* Reusable button styles */
 .btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 28px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 600;
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s ease;
 }
-.confirm {
-  background-color: #3cabe7;
-  color: #fff;
+
+.btn-secondary {
+	background-color: #fff;
+	color: var(--text-dark);
+	border: 1px solid var(--border-color);
 }
-.confirm:hover {
-  background-color: #c0392b;
+
+.btn-secondary:hover {
+	background-color: var(--background-color);
 }
-.cancel {
-  background-color: #95a5a6;
-  color: #fff;
+
+.btn-danger {
+	background-color: var(--logout-red);
+	color: #fff;
+	border: 1px solid var(--logout-red);
 }
-.cancel:hover {
-  background-color: #7f8c8d;
+
+.btn-danger:hover {
+	background-color: #c9302c;
+	/* A slightly darker red */
+	border-color: #c9302c;
 }

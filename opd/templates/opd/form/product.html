@@ -1,40 +1,41 @@
-{% extends 'base.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/ eform.css' %}" />
-<link rel="stylesheet" href="{% static 'styles/form.css' %}" />
-{% endblock css %} {% block content %}
-<div class="container">
-  <div class="form-card">
-    <h2>Product Form</h2>
-    <form method="POST" action="">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="name">{{form.name.label}}</label>
-        <input type="text" id="name" name="name" required /><br></br>
-        <label for="quantity">{{form.quantity.label}}</label>
-        <input type="number" id="quantity" name="quantity" required /><br></br>
-        <label for="price">{{form.price.label}}</label>
-        <input type="number" id="price" name="price" required /><br></br>
-      </div>
-
-      <div class="form-group">
-        <label>{{form.type.label}}</label>
-        <div class="radio-group">
-          <label>
-            <input type="radio" name="type" value="oral" required /> Oral
-          </label>
-          <label>
-            <input type="radio" name="type" value="vascular" /> Vascular
-          </label>
-          <label>
-            <input type="radio" name="type" value="applicant" /> Applicant
-          </label>
+{% extends 'opd/index.html' %}
+{% load static %}
+{% block css %}
+    {# This page reuses the general form styles for consistency #}
+    <link rel="stylesheet" href="{% static 'styles/form.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <div class="header-main">
+            <a href="javascript:window.history.back()" class="btn btn-secondary back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <h1>Add New Product</h1>
         </div>
-      </div>
-      <div class="form-footer">
-        <button type="reset" class="btn btn-secondary">Reset</button>
-        <button type="submit" class="btn">Submit</button>
-      </div>
-    </form>
-  </div>
-</div>
+    </div>
+
+    <div class="card form-card">
+        <form method="POST" action="" class="styled-form">
+            {% csrf_token %}
+            <div class="form-grid">
+                {# This loop will render all your form fields consistently #}
+                {% for field in form %}
+                    <div class="form-group field-{{ field.name }}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="help-text">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <p class="error-text">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-footer">
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </div>
+        </form>
+    </div>
 {% endblock content %}

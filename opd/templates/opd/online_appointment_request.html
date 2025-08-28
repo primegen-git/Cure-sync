@@ -1,37 +1,52 @@
-{% extends 'opd/index.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/online_appointment_request.css' %}" />
-{% endblock css %} {% block content %}
-
-<div class="main-appointment">
-  <div class="header">
-    <h1>OPD Appointment Management</h1>
-  </div>
-  <div class="container">
-    <div class="appointment-section">
-      <div class="section-header">
-        <h2>Online Appointments Request</h2>
-      </div>
-      <ul class="appointment-list">
-        {% for appointment in appointments %}
-        <li class="appointment-item">
-          <div class="appointment-info">
-            <h3>{{ appointment.online_patient.name }}</h3>
-            <p>Time: {{ appointment.date_of_appointment|time:"H:i" }}
-              | Date: {{appointment.date_of_appointment|date:"Y-m-d"}}
-            </p>
-            <span class="badge badge-online">Online Booking</span>
-          </div>
-          <div class="appointment-actions">
-            <button class="btn"><a href="{% url 'opd:online_appointment_booking' id=appointment.id %}"
-                style="text-decoration: none; color: inherit;">Accept</a></button>
-            <button class="btn"><a href="{% url 'opd:appointment_request' %}?search_query=cancel?id={{appointment.id}}"
-                style="text-decoration: none; color: inherit;">Cancel</a></button>
-          </div>
-        </li>
-        {% endfor %}
-      </ul>
+{% extends 'opd/index.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/online_appointment_request.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <h1>Online Appointment Requests</h1>
     </div>
-  </div>
-</div>
 
+    <div class="card table-card">
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Requested Date</th>
+                        <th>Requested Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                        <tr>
+                            <td>{{ appointment.name }}</td>
+                            <td>{{ appointment.date_of_appointment|date:"M d, Y" }}</td>
+                            <td>{{ appointment.date_of_appointment|time:"h:i A" }}</td>
+                            <td class="actions-cell">
+                                <a href="{% url 'opd:online_appointment_booking' id=appointment.id %}" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Accept
+                                </a>
+                                <a href="{% url 'opd:appointment_request' %}?search_query=cancel?id={{appointment.id}}" class="btn btn-danger">
+                                    <i class="fas fa-times"></i> Decline
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-inbox"></i></div>
+                                    <h2>No Pending Requests</h2>
+                                    <p>There are currently no online appointment requests to review.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock content %}

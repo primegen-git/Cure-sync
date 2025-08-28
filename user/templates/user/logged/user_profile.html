@@ -4,50 +4,62 @@
     <link rel="stylesheet" href="{% static 'styles/user_profile.css' %}" />
 {% endblock css %}
 {% block content %}
-    <div class="container">
-        <main class="main-content">
-            <div class="profile-card">
-                <div class="profile-header">
-                    <img src="{{ user.profile_image.url }}"
-                         alt="User Avatar"
-                         class="profile-image" />
-                    <button onclick="window.location.href='{% url 'user:edit_profile' %}'">Edit Profile</button>
-                </div>
-                <div class="profile-info">
-                    <div class="info-item">
-                        <div class="info-label">Name</div>
-                        <div class="info-value">{{ user.name }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Age</div>
-                        <div class="info-value">{{ user.age }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Date of Birth:</div>
-                        <div class="info-value">{{ user.date_of_birth }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Gender:</div>
-                        <div class="info-value">{{ user.gender }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Blood Type:</div>
-                        <div class="info-value">{{ user.blood_group }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Email:</div>
-                        <div class="info-value">{{ user.email }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Phone:</div>
-                        <div class="info-value">{{ user.phone_number }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Address:</div>
-                        <div class="info-value">{{ user.address }}</div>
-                    </div>
+    <div class="page-header">
+        <h1>Your Profile</h1>
+    </div>
+
+    <div class="card profile-card">
+        <div class="profile-header">
+            <div class="avatar-block">
+                <img src="{{ user.profile_image.url }}" alt="User Avatar" class="profile-avatar" />
+                <div class="name-block">
+                    <h2 class="profile-name">{{ user.name }}</h2>
+                    <p class="profile-email">{{ user.email }}</p>
                 </div>
             </div>
-        </main>
+            <a href="{% url 'user:edit_profile' %}" class="btn btn-outline-primary"><i class="fas fa-pencil-alt"></i> Edit Profile</a>
+        </div>
+
+        <div class="profile-details">
+            <h3 class="details-header">Personal Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Full Name</span>
+                    <span class="info-value">{{ user.name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Age</span>
+                    <span class="info-value">{{ user.age }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Date of Birth</span>
+                    <span class="info-value">{{ user.date_of_birth }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Gender</span>
+                    <span class="info-value">{{ user.gender }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Blood Group</span>
+                    <span class="info-value">{{ user.blood_group }}</span>
+                </div>
+            </div>
+
+            <h3 class="details-header">Contact Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Email Address</span>
+                    <span class="info-value">{{ user.email }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Phone Number</span>
+                    <span class="info-value">{{ user.phone_number }}</span>
+                </div>
+                <div class="info-item full-width">
+                    <span class="info-label">Address</span>
+                    <span class="info-value">{{ user.address }}</span>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock content %}

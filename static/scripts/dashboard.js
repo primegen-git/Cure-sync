@@ -1,14 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Select all list items within the nav
   const navItems = document.querySelectorAll("nav ul li");
-
   navItems.forEach((item) => {
+    item.setAttribute("tabindex", "0");
+    item.setAttribute("role", "menuitem");
     item.addEventListener("click", function () {
-      // Remove 'active' class from all items
       navItems.forEach((nav) => nav.classList.remove("active"));
-
-      // Add 'active' class to the clicked item
       this.classList.add("active");
+    });
+    item.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        navItems.forEach((nav) => nav.classList.remove("active"));
+        this.classList.add("active");
+      }
     });
   });
 });

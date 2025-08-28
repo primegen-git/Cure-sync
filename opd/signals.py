@@ -9,7 +9,7 @@ from django.db import models, transaction
 def online_appointment_request(sender, instance, created, **kwargs):
     if created and instance.online_patient:
         cache_key = "some_value"
-        appointments = Appointment.objects.filter(appointment_type="online")
+        appointments = Appointment.objects.filter(patient_type="online")
         cache.set(cache_key, appointments, timeout=None)
 
 
@@ -45,26 +45,23 @@ def increment_appointment(sender, instance, created, **kwargs):
     if created:
         with transaction.atomic():
             opd = instance.opd
-            print(opd.no_of_appointment)
             opd.no_of_appointment = models.F("no_of_appointment") + 1
-            print(opd.no_of_appointment)
-            opd.save()
-
-            if instance.online_patient:
-                instance.appointment_type = "online"
+            opd.save(update_fields=["no_of_appointment"])
+            opd.refresh_from_db(fields=["no_of_appointment"])
+            if instance.patient_profile:
+                instance.patient_type = "online"
             else:
-                instance.appointment_type = "offline"
-            instance.save()
+                instance.patient_type = "offline"
+            instance.save(update_fields=["patient_type"])
 
 
 def decrement_appointment(sender, instance, **kwargs):
     with transaction.atomic():
         opd = instance.opd
         if not kwargs.get("raw", False):
-            print(opd.no_of_appointment)
             opd.no_of_appointment = models.F("no_of_appointment") - 1
-            print(opd.no_of_appointment)
-            opd.save()
+            opd.save(update_fields=["no_of_appointment"])
+            opd.refresh_from_db(fields=["no_of_appointment"])
 
 
 def increment_bed(sender, instance, created, **kwargs):

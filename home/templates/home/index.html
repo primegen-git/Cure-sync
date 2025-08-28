@@ -1,42 +1,60 @@
-{% extends 'base.html' %} {% load static %}
+{% extends 'base.html' %}
+{% load static %}
+
 {% block css %}
-<link rel="stylesheet" href="{% static 'styles/home.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
 {% endblock css %}
 
 {% block content %}
-
-
-<div class="container">
-  <div class="sidebar">
-    <div>
-      <div class="logo"></div>
-      <img style="height:214px;" src="/media/profile/logo_processed.png" />
+<div class="page-wrapper">
+  <div class="animated-background"></div>
+  <header class="landing-header">
+    <div class="container navbar-container">
+      <nav class="navbar">
+        <div class="navbar-brand">
+          <img class="logo" src="/media/profile/logo_processed.png" alt="CureSync Logo" />
+        </div>
+      </nav>
     </div>
-    <div>
-      <!-- <p>&copy; 2024 CureSync. All rights reserved.</p> -->
-    </div>
-  </div>
-  <div class="main-content">
-    <div class="hexagon-container">
-      <div class="hexagon" onclick="location.href='{% url 'user:home_page' %}'">
-        <div class="hexagon-content">
-          <div class="hexagon-icon">👤</div>
-          <div class="hexagon-text">User</div>
+  </header>
+
+  <main class="container">
+  <section id="portals" class="selection-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Choose Your Portal</h2>
+        <p>Select your entry point to access the CureSync platform.</p>
+      </div>
+      <div class="card-grid">
+        <div class="selection-card">
+          <div class="card-icon"><i class="fas fa-user-circle"></i></div>
+          <h3 class="card-title">Patient Portal</h3>
+          <p class="card-description">Access your health records, manage appointments, and view prescriptions.</p>
+          <a href="{% url 'user:home_page' %}" class="card-link">Go to Patient Portal <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="selection-card">
+          <div class="card-icon"><i class="fas fa-clinic-medical"></i></div>
+          <h3 class="card-title">Hospital / OPD</h3>
+          <p class="card-description">Staff and administration access for patient management and hospital operations.</p>
+          <a href="{% url 'opd:login' %}" class="card-link">Go to OPD Portal <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
-      <div class="hexagon" onclick="location.href='{% url 'opd:login' %}'">
-        <div class="hexagon-content">
-          <div class="hexagon-icon">🏥</div>
-          <div class="hexagon-text">OPD</div>
-        </div>
-      </div>
     </div>
-  </div>
+  </section>
+
+  <footer class="landing-footer">
+    <div class="container">
+      <p>&copy; {% now "Y" %} CureSync. All rights reserved.</p>
+    </div>
+  </footer>
 </div>
-<div id="particles-js" class="particles"></div>
 {% endblock content %}
 
-
 {% block js %}
-<script src="{% static 'scripts/home.js' %}"></script>
+  {# No JavaScript is needed for this updated design #}
 {% endblock js %}

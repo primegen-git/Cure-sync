@@ -1,55 +1,70 @@
-{% extends 'opd/index.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/doctor_profile.css' %}" />
-{% endblock css %} {% block content %}
-<main class="main-content">
-  <div class="profile-header">
-    <img src="{{doctor.profile_image.url}}" alt="Doctor Image" class="profile-image" />
-    <div>
-      <h1 class="profile-name">{{doctor.name}}</h1>
-      <br />
-      <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+{% extends 'opd/index.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/doctor_profile.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <h1>Doctor Profile</h1>
     </div>
-  </div>
 
-  <section class="profile-section">
-    <h2 class="section-title">Personal Information</h2>
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="info-label">Email:</span> {{doctor.email}}
-      </div>
-      <div class="info-item">
-        <span class="info-label">Phone:</span> {{doctor.phone_number}}
-      </div>
-      <div class="info-item">
-        <span class="info-label">specialization:</span> {{doctor.speciality}}
-      </div>
-      <div class="info-item">
-        <span class="info-label">Years of Experience:</span> {{doctor.experience}}
-      </div>
+    <div class="card profile-card">
+        <div class="profile-header">
+            <div class="avatar-block">
+                <img src="{{ doctor.profile_image.url }}" alt="Doctor Avatar" class="profile-avatar" />
+                <div class="name-block">
+                    <h2 class="profile-name">{{ doctor.name }}</h2>
+                    <p class="profile-specialty">{{ doctor.speciality }}</p>
+                </div>
+            </div>
+            <a href="{% url 'opd:edit_doctor_profile' %}" class="btn btn-outline-primary"><i class="fas fa-pencil-alt"></i> Edit Profile</a>
+        </div>
+
+        <div class="profile-details">
+            <h3 class="details-header">Contact & Professional Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Email Address</span>
+                    <span class="info-value">{{ doctor.email }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Phone Number</span>
+                    <span class="info-value">{{ doctor.phone_number }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Specialization</span>
+                    <span class="info-value">{{ doctor.speciality }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Years of Experience</span>
+                    <span class="info-value">{{ doctor.experience }}</span>
+                </div>
+            </div>
+
+            <h3 class="details-header">About</h3>
+            <div class="section-content">
+                <p>{{ doctor.about|linebreaksbr }}</p>
+            </div>
+
+            <h3 class="details-header">Education & Qualifications</h3>
+            <div class="section-content">
+                <p>{{ doctor.education|linebreaksbr }}</p>
+            </div>
+
+            <h3 class="details-header">Address</h3>
+            <div class="section-content">
+                <p>{{ doctor.address|linebreaksbr }}</p>
+            </div>
+        </div>
     </div>
-  </section>
-
-  <section class="profile-section">
-    <h2 class="section-title">Education & Qualifications</h2>
-    {{doctor.education}}
-  </section>
-
-  <section class="profile-section">
-    <h2 class="section-title">Address</h2>
-    {{doctor.address}}
-  </section>
-
-  <section class="profile-section">
-    <h2 class="section-title">About</h2>
-    <p>{{doctor.about}}</p>
-  </section>
-</main>
-{% endblock content %} {% block js %}
-
+{% endblock content %}
+{% block js %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const doctorElement = document.getElementById("doctor");
-    doctorElement.classList.add("active");
+    const doctorLink = document.querySelector("#doctor .nav-link");
+    if(doctorLink) {
+        doctorLink.classList.add("active");
+    }
   });
 </script>
 {% endblock js %}

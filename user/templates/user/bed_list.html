@@ -1,53 +1,45 @@
-{% extends base_template %}
+{% extends 'user/logged/index.html' %}
 {% load static %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'styles/bed_opd_specialist.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/bed_opd_specialist.css' %}" />
 {% endblock css %}
 {% block content %}
-<div class="dashboard-container">
-  <main class="main-content">
-    <button onclick="window.history.back()" class="back-btn"
-      style="margin-bottom: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
-      <span style="margin-right: 8px;">←</span> Back
-    </button>
-    <header>
-      <h1>Search by Bed</h1>
-      <form id="search_form" method="post" action="">
-        {% csrf_token %}
-      </form>
-    </header>
-    <div class="sort-options">
-      <form method="get" style="display:inline;">
-        <button type="submit" name="sort" value="beds" class="sort-btn">Sort by Beds</button>
-      </form>
-      <button class="sort-btn">Sort by Location</button>
-    </div>
-    <div class="bed-list">
-      {% for doctor in doctors %}
-      <a href="{% url 'user:appointment' pk=doctor.id %}" class="bed-card"
-        style="text-decoration: none; color: inherit;">
-        <div class="doctor-info">
-          <img src="{{doctor.profile_image.url}}" alt="Doctor Avatar" class="doctor-avatar" />
-          <div class="doctor-details">
-            <h3>{{doctor.name}}</h3>
-            <p>{{doctor.speciality}}</p>
-            <p>Experienced in heart surgeries</p>
-          </div>
+    <div class="page-header">
+        <div class="header-main">
+            <a href="javascript:window.history.back()" class="btn btn-secondary back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <h1>Search by Bed</h1>
         </div>
-        <div class="bed-availability">
-          <p>No. of beds available: <span>{{doctor.opd.no_of_beds}}</span></p>
+        <div class="header-actions">
+            <form method="get" class="sort-form">
+                <button type="submit" name="sort" value="beds" class="btn btn-filter active">Sort by Beds</button>
+                <button type="button" class="btn btn-filter">Sort by Location</button>
+            </form>
         </div>
-      </a>
-      {% endfor %}
     </div>
+
+    <div class="results-grid">
+        {% for doctor in doctors %}
+            <a href="{% url 'user:appointment' pk=doctor.id %}" class="doctor-card">
+                <div class="card-header">
+                    <img src="{{ doctor.profile_image.url }}" alt="Doctor Avatar" class="doctor-avatar" />
+                    <div class="doctor-details">
+                        <h3 class="doctor-name">{{ doctor.name }}</h3>
+                        <p class="doctor-specialty">{{ doctor.speciality }}</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Beds Available</span>
+                    <span class="bed-count">{{ doctor.opd.no_of_beds }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
     <div class="pagination">
-      <button><i class="fas fa-chevron-left"></i></button>
-      <span>Page 1 of 5</span>
-      <button><i class="fas fa-chevron-right"></i></button>
+        <a href="#" class="pagination-btn disabled"><i class="fas fa-chevron-left"></i></a>
+        <span class="page-info">Page 1 of 5</span>
+        <a href="#" class="pagination-btn"><i class="fas fa-chevron-right"></i></a>
     </div>
-  </main>
-</div>
 {% endblock content %}
-{% block js %}
-<scripts src="{% static 'scripts/form_submit.js' %}"></scripts>
-{% endblock js %}

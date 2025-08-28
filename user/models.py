@@ -33,7 +33,7 @@ class Profile(models.Model):
     profile_image = models.ImageField(
         "Image",
         upload_to="profile/",
-        default="profile/default-profile.png",
+        default="profile/default-profile.jpg",
     )
     phone_number = models.CharField("Phone Number", max_length=10, null=True)
     address = models.TextField("Address", null=True)

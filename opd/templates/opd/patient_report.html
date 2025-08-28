@@ -1,47 +1,59 @@
-{% extends 'opd/index.html' %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'styles/patient_report.css' %}" />
-{% endblock css %} {% block content %}
-<div class="p-container">
-  <div class="container">
-    <div class="header">
-      <h1>Patient Medical Report</h1>
-    </div>
-    <div class="tab-container">
-      <div class="tab active" onclick="showSection('personal')">
-        Personal Info
-      </div>
-      <div class="tab" onclick="showSection('medical')">Medical Info</div>
-      <div class="tab" onclick="showSection('visits')">Visits & Billing</div>
-    </div>
-    <div class="content">
-      <div id="personal" class="section active">
-        <h2>Personal Information</h2>
-        <div class="grid">
-          <p><strong>Name:</strong> {{patient.name}}</p>
-          <p><strong>Patient ID:</strong> {{patient.patient_id}}</p>
-          <p><strong>Date of Birth:</strong> 1985-05-15</p>
-          <p><strong>Gender:</strong> {{patient.gender}}</p>
-          <p><strong>Contact:</strong> {{patient.phone_number}}</p>
-          <p><strong>Email:</strong> {{patient.email}}</p>
-          <p><strong>Address:</strong>{{patient.address}}</p>
-          <p>
-            <strong>Bed Reservation:</strong>{{patient.bed_reservation}} hours
-          </p>
+{% extends 'opd/index.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'styles/patient_report.css' %}" />
+{% endblock css %}
+{% block content %}
+    <div class="page-header">
+        <div class="header-main">
+            <a href="javascript:window.history.back()" class="btn btn-secondary back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Patients
+            </a>
+            <h1>Patient Medical Report</h1>
         </div>
-      </div>
-      <div id="medical" class="section">
-        <h2>Medical Information</h2>
-        <p style="width: 70%">{{patient.description}}</p>
-      </div>
-      <div id="visits" class="section">
-        <h2>Visits & Billing</h2>
-        <p style="width: 70%">{{patient.billing_report}}</p>
-        <h3>Next Appointment</h3>
-        <p>{{patient.next_appointment}}</p>
-      </div>
     </div>
-  </div>
-</div>
-{% endblock content %} {% block js %}
-<script src="{% static 'scripts/patient_report.js' %}"></script>
+
+    <div class="card report-card">
+        <div class="report-header">
+            <img src="{{ patient.profile_image.url }}" alt="Patient Avatar" class="patient-avatar">
+            <div class="patient-summary">
+                <h2 class="patient-name">{{ patient.name }}</h2>
+                <span class="patient-id">Patient ID: {{ patient.patient_id }}</span>
+            </div>
+        </div>
+
+        <nav class="tab-nav">
+            <button class="tab-item active" onclick="showSection('personal', this)">Personal Info</button>
+            <button class="tab-item" onclick="showSection('medical', this)">Medical Info</button>
+            <button class="tab-item" onclick="showSection('visits', this)">Visits & Billing</button>
+        </nav>
+
+        <div class="tab-content">
+            <div id="personal" class="tab-pane active">
+                <div class="info-grid">
+                    <div class="info-item"><span class="info-label">Full Name</span><span class="info-value">{{patient.name}}</span></div>
+                    <div class="info-item"><span class="info-label">Patient ID</span><span class="info-value">{{patient.patient_id}}</span></div>
+                    <div class="info-item"><span class="info-label">Date of Birth</span><span class="info-value">{{patient.date_of_birth|date:"M d, Y"}}</span></div>
+                    <div class="info-item"><span class="info-label">Gender</span><span class="info-value">{{patient.gender}}</span></div>
+                    <div class="info-item"><span class="info-label">Contact</span><span class="info-value">{{patient.phone_number}}</span></div>
+                    <div class="info-item"><span class="info-label">Email</span><span class="info-value">{{patient.email}}</span></div>
+                    <div class="info-item full-width"><span class="info-label">Address</span><span class="info-value">{{patient.address}}</span></div>
+                    <div class="info-item"><span class="info-label">Bed Reservation</span><span class="info-value">{{patient.bed_reservation}} hours</span></div>
+                </div>
+            </div>
+            <div id="medical" class="tab-pane">
+                <h3 class="section-title">Medical Information</h3>
+                <p>{{ patient.description|linebreaksbr }}</p>
+            </div>
+            <div id="visits" class="tab-pane">
+                <h3 class="section-title">Visits & Billing Report</h3>
+                <p>{{ patient.billing_report|linebreaksbr }}</p>
+                <h3 class="section-title">Next Appointment</h3>
+                <p>{{ patient.next_appointment }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'scripts/patient_report.js' %}"></script>
 {% endblock js %}

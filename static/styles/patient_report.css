@@ -1,81 +1,169 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
-  margin: 0;
-  color: #333;
+/* This file contains styles for the Patient Report page. */
+
+/* Page Header & Button styles are inherited or can be added from other files */
+.page-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
 }
-.p-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+
+.header-main {
+	display: flex;
+	align-items: center;
+	gap: 16px;
 }
-.container {
-  max-width: 1000px;
-  margin-top: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  height: 50%;
-  width: 100%;
+
+.page-header h1 {
+	font-size: 2rem;
+	font-weight: 600;
+	margin: 0;
 }
-.header {
-  background-color: #3498db;
-  color: white;
-  padding: 20px;
-  text-align: center;
+
+/* Report Card */
+.card.report-card {
+	background-color: #fff;
+	border-radius: 12px;
+	border: 1px solid var(--border-color);
+	padding: 0;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+	overflow: hidden;
 }
-.tab-container {
-  display: flex;
-  background-color: #f8f9fa;
+
+.report-header {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 24px 32px;
+	background-color: #f9fafb;
+	border-bottom: 1px solid var(--border-color);
 }
-.tab {
-  padding: 10px 20px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
+
+.patient-avatar {
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	object-fit: cover;
 }
-.tab.active {
-  border-bottom-color: #3498db;
-  font-weight: bold;
+
+.patient-name {
+	font-size: 1.75rem;
+	font-weight: 600;
+	margin: 0;
 }
-.content {
-  padding: 20px;
+
+.patient-id {
+	color: var(--text-light);
+	font-weight: 500;
 }
-.section {
-  display: none;
+
+/* Tab Navigation */
+.tab-nav {
+	display: flex;
+	border-bottom: 1px solid var(--border-color);
+	padding: 0 32px;
 }
-.section.active {
-  display: block;
+
+.tab-item {
+	padding: 16px 20px;
+	font-size: 1rem;
+	font-weight: 500;
+	color: var(--text-light);
+	cursor: pointer;
+	border: none;
+	background: none;
+	border-bottom: 3px solid transparent;
+	margin-bottom: -1px;
+	/* Overlaps the container border */
+	transition: all 0.2s ease;
 }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+
+.tab-item:hover {
+	color: var(--primary-color);
 }
-.full-width {
-  grid-column: 1 / -1;
+
+.tab-item.active {
+	color: var(--primary-color);
+	font-weight: 600;
+	border-bottom-color: var(--primary-color);
 }
-.status {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
+
+/* Tab Content */
+.tab-content {
+	padding: 32px;
 }
-.status-active {
-  background-color: #e6f7e6;
-  color: #28a745;
+
+.tab-pane {
+	display: none;
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
+
+.tab-pane.active {
+	display: block;
 }
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+
+.section-title {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin: 0 0 16px 0;
 }
-th {
-  background-color: #f2f2f2;
+
+.section-title:not(:first-child) {
+	margin-top: 32px;
+}
+
+.tab-pane p {
+	line-height: 1.7;
+	color: var(--text-dark);
+}
+
+/* Reusing info-grid style from other profile pages */
+.info-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 24px;
+}
+
+.info-item {
+	display: flex;
+	flex-direction: column;
+}
+
+.info-label {
+	font-size: 0.9rem;
+	color: var(--text-light);
+	margin-bottom: 6px;
+	text-transform: uppercase;
+}
+
+.info-value {
+	font-size: 1rem;
+	font-weight: 500;
+	color: var(--text-dark);
+}
+
+.info-item.full-width {
+	grid-column: 1 / -1;
+}
+
+/* Reusable button for the header */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 500;
+	border: none;
+	cursor: pointer;
+}
+
+.btn-secondary {
+	background-color: #fff;
+	color: var(--text-dark);
+	border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+	background-color: #e9ecef;
 }
