@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://smart-india-hackathon-production.up.railway.app",
+    "https://cure-sync-production.up.railway.app",
 ]
 
 
