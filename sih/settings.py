@@ -30,12 +30,13 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
+    "cure-sync-production.up.railway.app",
     "https://cure-sync-production.up.railway.app",
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://smart-india-hackathon-production.up.railway.app",
+    "cure-sync-production.up.railway.app",
     "https://cure-sync-production.up.railway.app",
 ]
 
