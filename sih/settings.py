@@ -36,7 +36,6 @@ ALLOWED_HOSTS = [
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "cure-sync-production.up.railway.app",
     "https://cure-sync-production.up.railway.app",
 ]
 
